@@ -9,7 +9,9 @@
 @testable import MidiParser
 import XCTest
 
-class MetaEventTypeTests: XCTestCase {
+extension MetaEventType: EnumCollection {}
+
+final class MetaEventTypeTests: XCTestCase {
     var values: [UInt8]!
     
     override func setUp() {
@@ -25,27 +27,7 @@ class MetaEventTypeTests: XCTestCase {
     }
     
     func testMetaEventType() {
-        let expects: [MetaEventType] = [
-            .trackSequenceNumber,
-            .textEvent,
-            .copyright,
-            .sequenceTrackName,
-            .trackInstrumentName,
-            .lyric,
-            .marker,
-            .cuePoint,
-            .programName,
-            .deviceName,
-            .midiChannel,
-            .midiPort,
-            .endTrack,
-            .setTempo,
-            .smpteOffset,
-            .timeSignature,
-            .keySignature,
-            .sequencerSpecific
-        ]
-        precondition(values.count == expects.count)
+        let expects = MetaEventType.allValues
         
         for i in 0 ..< values.count {
             XCTAssertEqual(MetaEventType(decimal: values[i]), expects[i])

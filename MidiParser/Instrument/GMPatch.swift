@@ -8,10 +8,9 @@
 
 import Foundation
 
-// General MIDI Instrument Patch Map defines 128 instruments with program number 1 to 128.
-// Be careful that rawValue must be 0 to 127.
+// General MIDI Instrument Patch Map defines 128 instruments with program number 0 to 127.
 public enum GMPatch: Int {
-    // No.1-8 PIANO
+    // 0-7 PIANO
     case acousticGrand
     case brightAcoustic
     case electricGrand
@@ -20,7 +19,7 @@ public enum GMPatch: Int {
     case electricPiano2
     case harpsichord
     case clavinet
-    // 9-16 CHROMATIC PERCUSSION
+    // 8-15 CHROMATIC PERCUSSION
     case celesta
     case glockenspiel
     case musicBox
@@ -29,7 +28,7 @@ public enum GMPatch: Int {
     case xylophone
     case tubularBells
     case dulcimer
-    // 17-24 ORGAN
+    // 16-23 ORGAN
     case drawbarOrgan
     case percussiveOrgan
     case rockOrgan
@@ -38,7 +37,7 @@ public enum GMPatch: Int {
     case accordion
     case harmonica
     case rangoAccordian
-    // 25-32 GUITAR
+    // 24-31 GUITAR
     case acousticGuitarNylon
     case acousticGuitarSteel
     case electricGuitarJazz
@@ -47,7 +46,7 @@ public enum GMPatch: Int {
     case overdrivenGuitar
     case distortionGuitar
     case guitarHarmonics
-    // 33-40 BASS
+    // 32-39 BASS
     case acousticBass
     case electricBassFinger
     case electricBassPick
@@ -56,7 +55,7 @@ public enum GMPatch: Int {
     case slapBass2
     case synthBass1
     case synthBass2
-    // 41-48 STRINGS
+    // 40-47 STRINGS
     case violin
     case viola
     case cello
@@ -65,7 +64,7 @@ public enum GMPatch: Int {
     case pizzicatoStrings
     case orchestralStrings
     case timpani
-    // 49-56 ENSEMBLE
+    // 48-55 ENSEMBLE
     case stringEnsemble1
     case stringEnsemble2
     case synthStrings1
@@ -74,7 +73,7 @@ public enum GMPatch: Int {
     case voiceOohs
     case synthVoice
     case orchestraHit
-    // 57-64 BRASS
+    // 56-63 BRASS
     case trumpet
     case trombone
     case tuba
@@ -83,7 +82,7 @@ public enum GMPatch: Int {
     case brassSection
     case synthBrass1
     case synthBrass2
-    // 65-72 REED
+    // 64-71 REED
     case sopranoSax
     case altoSax
     case tenorSax
@@ -92,7 +91,7 @@ public enum GMPatch: Int {
     case englishHorn
     case bassoon
     case clarinet
-    // 73-80 PIPE
+    // 72-79 PIPE
     case piccolo
     case flute
     case recorder
@@ -101,7 +100,7 @@ public enum GMPatch: Int {
     case skakuhachi
     case whistle
     case ocarina
-    // 81-88 SYNTH LEAD
+    // 80-87 SYNTH LEAD
     case lead1square
     case lead2sawtooth
     case lead3calliope
@@ -110,7 +109,7 @@ public enum GMPatch: Int {
     case lead6voice
     case lead7fifths
     case lead8basslead
-    // 89-96 SYNTH PAD
+    // 88-95 SYNTH PAD
     case pad1newage
     case pad2warm
     case pad3polysynth
@@ -119,7 +118,7 @@ public enum GMPatch: Int {
     case pad6metallic
     case pad7halo
     case pad8sweep
-    // 97-104 SYNTH EFFECTS
+    // 96-103 SYNTH EFFECTS
     case FX1Rain
     case FX2Soundtrack
     case FX3Crystal
@@ -128,7 +127,7 @@ public enum GMPatch: Int {
     case FX6Goblins
     case FX7Echoes
     case FX8Scifi
-    // 105-112 ETHNIC
+    // 104-111 ETHNIC
     case sitar
     case banjo
     case shamisen
@@ -137,7 +136,7 @@ public enum GMPatch: Int {
     case bagpipe
     case fiddle
     case shanai
-    // 113-120 PERCUSSIVE
+    // 112-119 PERCUSSIVE
     case tinkleBell
     case agogo
     case steelDrums
@@ -146,7 +145,7 @@ public enum GMPatch: Int {
     case melodicTom
     case synthDrum
     case reverseCymbal
-    // 121-128 SOUND EFFECTS
+    // 120-127 SOUND EFFECTS
     case guitarFretNoise
     case breathNoise
     case seashore

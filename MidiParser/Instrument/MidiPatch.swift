@@ -8,12 +8,16 @@
 
 import Foundation
 
+/// Standard MIDI Patch Assignments
+/// [Microsoft documents](https://docs.microsoft.com/en-us/windows/desktop/multimedia/standard-midi-patch-assignments)
 public struct MidiPatch {
     public let patch: GMPatch
     public let family: PatchFamily
     
-    init(program: Int) {
-        precondition(0 ..< 128 ~= program, "program must be 0..<128 .")
+    init?(program: Int) {
+        guard 0 ..< 128 ~= program else {
+            return nil
+        }
         patch = GMPatch(rawValue: program)!
         family = PatchFamily(rawValue: patch.rawValue / 8)!
     }
