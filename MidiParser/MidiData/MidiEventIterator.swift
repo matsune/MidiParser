@@ -64,4 +64,8 @@ final class MidiEventIterator {
         }
         return MidiEventInfo(type: eventType, timeStamp: eventTimeStamp, data: eventData, dataSize: eventDataSize)
     }
+    
+    func seek(in timestamp: MusicTimeStamp) {
+        check(MusicEventIteratorSeek(_iterator, timestamp), label: "MusicEventIteratorSeek")
+    }
 }

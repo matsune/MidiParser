@@ -13,9 +13,11 @@ import Foundation
 public class MidiTrack {
     // swiftlint:disable identifier_name
     let _musicTrack: MusicTrack
+    let iterator: MidiEventIterator
     
     init(musicTrack: MusicTrack) {
         _musicTrack = musicTrack
+        iterator = MidiEventIterator(track: _musicTrack)
     }
     
     public var length: MusicTimeStamp {

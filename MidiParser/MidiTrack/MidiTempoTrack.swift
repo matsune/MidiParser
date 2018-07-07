@@ -22,7 +22,7 @@ public final class MidiTempoTrack: MidiTrack {
         timeSignatures = []
         extendedTempos = []
         
-        let iterator = MidiEventIterator(track: _musicTrack)
+        iterator.seek(in: 0)
         while iterator.hasCurrentEvent {
             guard let eventInfo = iterator.currentEvent,
                 let eventData = eventInfo.data else {
