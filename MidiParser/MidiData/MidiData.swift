@@ -42,12 +42,13 @@ public final class MidiData {
         noteTracks.forEach { sequence.disposeTrack($0) }
     }
     
-    public var numberOfTracks: Int {
-        return noteTracks.count
-    }
-    
-    public var length: MusicTimeStamp {
-        return noteTracks.map { $0.length }.max() ?? 0
+    public var sequenceType: MusicSequenceType {
+        get {
+            return sequence.sequenceType
+        }
+        set {
+            sequence.sequenceType = newValue
+        }
     }
     
     public var infoDictionary: [String: AnyObject]? {

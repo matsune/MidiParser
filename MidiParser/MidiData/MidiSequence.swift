@@ -65,4 +65,17 @@ final class MidiSequence {
               label: "MusicSequenceGetIndTrack", level: .log)
         return track
     }
+    
+    var sequenceType: MusicSequenceType {
+        get {
+            var type = MusicSequenceType.beats
+            check(MusicSequenceGetSequenceType(_musicSequence, &type),
+                  label: "MusicSequenceGetSequenceType", level: .log)
+            return type
+        }
+        set {
+            check(MusicSequenceSetSequenceType(_musicSequence, newValue),
+                  label: "MusicSequenceSetSequenceType", level: .log)
+        }
+    }
 }

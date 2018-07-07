@@ -11,6 +11,7 @@ import Foundation
 
 public final class MidiTempoTrack: MidiTrack {
     public private(set) var timeSignatures: [MidiTimeSignature] = []
+    public private(set) var extendedTempos: [MidiExtendedTempoEvent] = []
     
     override init(musicTrack: MusicTrack) {
         super.init(musicTrack: musicTrack)
@@ -19,6 +20,7 @@ public final class MidiTempoTrack: MidiTrack {
     
     private func reloadEvents() {
         timeSignatures = []
+        extendedTempos = []
         
         let iterator = MidiEventIterator(track: _musicTrack)
         while iterator.hasCurrentEvent {
@@ -45,6 +47,10 @@ public final class MidiTempoTrack: MidiTrack {
                             break
                         }
                     }
+                case .extendedTempo:
+                    let tempoEvent = MidiExtendedTempoEvent(eventInfo: eventInfo,
+                                                            extendedTempoEvent: eventData.load(as: ExtendedTempoEvent.self))
+                    extendedTempos.append(tempoEvent)
                 default:
                     break
                 }
