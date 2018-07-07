@@ -41,7 +41,7 @@ extension String {
 }
 
 extension UInt8 {
-    public var hex: String {
+    var hexString: String {
         return String(self, radix: 16).uppercased()
     }
 }

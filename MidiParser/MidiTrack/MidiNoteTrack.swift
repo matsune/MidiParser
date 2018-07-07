@@ -96,7 +96,7 @@ public final class MidiNoteTrack: MidiTrack {
                     }
                 case .midiChannelMessage:
                     let channelMessage = eventData.load(as: MIDIChannelMessage.self)
-                    if channelMessage.status.hex.first == "C" {
+                    if channelMessage.status.hexString.first == "C" {
                         patch = MidiPatch(program: Int(channelMessage.data1))
                     }
                 default:
