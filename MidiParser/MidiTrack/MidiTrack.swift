@@ -11,10 +11,11 @@ import Foundation
 
 /// Superclass of `MidiTempoTrack` and `MidiNoteTrack`
 public class MidiTrack {
-    public let musicTrack: MusicTrack
+    // swiftlint:disable identifier_name
+    let _musicTrack: MusicTrack
     
     init(musicTrack: MusicTrack) {
-        self.musicTrack = musicTrack
+        _musicTrack = musicTrack
     }
     
     public var length: MusicTimeStamp {
@@ -25,17 +26,13 @@ public class MidiTrack {
     
     func getProperty<T>(_ property: SequenceTrackProperty, data: inout T) {
         var length = sizeof(T.self)
-        check(MusicTrackGetProperty(musicTrack, property.inPropertyID, &data, &length),
+        check(MusicTrackGetProperty(_musicTrack, property.inPropertyID, &data, &length),
               label: "[MusicTrackGetProperty] \(property)", level: .fatal)
     }
     
     func setProperty<T>(_ property: SequenceTrackProperty, data: inout T) {
         let length = sizeof(T.self)
-        check(MusicTrackSetProperty(musicTrack, property.inPropertyID, &data, length),
+        check(MusicTrackSetProperty(_musicTrack, property.inPropertyID, &data, length),
               label: "[MusicTrackSetProperty] \(property)", level: .fatal)
-    }
-    
-    public func setDest(inNode node: AUNode) {
-        check(MusicTrackSetDestNode(musicTrack, node), label: "MusicTrackSetDestNode")
     }
 }

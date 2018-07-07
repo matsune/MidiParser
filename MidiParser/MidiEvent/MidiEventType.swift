@@ -22,7 +22,7 @@ public enum MidiEventType: CustomDebugStringConvertible {
     case auPreset
     
     // swiftlint:disable cyclomatic_complexity
-    init(_ kMusicEventType: UInt32) {
+    init?(_ kMusicEventType: UInt32) {
         switch kMusicEventType {
         case kMusicEventType_NULL:
             self = .null
@@ -45,7 +45,7 @@ public enum MidiEventType: CustomDebugStringConvertible {
         case kMusicEventType_AUPreset:
             self = .auPreset
         default:
-            fatalError("MidiEventType error")
+            return nil
         }
     }
     

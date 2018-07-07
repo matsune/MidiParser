@@ -29,16 +29,8 @@ excluded:
 - Pods/
 - Carthage/
 - vendor/
-- mymeritTests/
-- Entity/EntityTests/
-- NetworkAPI/NetworkAPITests/
-- CellDriver/CellDriverTests/
-- SignalKit/SignalKitTests/
 
-# 1行あたりの文字数制限を300に変更
-# プロジェクト作成時にデフォルトで追加されるコメントをひっかけないため
 line_length: 300
-
-# 変数名が１文字以上なら許可に変更
 identifier_name:
   min_length: 1
+

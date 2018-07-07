@@ -17,7 +17,7 @@ final class MidiEventIterator {
         check(NewMusicEventIterator(track, &iterator), label: "NewMusicEventIterator")
         
         guard let eventIterator = iterator else {
-            fatalError("MidiEventIterator error")
+            fatalError("Could not initialize MidiEventIterator")
         }
         _iterator = eventIterator
     }
@@ -49,7 +49,7 @@ final class MidiEventIterator {
         check(MusicEventIteratorPreviousEvent(_iterator), label: "MusicEventIteratorPreviousEvent")
     }
     
-    func getCurrentEvent() -> MidiEventInfo? {
+    var currentEvent: MidiEventInfo? {
         var eventType: MusicEventType = 0
         var eventTimeStamp: MusicTimeStamp = -1
         var eventData: UnsafeRawPointer?
@@ -59,7 +59,7 @@ final class MidiEventIterator {
                                                 &eventType,
                                                 &eventData,
                                                 &eventDataSize),
-                 label: "MusicEventIteratorGetEventInfo") != noErr {
+                 label: "MusicEventIteratorGetEventInfo", level: .log) != noErr {
             return nil
         }
         return MidiEventInfo(type: eventType, timeStamp: eventTimeStamp, data: eventData, dataSize: eventDataSize)

@@ -9,7 +9,7 @@
 import AudioToolbox
 import Foundation
 
-public class MidiKeySignature: MidiEvent {
+public final class MidiKeySignature: MidiEvent, Equatable {
     public let keySignature: KeySignature
     
     init(eventInfo: MidiEventInfo, data: [Int]) {
@@ -21,12 +21,12 @@ public class MidiKeySignature: MidiEvent {
     public override var debugDescription: String {
         return "MidiKeySignature(timeStamp: \(timeStamp), keySignature: \(keySignature))"
     }
-}
-
-public func == (lhs: MidiKeySignature, rhs: MidiKeySignature) -> Bool {
-    return lhs.keySignature == rhs.keySignature
-}
-
-public func != (lhs: MidiKeySignature, rhs: MidiKeySignature) -> Bool {
-    return !(lhs == rhs)
+    
+    public static func == (lhs: MidiKeySignature, rhs: MidiKeySignature) -> Bool {
+        return lhs.keySignature == rhs.keySignature
+    }
+    
+    public static func != (lhs: MidiKeySignature, rhs: MidiKeySignature) -> Bool {
+        return !(lhs == rhs)
+    }
 }

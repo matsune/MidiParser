@@ -7,11 +7,10 @@
 //
 
 import AudioToolbox
-import CoreMIDI
 import Foundation
 
 public final class MidiData {
-    public let sequence: MidiSequence
+    private let sequence: MidiSequence
     public let tempoTrack: MidiTempoTrack?
     public let noteTracks: [MidiNoteTrack]
     
@@ -24,7 +23,6 @@ public final class MidiData {
             tempoTrack = nil
         }
         
-        // note tracks
         var tracks: [MidiNoteTrack] = []
         for i in 0 ..< sequence.trackCount {
             if let track = sequence.getTrack(at: i) {
@@ -50,5 +48,9 @@ public final class MidiData {
     
     public var length: MusicTimeStamp {
         return noteTracks.map { $0.length }.max() ?? 0
+    }
+    
+    public var infoDictionary: [String: AnyObject]? {
+        return sequence.infoDictionary as? [String: AnyObject]
     }
 }

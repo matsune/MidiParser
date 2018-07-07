@@ -63,40 +63,45 @@ public final class MidiNoteTrack: MidiTrack {
         keySignatures = []
         channels = []
         
-        let iterator = MidiEventIterator(track: musicTrack)
+        let iterator = MidiEventIterator(track: _musicTrack)
         while iterator.hasCurrentEvent {
-            guard let eventInfo = iterator.getCurrentEvent(),
+            guard let eventInfo = iterator.currentEvent,
                 let eventData = eventInfo.data else {
                 fatalError("MidiNoteTrack error")
             }
             
-            switch MidiEventType(eventInfo.type) {
-            case .midiNoteMessage:
-                let noteMessage = eventData.load(as: MIDINoteMessage.self)
-                notes.append(MidiNoteEvent(eventInfo: eventInfo,
-                                           midiNoteMessage: noteMessage))
-                isDrumTrack = noteMessage.channel == 9
-            case .meta:
-                var metaEvent = eventData.load(as: MIDIMetaEvent.self)
-                var data: [Int] = []
-                withUnsafeMutablePointer(to: &metaEvent.data) {
-                    for i in 0 ..< Int(metaEvent.dataLength) {
-                        data.append(Int($0.advanced(by: i).pointee))
+            if let eventType = MidiEventType(eventInfo.type) {
+                switch eventType {
+                case .midiNoteMessage:
+                    let noteMessage = eventData.load(as: MIDINoteMessage.self)
+                    notes.append(MidiNoteEvent(eventInfo: eventInfo,
+                                               midiNoteMessage: noteMessage))
+                    // Channel 9 is reserved for the use with percussion instruments in general.
+                    isDrumTrack = noteMessage.channel == 9
+                case .meta:
+                    var metaEvent = eventData.load(as: MIDIMetaEvent.self)
+                    var data: [Int] = []
+                    withUnsafeMutablePointer(to: &metaEvent.data) {
+                        for i in 0 ..< Int(metaEvent.dataLength) {
+                            data.append(Int($0.advanced(by: i).pointee))
+                        }
                     }
-                }
-                switch MetaEventType(metaEvent.metaEventType) {
-                case .keySignature:
-                    keySignatures.append(MidiKeySignature(eventInfo: eventInfo, data: data))
+                    if let metaType = MetaEventType(decimal: metaEvent.metaEventType) {
+                        switch metaType {
+                        case .keySignature:
+                            keySignatures.append(MidiKeySignature(eventInfo: eventInfo, data: data))
+                        default:
+                            break
+                        }
+                    }
+                case .midiChannelMessage:
+                    let channelMessage = eventData.load(as: MIDIChannelMessage.self)
+                    if channelMessage.status.hex.first == "C" {
+                        patch = MidiPatch(program: Int(channelMessage.data1))
+                    }
                 default:
                     break
                 }
-            case .midiChannelMessage:
-                let channelMessage = eventData.load(as: MIDIChannelMessage.self)
-                if channelMessage.status.hex.first == "C" {
-                    patch = MidiPatch(program: Int(channelMessage.data1))
-                }
-            default:
-                break
             }
             
             if !iterator.hasNextEvent { break }

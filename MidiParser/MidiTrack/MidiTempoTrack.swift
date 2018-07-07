@@ -20,30 +20,34 @@ public final class MidiTempoTrack: MidiTrack {
     private func reloadEvents() {
         timeSignatures = []
         
-        let iterator = MidiEventIterator(track: musicTrack)
+        let iterator = MidiEventIterator(track: _musicTrack)
         while iterator.hasCurrentEvent {
-            guard let eventInfo = iterator.getCurrentEvent(),
+            guard let eventInfo = iterator.currentEvent,
                 let eventData = eventInfo.data else {
                 fatalError("MidiTempoTrack error")
             }
             
-            switch MidiEventType(eventInfo.type) {
-            case .meta:
-                var metaEvent = eventData.load(as: MIDIMetaEvent.self)
-                var data: [Int] = []
-                withUnsafeMutablePointer(to: &metaEvent.data) {
-                    for i in 0 ..< Int(metaEvent.dataLength) {
-                        data.append(Int($0.advanced(by: i).pointee))
+            if let eventType = MidiEventType(eventInfo.type) {
+                switch eventType {
+                case .meta:
+                    var metaEvent = eventData.load(as: MIDIMetaEvent.self)
+                    var data: [Int] = []
+                    withUnsafeMutablePointer(to: &metaEvent.data) {
+                        for i in 0 ..< Int(metaEvent.dataLength) {
+                            data.append(Int($0.advanced(by: i).pointee))
+                        }
                     }
-                }
-                switch MetaEventType(metaEvent.metaEventType) {
-                case .timeSignature:
-                    timeSignatures.append(MidiTimeSignature(eventInfo: eventInfo, data: data))
+                    if let metaType = MetaEventType(decimal: metaEvent.metaEventType) {
+                        switch metaType {
+                        case .timeSignature:
+                            timeSignatures.append(MidiTimeSignature(eventInfo: eventInfo, data: data))
+                        default:
+                            break
+                        }
+                    }
                 default:
                     break
                 }
-            default:
-                break
             }
             
             if !iterator.hasNextEvent { break }

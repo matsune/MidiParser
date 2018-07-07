@@ -11,7 +11,7 @@ import Foundation
 // General MIDI Instrument Patch Map defines 128 instruments with program number 1 to 128.
 // Be careful that rawValue must be 0 to 127.
 public enum GMPatch: Int {
-    // 1-8 PIANO
+    // No.1-8 PIANO
     case acousticGrand
     case brightAcoustic
     case electricGrand

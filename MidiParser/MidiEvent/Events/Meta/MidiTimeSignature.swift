@@ -9,10 +9,10 @@
 import AudioToolbox
 import Foundation
 
-public class MidiTimeSignature: MidiEvent {
-    // 分子
+public final class MidiTimeSignature: MidiEvent, Equatable {
+    // numerator / denominator
+    // ex.) 4/4
     public let numerator: Int
-    // 分母
     public let denominator: Int
     /// number of MIDI clocks in a metronome click
     public let cc: Int
@@ -37,12 +37,12 @@ public class MidiTimeSignature: MidiEvent {
     public override var debugDescription: String {
         return "MidiTimeSignature(timeStamp: \(timeStamp), timeSignature: \(numerator)/\(denominator), cc: \(cc), bb: \(bb))"
     }
-}
-
-public func == (lhs: MidiTimeSignature, rhs: MidiTimeSignature) -> Bool {
-    return lhs.numerator == rhs.numerator && lhs.denominator == rhs.denominator
-}
-
-public func != (lhs: MidiTimeSignature, rhs: MidiTimeSignature) -> Bool {
-    return !(lhs == rhs)
+    
+    public static func == (lhs: MidiTimeSignature, rhs: MidiTimeSignature) -> Bool {
+        return lhs.numerator == rhs.numerator && lhs.denominator == rhs.denominator
+    }
+    
+    public static func != (lhs: MidiTimeSignature, rhs: MidiTimeSignature) -> Bool {
+        return !(lhs == rhs)
+    }
 }

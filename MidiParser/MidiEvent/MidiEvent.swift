@@ -15,7 +15,7 @@ public class MidiEvent: CustomDebugStringConvertible {
     public let dataSize: UInt32
     
     init(eventInfo: MidiEventInfo) {
-        eventType = MidiEventType(eventInfo.type)
+        eventType = MidiEventType(eventInfo.type)!
         timeStamp = eventInfo.timeStamp
         dataSize = eventInfo.dataSize
     }
