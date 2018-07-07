@@ -76,7 +76,7 @@ public final class MidiNoteTrack: MidiTrack {
                     let noteMessage = eventData.load(as: MIDINoteMessage.self)
                     notes.append(MidiNoteEvent(eventInfo: eventInfo,
                                                midiNoteMessage: noteMessage))
-                    // Channel 9 is reserved for the use with percussion instruments in general.
+                    // Channel 9 is reserved for the use with percussion instruments.
                     isDrumTrack = noteMessage.channel == 9
                 case .meta:
                     var metaEvent = eventData.load(as: MIDIMetaEvent.self)

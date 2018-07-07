@@ -20,15 +20,13 @@ class MidiParserTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
+//    func testExample() {
+//        guard let url = Bundle(for: type(of: self)).url(forResource: "MIDI_sample", withExtension: "mid"),
+//            let data = try? Data(contentsOf: url) else {
+//            XCTFail()
+//            return
+//        }
+//        let midi = MidiData(data: data)
+//        print(midi.infoDictionary)
+//    }
 }
