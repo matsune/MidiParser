@@ -10,7 +10,6 @@ import AudioToolbox
 import Foundation
 
 public final class MidiSequence {
-    
     private let musicSequence: MusicSequence
     
     init(data: Data) {
@@ -23,7 +22,7 @@ public final class MidiSequence {
         check(MusicSequenceFileLoadData(sequence, data as CFData, MusicSequenceFileTypeID.midiType, []),
               label: "MusicSequenceFileLoadData")
         
-        self.musicSequence = sequence
+        musicSequence = sequence
     }
     
     deinit {
@@ -32,7 +31,7 @@ public final class MidiSequence {
     
     func disposeTrack(_ track: MidiTrack) {
         check(MusicSequenceDisposeTrack(musicSequence, track.musicTrack),
-               label: "MusicSequenceDisposeTrack", level: .ignore)
+              label: "MusicSequenceDisposeTrack", level: .ignore)
     }
     
     public var infoDictionary: CFDictionary {
@@ -42,28 +41,28 @@ public final class MidiSequence {
     public var tempoTrack: MusicTrack? {
         var tempoTrack: MusicTrack?
         check(MusicSequenceGetTempoTrack(musicSequence, &tempoTrack),
-               label: "MusicSequenceGetTempoTrack", level: .log)
+              label: "MusicSequenceGetTempoTrack", level: .log)
         return tempoTrack
     }
     
     public var trackCount: Int {
         var trackCount: UInt32 = 0
         check(MusicSequenceGetTrackCount(musicSequence, &trackCount),
-               label: "MusicSequenceGetTrackCount", level: .log)
+              label: "MusicSequenceGetTrackCount", level: .log)
         return Int(trackCount)
     }
     
     public func getTrackIndex(ofTrack track: MusicTrack) -> Int {
         var trackIndex: UInt32 = 0
         check(MusicSequenceGetTrackIndex(musicSequence, track, &trackIndex),
-               label: "MusicSequenceGetTrackIndex", level: .log)
+              label: "MusicSequenceGetTrackIndex", level: .log)
         return Int(trackIndex)
     }
     
     public func getTrack(at index: Int) -> MusicTrack? {
         var track: MusicTrack?
         check(MusicSequenceGetIndTrack(musicSequence, UInt32(index), &track),
-               label: "MusicSequenceGetIndTrack", level: .log)
+              label: "MusicSequenceGetIndTrack", level: .log)
         return track
     }
 }

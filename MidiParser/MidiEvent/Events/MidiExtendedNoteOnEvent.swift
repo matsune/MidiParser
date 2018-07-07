@@ -10,11 +10,10 @@ import AudioToolbox
 import Foundation
 
 public final class MidiExtendedNoteOnEvent: MidiEvent {
-    
     private let _extendedNoteOnEvent: ExtendedNoteOnEvent
     
     init(eventInfo: MidiEventInfo, extendedNoteOnEvent: ExtendedNoteOnEvent) {
-        self._extendedNoteOnEvent = extendedNoteOnEvent
+        _extendedNoteOnEvent = extendedNoteOnEvent
         super.init(eventInfo: eventInfo)
     }
     

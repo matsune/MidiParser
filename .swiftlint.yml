@@ -1,0 +1,44 @@
+disabled_rules:
+- trailing_whitespace
+- large_tuple
+- force_cast
+- force_try
+
+opt_in_rules:
+- attributes
+- closure_end_indentation
+- closure_spacing
+- conditional_returns_on_newline
+- empty_count
+- explicit_init
+- fatal_error_message
+- first_where
+- implicitly_unwrapped_optional
+- missing_docs
+- nimble_operator
+- operator_usage_whitespace
+- overridden_super_call
+- private_outlet
+- prohibited_super_call
+- redundant_nil_coalescing
+- sorted_imports
+- switch_case_on_newline
+- valid_docs
+
+excluded:
+- Pods/
+- Carthage/
+- vendor/
+- mymeritTests/
+- Entity/EntityTests/
+- NetworkAPI/NetworkAPITests/
+- CellDriver/CellDriverTests/
+- SignalKit/SignalKitTests/
+
+# 1行あたりの文字数制限を300に変更
+# プロジェクト作成時にデフォルトで追加されるコメントをひっかけないため
+line_length: 300
+
+# 変数名が１文字以上なら許可に変更
+identifier_name:
+  min_length: 1

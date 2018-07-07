@@ -10,11 +10,10 @@ import AudioToolbox
 import Foundation
 
 public final class MidiParameterEvent: MidiEvent {
-    
     private let _parameterEvent: ParameterEvent
     
     init(eventInfo: MidiEventInfo, parameterEvent: ParameterEvent) {
-        self._parameterEvent = parameterEvent
+        _parameterEvent = parameterEvent
         super.init(eventInfo: eventInfo)
     }
     

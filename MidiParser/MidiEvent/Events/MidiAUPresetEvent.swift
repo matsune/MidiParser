@@ -10,11 +10,10 @@ import AudioToolbox
 import Foundation
 
 public final class MidiAUPresetEvent: MidiEvent {
-    
     private let _auPresetEvent: AUPresetEvent
     
     init(eventInfo: MidiEventInfo, auPresetEvent: AUPresetEvent) {
-        self._auPresetEvent = auPresetEvent
+        _auPresetEvent = auPresetEvent
         super.init(eventInfo: eventInfo)
     }
     

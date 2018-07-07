@@ -10,15 +10,14 @@ import AudioToolbox
 import Foundation
 
 public class MidiEvent: CustomDebugStringConvertible {
-    
     public let eventType: MidiEventType
     public let timeStamp: MusicTimeStamp
     public let dataSize: UInt32
     
     init(eventInfo: MidiEventInfo) {
-        self.eventType = MidiEventType(eventInfo.type)
-        self.timeStamp = eventInfo.timeStamp
-        self.dataSize = eventInfo.dataSize
+        eventType = MidiEventType(eventInfo.type)
+        timeStamp = eventInfo.timeStamp
+        dataSize = eventInfo.dataSize
     }
     
     // - MARK: CustomDebugStringConvertible

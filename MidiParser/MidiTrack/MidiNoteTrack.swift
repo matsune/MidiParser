@@ -10,7 +10,6 @@ import AudioToolbox
 import Foundation
 
 public final class MidiNoteTrack: MidiTrack {
-    
     public private(set) var notes: [MidiNoteEvent] = []
     public private(set) var keySignatures: [MidiKeySignature] = []
     public private(set) var channels: [MIDIChannelMessage] = []
@@ -68,7 +67,7 @@ public final class MidiNoteTrack: MidiTrack {
         while iterator.hasCurrentEvent {
             guard let eventInfo = iterator.getCurrentEvent(),
                 let eventData = eventInfo.data else {
-                    fatalError("MidiNoteTrack error")
+                fatalError("MidiNoteTrack error")
             }
             
             switch MidiEventType(eventInfo.type) {
@@ -81,7 +80,7 @@ public final class MidiNoteTrack: MidiTrack {
                 var metaEvent = eventData.load(as: MIDIMetaEvent.self)
                 var data: [Int] = []
                 withUnsafeMutablePointer(to: &metaEvent.data) {
-                    for i in 0..<Int(metaEvent.dataLength) {
+                    for i in 0 ..< Int(metaEvent.dataLength) {
                         data.append(Int($0.advanced(by: i).pointee))
                     }
                 }
@@ -94,7 +93,7 @@ public final class MidiNoteTrack: MidiTrack {
             case .midiChannelMessage:
                 let channelMessage = eventData.load(as: MIDIChannelMessage.self)
                 if channelMessage.status.hex.first == "C" {
-                    self.patch = MidiPatch(program: Int(channelMessage.data1))
+                    patch = MidiPatch(program: Int(channelMessage.data1))
                 }
             default:
                 break

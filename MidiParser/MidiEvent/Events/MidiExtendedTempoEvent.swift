@@ -10,11 +10,10 @@ import AudioToolbox
 import Foundation
 
 public final class MidiExtendedTempoEvent: MidiEvent {
-    
     private let _extendedTempoEvent: ExtendedTempoEvent
     
     init(eventInfo: MidiEventInfo, extendedTempoEvent: ExtendedTempoEvent) {
-        self._extendedTempoEvent = extendedTempoEvent
+        _extendedTempoEvent = extendedTempoEvent
         super.init(eventInfo: eventInfo)
     }
     

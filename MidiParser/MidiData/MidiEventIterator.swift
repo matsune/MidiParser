@@ -10,7 +10,6 @@ import AudioToolbox
 import Foundation
 
 final class MidiEventIterator {
-    
     private let _iterator: MusicEventIterator
     
     init(track: MusicTrack) {
@@ -20,25 +19,25 @@ final class MidiEventIterator {
         guard let eventIterator = iterator else {
             fatalError("MidiEventIterator error")
         }
-        self._iterator = eventIterator
+        _iterator = eventIterator
     }
     
     deinit {
         check(DisposeMusicEventIterator(_iterator),
-               label: "DisposeMusicEventIterator", level: .log)
+              label: "DisposeMusicEventIterator", level: .log)
     }
     
     var hasNextEvent: Bool {
         var hasNextEvent: DarwinBoolean = false
         check(MusicEventIteratorHasNextEvent(_iterator, &hasNextEvent),
-               label: "MusicEventIteratorHasNextEvent", level: .log)
+              label: "MusicEventIteratorHasNextEvent", level: .log)
         return hasNextEvent.boolValue
     }
     
     var hasCurrentEvent: Bool {
         var hasCurrentEvent: DarwinBoolean = false
         check(MusicEventIteratorHasCurrentEvent(_iterator, &hasCurrentEvent),
-               label: "MusicEventIteratorHasCurrentEvent", level: .log)
+              label: "MusicEventIteratorHasCurrentEvent", level: .log)
         return hasCurrentEvent.boolValue
     }
     
@@ -56,11 +55,11 @@ final class MidiEventIterator {
         var eventData: UnsafeRawPointer?
         var eventDataSize: UInt32 = 0
         if check(MusicEventIteratorGetEventInfo(_iterator,
-                                                 &eventTimeStamp,
-                                                 &eventType,
-                                                 &eventData,
-                                                 &eventDataSize),
-                  label: "MusicEventIteratorGetEventInfo") != noErr {
+                                                &eventTimeStamp,
+                                                &eventType,
+                                                &eventData,
+                                                &eventDataSize),
+                 label: "MusicEventIteratorGetEventInfo") != noErr {
             return nil
         }
         return MidiEventInfo(type: eventType, timeStamp: eventTimeStamp, data: eventData, dataSize: eventDataSize)

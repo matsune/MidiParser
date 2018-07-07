@@ -10,7 +10,6 @@ import AudioToolbox
 import Foundation
 
 public final class MidiTempoTrack: MidiTrack {
-    
     public private(set) var timeSignatures: [MidiTimeSignature] = []
     
     override init(musicTrack: MusicTrack) {
@@ -25,7 +24,7 @@ public final class MidiTempoTrack: MidiTrack {
         while iterator.hasCurrentEvent {
             guard let eventInfo = iterator.getCurrentEvent(),
                 let eventData = eventInfo.data else {
-                    fatalError("MidiTempoTrack error")
+                fatalError("MidiTempoTrack error")
             }
             
             switch MidiEventType(eventInfo.type) {
@@ -33,7 +32,7 @@ public final class MidiTempoTrack: MidiTrack {
                 var metaEvent = eventData.load(as: MIDIMetaEvent.self)
                 var data: [Int] = []
                 withUnsafeMutablePointer(to: &metaEvent.data) {
-                    for i in 0..<Int(metaEvent.dataLength) {
+                    for i in 0 ..< Int(metaEvent.dataLength) {
                         data.append(Int($0.advanced(by: i).pointee))
                     }
                 }

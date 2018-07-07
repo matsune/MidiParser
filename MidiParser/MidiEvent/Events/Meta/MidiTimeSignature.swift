@@ -20,7 +20,7 @@ public class MidiTimeSignature: MidiEvent {
     public let bb: Int
     
     convenience init(eventInfo: MidiEventInfo, data: [Int]) {
-       self.init(eventInfo: eventInfo, numerator: data[0], denominator: data[1], cc: data[2], bb: data[3])
+        self.init(eventInfo: eventInfo, numerator: data[0], denominator: data[1], cc: data[2], bb: data[3])
     }
     
     init(eventInfo: MidiEventInfo, numerator: Int, denominator: Int, cc: Int, bb: Int) {
@@ -34,7 +34,7 @@ public class MidiTimeSignature: MidiEvent {
     }
     
     // - MARK: CustomDebugStringConvertible
-    override public var debugDescription: String {
+    public override var debugDescription: String {
         return "MidiTimeSignature(timeStamp: \(timeStamp), timeSignature: \(numerator)/\(denominator), cc: \(cc), bb: \(bb))"
     }
 }

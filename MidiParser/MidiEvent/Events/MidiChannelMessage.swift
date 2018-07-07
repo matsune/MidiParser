@@ -10,18 +10,17 @@ import AudioToolbox
 import Foundation
 
 public final class MidiChannelMessage: MidiEvent {
-    
     private let _channelMessage: MIDIChannelMessage
     
     init(eventInfo: MidiEventInfo, channelMessage: MIDIChannelMessage) {
-        self._channelMessage = channelMessage
+        _channelMessage = channelMessage
         super.init(eventInfo: eventInfo)
     }
     
     public var status: UInt8 {
         return _channelMessage.status
     }
-
+    
     public var data1: UInt8 {
         return _channelMessage.data1
     }

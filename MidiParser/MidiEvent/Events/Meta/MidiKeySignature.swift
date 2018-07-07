@@ -10,7 +10,6 @@ import AudioToolbox
 import Foundation
 
 public class MidiKeySignature: MidiEvent {
-    
     public let keySignature: KeySignature
     
     init(eventInfo: MidiEventInfo, data: [Int]) {
@@ -19,7 +18,7 @@ public class MidiKeySignature: MidiEvent {
     }
     
     // - MARK: CustomDebugStringConvertible
-    override public var debugDescription: String {
+    public override var debugDescription: String {
         return "MidiKeySignature(timeStamp: \(timeStamp), keySignature: \(keySignature))"
     }
 }

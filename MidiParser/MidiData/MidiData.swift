@@ -11,23 +11,22 @@ import CoreMIDI
 import Foundation
 
 public final class MidiData {
-    
     public let sequence: MidiSequence
     public let tempoTrack: MidiTempoTrack?
     public let noteTracks: [MidiNoteTrack]
     
     public init(data: Data) {
-        self.sequence = MidiSequence(data: data)
+        sequence = MidiSequence(data: data)
         
         if let tempoTrack = sequence.tempoTrack {
             self.tempoTrack = MidiTempoTrack(musicTrack: tempoTrack)
         } else {
-            self.tempoTrack = nil
+            tempoTrack = nil
         }
         
         // note tracks
         var tracks: [MidiNoteTrack] = []
-        for i in 0..<sequence.trackCount {
+        for i in 0 ..< sequence.trackCount {
             if let track = sequence.getTrack(at: i) {
                 let track = MidiNoteTrack(musicTrack: track)
                 if !track.notes.isEmpty {
@@ -35,7 +34,7 @@ public final class MidiData {
                 }
             }
         }
-        self.noteTracks = tracks
+        noteTracks = tracks
     }
     
     deinit {

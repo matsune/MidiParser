@@ -10,11 +10,10 @@ import AudioToolbox
 import Foundation
 
 public final class MidiRawData: MidiEvent {
-    
     private let _rawData: MIDIRawData
     
     init(eventInfo: MidiEventInfo, rawData: MIDIRawData) {
-        self._rawData = rawData
+        _rawData = rawData
         super.init(eventInfo: eventInfo)
     }
     
@@ -22,7 +21,7 @@ public final class MidiRawData: MidiEvent {
         return _rawData.length
     }
     
-    public var data: (UInt8) {
+    public var data: UInt8 {
         return _rawData.data
     }
 }

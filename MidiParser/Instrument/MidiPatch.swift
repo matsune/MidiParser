@@ -9,14 +9,12 @@
 import Foundation
 
 public struct MidiPatch {
-    
     public let patch: GMPatch
     public let family: PatchFamily
     
     init(program: Int) {
-        precondition(0..<128 ~= program, "program must be 0..<128 .")
-        self.patch = GMPatch(rawValue: program)!
-        self.family = PatchFamily(rawValue: patch.rawValue / 8)!
+        precondition(0 ..< 128 ~= program, "program must be 0..<128 .")
+        patch = GMPatch(rawValue: program)!
+        family = PatchFamily(rawValue: patch.rawValue / 8)!
     }
-    
 }

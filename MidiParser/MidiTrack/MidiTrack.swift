@@ -11,7 +11,6 @@ import Foundation
 
 /// Superclass of `MidiTempoTrack` and `MidiNoteTrack`
 public class MidiTrack {
-    
     public let musicTrack: MusicTrack
     
     init(musicTrack: MusicTrack) {
@@ -27,13 +26,13 @@ public class MidiTrack {
     func getProperty<T>(_ property: SequenceTrackProperty, data: inout T) {
         var length = sizeof(T.self)
         check(MusicTrackGetProperty(musicTrack, property.inPropertyID, &data, &length),
-               label: "[MusicTrackGetProperty] \(property)", level: .fatal)
+              label: "[MusicTrackGetProperty] \(property)", level: .fatal)
     }
     
     func setProperty<T>(_ property: SequenceTrackProperty, data: inout T) {
         let length = sizeof(T.self)
         check(MusicTrackSetProperty(musicTrack, property.inPropertyID, &data, length),
-               label: "[MusicTrackSetProperty] \(property)", level: .fatal)
+              label: "[MusicTrackSetProperty] \(property)", level: .fatal)
     }
     
     public func setDest(inNode node: AUNode) {
