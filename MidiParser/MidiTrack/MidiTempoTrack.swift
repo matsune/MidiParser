@@ -22,9 +22,8 @@ public final class MidiTempoTrack: MidiTrack {
         timeSignatures = []
         extendedTempos = []
         
-        iterator.seek(in: 0)
-        while iterator.hasCurrentEvent {
-            guard let eventInfo = iterator.currentEvent,
+        iterator.enumerate { eventInfo in
+            guard let eventInfo = eventInfo,
                 let eventData = eventInfo.data else {
                 fatalError("MidiTempoTrack error")
             }
@@ -55,9 +54,6 @@ public final class MidiTempoTrack: MidiTrack {
                     break
                 }
             }
-            
-            if !iterator.hasNextEvent { break }
-            iterator.nextEvent()
         }
     }
 }

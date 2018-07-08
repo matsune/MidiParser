@@ -63,9 +63,8 @@ public final class MidiNoteTrack: MidiTrack {
         keySignatures = []
         channels = []
         
-        iterator.seek(in: 0)
-        while iterator.hasCurrentEvent {
-            guard let eventInfo = iterator.currentEvent,
+        iterator.enumerate { eventInfo in
+            guard let eventInfo = eventInfo,
                 let eventData = eventInfo.data else {
                 fatalError("MidiNoteTrack error")
             }
@@ -103,9 +102,6 @@ public final class MidiNoteTrack: MidiTrack {
                     break
                 }
             }
-            
-            if !iterator.hasNextEvent { break }
-            iterator.nextEvent()
         }
     }
 }
