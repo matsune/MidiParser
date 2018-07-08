@@ -162,12 +162,12 @@
 			isa = PBXGroup;
 			children = (
 				13C66B5A20F0C1F800DD8D1D /* MIDI_sample.mid */,
-				13C66B0D20F0B9AE00DD8D1D /* MidiParserTests.swift */,
 				13C66B0F20F0B9AE00DD8D1D /* Info.plist */,
-				13C66B5C20F0CAC600DD8D1D /* MetaEventTypeTests.swift */,
-				13C66B6020F0E8C300DD8D1D /* MidiPatchTests.swift */,
 				13C66B6220F0ED4C00DD8D1D /* EnumCollection.swift */,
+				13C66B5C20F0CAC600DD8D1D /* MetaEventTypeTests.swift */,
 				13C66B6620F0F28500DD8D1D /* MidiEventTypeTests.swift */,
+				13C66B0D20F0B9AE00DD8D1D /* MidiParserTests.swift */,
+				13C66B6020F0E8C300DD8D1D /* MidiPatchTests.swift */,
 			);
 			path = MidiParserTests;
 			sourceTree = "<group>";

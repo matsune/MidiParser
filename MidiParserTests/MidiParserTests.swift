@@ -41,5 +41,9 @@ final class MidiParserTests: XCTestCase {
         XCTAssertEqual(midi.tempoTrack?.timeSignatures[0].bb, 8)
         XCTAssertEqual(midi.tempoTrack?.extendedTempos[0].bpm, 120)
         XCTAssertEqual(midi.sequenceType, .beats)
+        
+        let noteCount = midi.noteTracks[0].notes.count
+        midi.noteTracks[0].deleteNote(at: 10)
+        XCTAssertEqual(noteCount - 1, midi.noteTracks[0].notes.count)
     }
 }

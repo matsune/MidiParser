@@ -104,4 +104,9 @@ public final class MidiNoteTrack: MidiTrack {
             }
         }
     }
+    
+    func deleteNote(at index: Int) {
+        let note = notes.remove(at: index)
+        iterator.delete(event: note)
+    }
 }

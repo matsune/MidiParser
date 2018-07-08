@@ -81,4 +81,12 @@ final class MidiEventIterator {
     func deleteEvent() {
         check(MusicEventIteratorDeleteEvent(_iterator), label: "MusicEventIteratorDeleteEvent")
     }
+    
+    func delete(event: MidiEvent) {
+        enumerate { eventInfo in
+            if eventInfo?.data == event.eventInfo.data {
+                deleteEvent()
+            }
+        }
+    }
 }
