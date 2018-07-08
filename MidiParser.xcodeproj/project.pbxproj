@@ -41,6 +41,7 @@
 		13C66B6120F0E8C300DD8D1D /* MidiPatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66B6020F0E8C300DD8D1D /* MidiPatchTests.swift */; };
 		13C66B6320F0ED4C00DD8D1D /* EnumCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66B6220F0ED4C00DD8D1D /* EnumCollection.swift */; };
 		13C66B6720F0F28500DD8D1D /* MidiEventTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66B6620F0F28500DD8D1D /* MidiEventTypeTests.swift */; };
+		13C66B6920F18BEE00DD8D1D /* MidiInfoKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66B6820F18BEE00DD8D1D /* MidiInfoKey.swift */; };
 		2A899B4C9B4C95177ADFFCDC /* Pods_MidiParserTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E04F0BBD16957D960E1B2CD /* Pods_MidiParserTests.framework */; };
 		A9776738786A16DE6010E112 /* Pods_MidiParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8977925237111AA7EEAA9A5A /* Pods_MidiParser.framework */; };
 /* End PBXBuildFile section */
@@ -93,6 +94,7 @@
 		13C66B6020F0E8C300DD8D1D /* MidiPatchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiPatchTests.swift; sourceTree = "<group>"; };
 		13C66B6220F0ED4C00DD8D1D /* EnumCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumCollection.swift; sourceTree = "<group>"; };
 		13C66B6620F0F28500DD8D1D /* MidiEventTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiEventTypeTests.swift; sourceTree = "<group>"; };
+		13C66B6820F18BEE00DD8D1D /* MidiInfoKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiInfoKey.swift; sourceTree = "<group>"; };
 		1FF43606FB3AB9F309D04341 /* Pods-MidiParserTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParserTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParserTests/Pods-MidiParserTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2290DA5469624C447CF07436 /* Pods-MidiParser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParser/Pods-MidiParser.debug.xcconfig"; sourceTree = "<group>"; };
 		2E04F0BBD16957D960E1B2CD /* Pods_MidiParserTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MidiParserTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -222,6 +224,7 @@
 				13C66B3020F0B9F200DD8D1D /* MidiData.swift */,
 				13C66B3120F0B9F200DD8D1D /* MidiEventIterator.swift */,
 				13C66B3220F0B9F200DD8D1D /* MidiSequence.swift */,
+				13C66B6820F18BEE00DD8D1D /* MidiInfoKey.swift */,
 			);
 			path = MidiData;
 			sourceTree = "<group>";
@@ -471,6 +474,7 @@
 				13C66B5320F0B9F200DD8D1D /* MidiTrack.swift in Sources */,
 				13C66B5120F0B9F200DD8D1D /* MidiTempoTrack.swift in Sources */,
 				13C66B4020F0B9F200DD8D1D /* MidiExtendedNoteOnEvent.swift in Sources */,
+				13C66B6920F18BEE00DD8D1D /* MidiInfoKey.swift in Sources */,
 				13C66B4220F0B9F200DD8D1D /* MidiChannelMessage.swift in Sources */,
 				13C66B5620F0B9F200DD8D1D /* GMPatch.swift in Sources */,
 				13C66B4420F0B9F200DD8D1D /* MidiParameterEvent.swift in Sources */,

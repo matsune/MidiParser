@@ -51,7 +51,10 @@ public final class MidiData {
         }
     }
     
-    public var infoDictionary: [String: AnyObject]? {
-        return sequence.infoDictionary as? [String: AnyObject]
+    public var infoDictionary: [MidiInfoKey: AnyObject] {
+        guard let dict = sequence.infoDictionary as? [String: AnyObject] else {
+            return [:]
+        }
+        return Dictionary(uniqueKeysWithValues: dict.map { (MidiInfoKey(val: $0.key)!, $0.value) })
     }
 }
