@@ -69,8 +69,8 @@ final class MidiEventIterator {
         check(MusicEventIteratorSeek(_iterator, timestamp), label: "MusicEventIteratorSeek")
     }
     
-    func enumerate(block: (MidiEventInfo?) -> Void) {
-        seek(in: 0)
+    func enumerate(seekTime: MusicTimeStamp = 0, block: (MidiEventInfo?) -> Void) {
+        seek(in: seekTime)
         while hasCurrentEvent {
             block(currentEvent)
             if !hasNextEvent { break }
@@ -82,11 +82,24 @@ final class MidiEventIterator {
         check(MusicEventIteratorDeleteEvent(_iterator), label: "MusicEventIteratorDeleteEvent")
     }
     
-    func delete(event: MidiEvent) {
-        enumerate { eventInfo in
-            if eventInfo?.data == event.eventInfo.data {
-                deleteEvent()
+    func delete(note: MidiNote) {
+        enumerate(seekTime: note.timeStamp) { info in
+            if let info = info,
+                info.type == kMusicEventType_MIDINoteMessage,
+                let noteMessage = info.data?.load(as: MIDINoteMessage.self),
+                note.convert() == noteMessage {
+                check(MusicEventIteratorDeleteEvent(_iterator), label: "MusicEventIteratorDeleteEvent")
             }
         }
+    }
+}
+
+extension MIDINoteMessage: Equatable {
+    public static func == (lhs: MIDINoteMessage, rhs: MIDINoteMessage) -> Bool {
+        return lhs.channel == rhs.channel
+            && lhs.duration == rhs.duration
+            && lhs.note == rhs.note
+            && lhs.releaseVelocity == rhs.releaseVelocity
+            && lhs.velocity == rhs.velocity
     }
 }

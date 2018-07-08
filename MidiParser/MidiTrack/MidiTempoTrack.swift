@@ -11,7 +11,7 @@ import Foundation
 
 public final class MidiTempoTrack: MidiTrack {
     public private(set) var timeSignatures: [MidiTimeSignature] = []
-    public private(set) var extendedTempos: [MidiExtendedTempoEvent] = []
+    public private(set) var extendedTempos: [MidiExtendedTempo] = []
     
     override init(musicTrack: MusicTrack) {
         super.init(musicTrack: musicTrack)
@@ -41,15 +41,14 @@ public final class MidiTempoTrack: MidiTrack {
                     if let metaType = MetaEventType(decimal: metaEvent.metaEventType) {
                         switch metaType {
                         case .timeSignature:
-                            timeSignatures.append(MidiTimeSignature(eventInfo: eventInfo, data: data))
+                            timeSignatures.append(MidiTimeSignature(timeStamp: eventInfo.timeStamp, data: data))
                         default:
                             break
                         }
                     }
                 case .extendedTempo:
-                    let tempoEvent = MidiExtendedTempoEvent(eventInfo: eventInfo,
-                                                            extendedTempoEvent: eventData.load(as: ExtendedTempoEvent.self))
-                    extendedTempos.append(tempoEvent)
+                    let extendedTempo = MidiExtendedTempo(timeStamp: eventInfo.timeStamp, bpm: eventData.load(as: ExtendedTempoEvent.self).bpm)
+                    extendedTempos.append(extendedTempo)
                 default:
                     break
                 }

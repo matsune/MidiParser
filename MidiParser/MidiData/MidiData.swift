@@ -27,7 +27,7 @@ public final class MidiData {
         for i in 0 ..< sequence.trackCount {
             if let track = sequence.getTrack(at: i) {
                 let track = MidiNoteTrack(musicTrack: track)
-                if !track.notes.isEmpty {
+                if !track.isEmpty {
                     tracks.append(track)
                 }
             }

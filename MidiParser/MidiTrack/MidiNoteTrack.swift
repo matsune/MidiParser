@@ -10,10 +10,16 @@ import AudioToolbox
 import Foundation
 
 public final class MidiNoteTrack: MidiTrack {
-    public private(set) var notes: [MidiNoteEvent] = []
+    private var notes: [MidiNote] = [] {
+        didSet {
+            notes.sort(by: { $0.timeStamp < $1.timeStamp })
+        }
+    }
+    
     public private(set) var keySignatures: [MidiKeySignature] = []
     public private(set) var channels: [MIDIChannelMessage] = []
     public private(set) var patch = MidiPatch(program: 0)
+    public var sequenceTrackName = ""
     
     public var isMute: Bool {
         get {
@@ -73,8 +79,14 @@ public final class MidiNoteTrack: MidiTrack {
                 switch eventType {
                 case .midiNoteMessage:
                     let noteMessage = eventData.load(as: MIDINoteMessage.self)
-                    notes.append(MidiNoteEvent(eventInfo: eventInfo,
-                                               midiNoteMessage: noteMessage))
+                    
+                    let note = MidiNote(timeStamp: eventInfo.timeStamp,
+                                        duration: noteMessage.duration,
+                                        note: noteMessage.note,
+                                        velocity: noteMessage.velocity,
+                                        channel: noteMessage.channel,
+                                        releaseVelocity: noteMessage.releaseVelocity)
+                    notes.append(note)
                     // Channel 9 is reserved for the use with percussion instruments.
                     isDrumTrack = noteMessage.channel == 9
                 case .meta:
@@ -88,7 +100,11 @@ public final class MidiNoteTrack: MidiTrack {
                     if let metaType = MetaEventType(decimal: metaEvent.metaEventType) {
                         switch metaType {
                         case .keySignature:
-                            keySignatures.append(MidiKeySignature(eventInfo: eventInfo, data: data))
+                            let keySig = KeySignature(data[0])
+                            let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp, keySignature: keySig)
+                            keySignatures.append(keySignature)
+                        case .sequenceTrackName:
+                            sequenceTrackName = data.map { String(format: "%c", $0) }.reduce("", +)
                         default:
                             break
                         }
@@ -105,8 +121,56 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    func deleteNote(at index: Int) {
+    public func add(timeStamp: MusicTimeStamp,
+                    duration: Float32,
+                    note: UInt8,
+                    velocity: UInt8,
+                    channel: UInt8,
+                    releaseVelocity: UInt8 = 0) {
+        var message = MIDINoteMessage(channel: channel,
+                                      note: note,
+                                      velocity: velocity,
+                                      releaseVelocity: releaseVelocity,
+                                      duration: duration)
+        let note = MidiNote(timeStamp: timeStamp,
+                            duration: duration,
+                            note: note,
+                            velocity: velocity,
+                            channel: channel,
+                            releaseVelocity: releaseVelocity)
+        check(MusicTrackNewMIDINoteEvent(_musicTrack, timeStamp, &message), label: "MusicTrackNewMIDINoteEvent")
+        notes.append(note)
+    }
+    
+    public func add(note: MidiNote) {
+        var message = MIDINoteMessage(channel: note.channel,
+                                      note: note.note,
+                                      velocity: note.velocity,
+                                      releaseVelocity: note.releaseVelocity,
+                                      duration: note.duration)
+        check(MusicTrackNewMIDINoteEvent(_musicTrack, note.timeStamp, &message), label: "MusicTrackNewMIDINoteEvent")
+        notes.append(note)
+    }
+    
+    public func deleteNote(at index: Int) {
         let note = notes.remove(at: index)
-        iterator.delete(event: note)
+        iterator.delete(note: note)
+    }
+}
+
+extension MidiNoteTrack: RandomAccessCollection {
+    public typealias Element = MidiNote
+    public typealias Index = Int
+    
+    public subscript(position: Int) -> MidiNote {
+        return notes[position]
+    }
+    
+    public var startIndex: Int {
+        return notes.startIndex
+    }
+    
+    public var endIndex: Int {
+        return notes.endIndex
     }
 }
