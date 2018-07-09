@@ -9,44 +9,35 @@
 import AudioToolbox
 import Foundation
 
-public enum KeySignature {
-    // swiftlint:disable identifier_name cyclomatic_complexity
-    case C, D, G, A, E, B, Fsharp, Csharp, F, Bflat, Eflat, Aflat, Dflat, Gflat, Cflat
+// 0, 1, 2, 3, 4, 5, 6, 7, -1(255), -2, -3, -4, -5, -6, -7
+
+public enum KeySignature: Equatable {
+    case major(MajorKey)
+    case minor(MinorKey)
+}
+
+private func sfToRawValue(_ sf: UInt8) -> Int {
+    if 0...7 ~= sf {
+        return Int(sf)
+    } else if 249 ... 255 ~= sf {
+        // 255 -> 8, 254 -> 9 ...
+        return 263 - Int(sf)
+    }
+    return 0
+}
+
+public enum MajorKey: Int {
+    case C, G, D, A, E, B, Fsharp, Csharp, F, Bflat, Eflat, Aflat, Dflat, Gflat, Cflat
     
-    init(_ sf: Int) {
-        switch sf {
-        case 0:
-            self = .C
-        case 1:
-            self = .G
-        case 2:
-            self = .D
-        case 3:
-            self = .A
-        case 4:
-            self = .E
-        case 5:
-            self = .B
-        case 6:
-            self = .Fsharp
-        case 7:
-            self = .Csharp
-        case 255:
-            self = .F
-        case 254:
-            self = .Bflat
-        case 253:
-            self = .Eflat
-        case 252:
-            self = .Aflat
-        case 251:
-            self = .Dflat
-        case 250:
-            self = .Gflat
-        case 249:
-            self = .Cflat
-        default:
-            self = .C
-        }
+    init(sf: UInt8) {
+        self.init(rawValue: sfToRawValue(sf))!
+    }
+}
+
+public enum MinorKey: Int {
+    case A, E, B, Fsharp, Csharp, Gsharp, Dsharp, Asharp, D, G, C, F, Bflat, Eflat, Aflat
+    
+    init(sf: UInt8) {
+        self.init(rawValue: sfToRawValue(sf))!
     }
 }

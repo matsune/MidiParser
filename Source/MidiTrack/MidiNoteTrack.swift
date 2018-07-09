@@ -99,8 +99,10 @@ public final class MidiNoteTrack: MidiTrack {
                     if let metaType = MetaEventType(decimal: header.metaType) {
                         switch metaType {
                         case .keySignature:
-                            let keySig = KeySignature(Int(data[0]))
-                            let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp, keySignature: keySig)
+                            // ex.) 0xFF 0x59 0x02 0x04(data[0]) 0x00(data[1])
+                            // data[0] sf
+                            // data[1] 0x00 => major, 0x01 => minor
+                            let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp, sf: data[0], isMajor: data[1] == 0)
                             keySignatures.append(keySignature)
                         case .sequenceTrackName:
                             sequenceTrackName = data.map { String(format: "%c", $0) }.reduce("", +)
