@@ -29,7 +29,7 @@ excluded:
 - Pods/
 - Carthage/
 - vendor/
-- MidiParserTests/
+- Tests/
 
 line_length: 300
 identifier_name:
