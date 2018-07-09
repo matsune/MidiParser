@@ -31,17 +31,20 @@ public final class MidiTempoTrack: MidiTrack {
             if let eventType = MidiEventType(eventInfo.type) {
                 switch eventType {
                 case .meta:
-                    var metaEvent = eventData.load(as: MIDIMetaEvent.self)
-                    var data: [Int] = []
-                    withUnsafeMutablePointer(to: &metaEvent.data) {
-                        for i in 0 ..< Int(metaEvent.dataLength) {
-                            data.append(Int($0.advanced(by: i).pointee))
-                        }
+                    let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
+                    var data: [UInt8] = []
+                    for i in 0 ..< Int(header.dataLength) {
+                        data.append(eventData.advanced(by: MemoryLayout<MetaEventHeader>.size).advanced(by: i).load(as: UInt8.self))
                     }
-                    if let metaType = MetaEventType(decimal: metaEvent.metaEventType) {
+                    
+                    if let metaType = MetaEventType(decimal: header.metaType) {
                         switch metaType {
                         case .timeSignature:
-                            timeSignatures.append(MidiTimeSignature(timeStamp: eventInfo.timeStamp, data: data))
+                            let numerator = Int(data[0])
+                            let decimal = pow(Decimal(2), Int(data[1]))
+                            let num = NSDecimalNumber(decimal: decimal)
+                            let denominator = Int(truncating: num)
+                            timeSignatures.append(MidiTimeSignature(timeStamp: eventInfo.timeStamp, numerator: numerator, denominator: denominator, cc: Int(data[2]), bb: Int(data[3])))
                         default:
                             break
                         }

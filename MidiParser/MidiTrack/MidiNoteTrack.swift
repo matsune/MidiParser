@@ -90,17 +90,16 @@ public final class MidiNoteTrack: MidiTrack {
                     // Channel 9 is reserved for the use with percussion instruments.
                     isDrumTrack = noteMessage.channel == 9
                 case .meta:
-                    var metaEvent = eventData.load(as: MIDIMetaEvent.self)
-                    var data: [Int] = []
-                    withUnsafeMutablePointer(to: &metaEvent.data) {
-                        for i in 0 ..< Int(metaEvent.dataLength) {
-                            data.append(Int($0.advanced(by: i).pointee))
-                        }
+                    let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
+                    var data: [UInt8] = []
+                    for i in 0 ..< Int(header.dataLength) {
+                        data.append(eventData.advanced(by: MemoryLayout<MetaEventHeader>.size).advanced(by: i).load(as: UInt8.self))
                     }
-                    if let metaType = MetaEventType(decimal: metaEvent.metaEventType) {
+                    
+                    if let metaType = MetaEventType(decimal: header.metaType) {
                         switch metaType {
                         case .keySignature:
-                            let keySig = KeySignature(data[0])
+                            let keySig = KeySignature(Int(data[0]))
                             let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp, keySignature: keySig)
                             keySignatures.append(keySignature)
                         case .sequenceTrackName:
