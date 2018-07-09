@@ -45,7 +45,7 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    public var offset: MusicTimeStamp {
+    public var offsetTime: MusicTimeStamp {
         get {
             var data: MusicTimeStamp = 0
             getProperty(.offsetTime, data: &data)
@@ -57,7 +57,7 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    public var isDrumTrack = false
+    public private(set) var isDrumTrack = false
     
     override init(musicTrack: MusicTrack) {
         super.init(musicTrack: musicTrack)

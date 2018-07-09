@@ -20,7 +20,7 @@ public class MidiTrack {
         iterator = MidiEventIterator(track: _musicTrack)
     }
     
-    public var length: MusicTimeStamp {
+    public var trackLength: MusicTimeStamp {
         var data: MusicTimeStamp = 0
         getProperty(.trackLength, data: &data)
         return data

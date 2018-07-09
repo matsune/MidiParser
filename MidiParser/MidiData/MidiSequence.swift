@@ -9,19 +9,19 @@
 import AudioToolbox
 import Foundation
 
+public enum MidiError: Error {
+    case writeURL
+}
+
 final class MidiSequence {
     private let _musicSequence: MusicSequence
     
-    init(data: Data) {
+    init() {
         var sequencePtr: MusicSequence?
         check(NewMusicSequence(&sequencePtr), label: "NewMusicSequence")
-        
         guard let sequence = sequencePtr else {
             fatalError("Could not initialize MidiSequence")
         }
-        check(MusicSequenceFileLoadData(sequence, data as CFData, MusicSequenceFileTypeID.midiType, []),
-              label: "MusicSequenceFileLoadData")
-        
         _musicSequence = sequence
     }
     
@@ -29,20 +29,50 @@ final class MidiSequence {
         check(DisposeMusicSequence(_musicSequence), label: "DisposeMusicSequence", level: .ignore)
     }
     
-    func disposeTrack(_ track: MidiTrack) {
+    func dispose(track: MidiTrack) {
         check(MusicSequenceDisposeTrack(_musicSequence, track._musicTrack),
               label: "MusicSequenceDisposeTrack", level: .ignore)
     }
     
-    var infoDictionary: CFDictionary {
-        return MusicSequenceGetInfoDictionary(_musicSequence)
+    func load(data: Data, inFileTypeHint: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceLoadFlags = .smf_ChannelsToTracks) {
+        check(MusicSequenceFileLoadData(_musicSequence, data as CFData, inFileTypeHint, inFlags),
+              label: "MusicSequenceFileLoadData")
     }
     
-    var tempoTrack: MusicTrack? {
+    func load(url: URL, inFileTypeHint: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceLoadFlags = .smf_ChannelsToTracks) {
+        check(MusicSequenceFileLoad(_musicSequence, url as CFURL, inFileTypeHint, inFlags),
+              label: "MusicSequenceFileLoad")
+    }
+    
+    func createData(inFileType: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceFileFlags = .eraseFile, inResolution: Int16 = 480) -> Data? {
+        var outData: Unmanaged<CFData>?
+        check(MusicSequenceFileCreateData(_musicSequence, inFileType, inFlags, inResolution, &outData),
+              label: "MusicSequenceFileCreateData")
+        if let data = outData {
+            return data.takeUnretainedValue() as Data
+        }
+        return nil
+    }
+    
+    func writeData(to url: URL, inFileType: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceFileFlags = .eraseFile, inResolution: Int16 = 480) throws {
+        let status = MusicSequenceFileCreate(_musicSequence, url as CFURL, inFileType, inFlags, inResolution)
+        if status != noErr {
+            throw MidiError.writeURL
+        }
+    }
+    
+    var infoDictionary: [MidiInfoKey: AnyObject] {
+        guard let dict = MusicSequenceGetInfoDictionary(_musicSequence) as? [String: AnyObject] else {
+            return [:]
+        }
+        return Dictionary(uniqueKeysWithValues: dict.map { (MidiInfoKey(val: $0.key)!, $0.value) })
+    }
+    
+    var tempoTrack: MusicTrack {
         var tempoTrack: MusicTrack?
         check(MusicSequenceGetTempoTrack(_musicSequence, &tempoTrack),
               label: "MusicSequenceGetTempoTrack", level: .log)
-        return tempoTrack
+        return tempoTrack!
     }
     
     var trackCount: Int {
@@ -52,14 +82,14 @@ final class MidiSequence {
         return Int(trackCount)
     }
     
-    func getTrackIndex(ofTrack track: MusicTrack) -> Int {
+    func index(ofTrack track: MusicTrack) -> Int {
         var trackIndex: UInt32 = 0
         check(MusicSequenceGetTrackIndex(_musicSequence, track, &trackIndex),
               label: "MusicSequenceGetTrackIndex", level: .log)
         return Int(trackIndex)
     }
     
-    func getTrack(at index: Int) -> MusicTrack? {
+    func track(at index: Int) -> MusicTrack? {
         var track: MusicTrack?
         check(MusicSequenceGetIndTrack(_musicSequence, UInt32(index), &track),
               label: "MusicSequenceGetIndTrack", level: .log)
@@ -77,5 +107,12 @@ final class MidiSequence {
             check(MusicSequenceSetSequenceType(_musicSequence, newValue),
                   label: "MusicSequenceSetSequenceType", level: .log)
         }
+    }
+    
+    func newTrack() -> MidiNoteTrack {
+        var musicTrack: MusicTrack?
+        check(MusicSequenceNewTrack(_musicSequence, &musicTrack),
+              label: "MusicSequenceNewTrack")
+        return MidiNoteTrack(musicTrack: musicTrack!)
     }
 }
