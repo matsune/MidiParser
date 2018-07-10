@@ -9,6 +9,6 @@
 import AudioToolbox
 import Foundation
 
-protocol MidiEventProtocol {
+protocol EventProtocol {
     var timeStamp: MusicTimeStamp { get }
 }

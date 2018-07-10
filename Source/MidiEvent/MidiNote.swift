@@ -9,7 +9,7 @@
 import AudioToolbox
 import Foundation
 
-public struct MidiNote: MidiEventProtocol {
+public struct MidiNote: EventProtocol {
     public var timeStamp: MusicTimeStamp
     public var duration: Float32
     public var note: UInt8

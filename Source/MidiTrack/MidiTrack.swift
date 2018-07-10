@@ -20,12 +20,6 @@ public class MidiTrack {
         iterator = MidiEventIterator(track: _musicTrack)
     }
     
-    public var trackLength: MusicTimeStamp {
-        var data: MusicTimeStamp = 0
-        getProperty(.trackLength, data: &data)
-        return data
-    }
-    
     func getProperty<T>(_ property: SequenceTrackProperty, data: inout T) {
         var length = sizeof(T.self)
         check(MusicTrackGetProperty(_musicTrack, property.inPropertyID, &data, &length),
@@ -36,5 +30,14 @@ public class MidiTrack {
         let length = sizeof(T.self)
         check(MusicTrackSetProperty(_musicTrack, property.inPropertyID, &data, length),
               label: "[MusicTrackSetProperty] \(property)", level: .fatal)
+    }
+    
+    func add(metaEvent: MetaEventProtocol) {
+        var e = MIDIMetaEvent()
+        e.metaEventType = UInt8(metaEvent.metaType.rawValue)
+        e.dataLength = UInt32(metaEvent.bytes.count)
+        write(bytes: metaEvent.bytes, to: &e.data)
+        check(MusicTrackNewMetaEvent(_musicTrack, metaEvent.timeStamp, &e),
+              label: "MusicTrackNewMetaEvent")
     }
 }

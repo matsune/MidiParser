@@ -9,7 +9,7 @@
 import AudioToolbox
 import Foundation
 
-public struct MidiAUPreset: MidiEventProtocol {
+public struct MidiAUPreset: EventProtocol {
     public var timeStamp: MusicTimeStamp
     public var scope: AudioUnit
     public var element: AudioUnitElement

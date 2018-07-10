@@ -9,7 +9,7 @@
 import AudioToolbox
 import Foundation
 
-public struct MidiExtendedNoteOnEvent: MidiEventProtocol {
+public struct MidiExtendedNoteOnEvent: EventProtocol {
     public var timeStamp: MusicTimeStamp
     public var instrumentID: MusicDeviceInstrumentID
     public var groupID: MusicDeviceGroupID

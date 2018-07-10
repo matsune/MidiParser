@@ -10,12 +10,34 @@ import AudioToolbox
 import Foundation
 
 public final class MidiTempoTrack: MidiTrack {
-    public private(set) var timeSignatures: [MidiTimeSignature] = []
+    public var timeSignatures: [MidiTimeSignature] = [] {
+        didSet {
+            if !isReload {
+                var count = 0
+                iterator.enumerate { (info, finished) in
+                    if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
+                        MetaEventType(byte: metaEvent.metaEventType) == .timeSignature {
+                        iterator.deleteEvent()
+                        count += 1
+                        finished = count >= oldValue.count
+                    }
+                }
+                timeSignatures.forEach {
+                    add(metaEvent: $0)
+                }
+            }
+        }
+    }
+    
     public private(set) var extendedTempos: [MidiExtendedTempo] = []
 
+    private var isReload = true
+    
     override init(musicTrack: MusicTrack) {
         super.init(musicTrack: musicTrack)
+        isReload = true
         reloadEvents()
+        isReload = false
     }
     
     private func reloadEvents() {
@@ -23,8 +45,7 @@ public final class MidiTempoTrack: MidiTrack {
         extendedTempos = []
         
         iterator.enumerate { eventInfo, _ in
-            guard let eventInfo = eventInfo,
-                let eventData = eventInfo.data else {
+            guard let eventData = eventInfo.data else {
                 fatalError("MidiTempoTrack error")
             }
             
@@ -32,7 +53,7 @@ public final class MidiTempoTrack: MidiTrack {
                 switch eventType {
                 case .meta:
                     let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
-                    var data: [UInt8] = []
+                    var data: Bytes = []
                     for i in 0 ..< Int(header.dataLength) {
                         data.append(eventData.advanced(by: MemoryLayout<MetaEventHeader>.size).advanced(by: i).load(as: UInt8.self))
                     }
@@ -40,11 +61,8 @@ public final class MidiTempoTrack: MidiTrack {
                     if let metaType = MetaEventType(byte: header.metaType) {
                         switch metaType {
                         case .timeSignature:
-                            let numerator = Int(data[0])
-                            let decimal = pow(Decimal(2), Int(data[1]))
-                            let num = NSDecimalNumber(decimal: decimal)
-                            let denominator = Int(truncating: num)
-                            timeSignatures.append(MidiTimeSignature(timeStamp: eventInfo.timeStamp, numerator: numerator, denominator: denominator, cc: Int(data[2]), bb: Int(data[3])))
+                            let timeSig = MidiTimeSignature(timeStamp: eventInfo.timeStamp, numerator: data[0], denominator: data[1], cc: data[2], bb: data[3])
+                            timeSignatures.append(timeSig)
                         default:
                             break
                         }

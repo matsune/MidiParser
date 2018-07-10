@@ -9,14 +9,22 @@
 import AudioToolbox
 import Foundation
 
-public struct MidiTimeSignature: MidiEventProtocol {
-    public var timeStamp: MusicTimeStamp
-    // numerator / denominator
-    // ex.) 4/4
-    public var numerator: Int
-    public var denominator: Int
+public struct MidiTimeSignature: MetaEventProtocol {
+    public let timeStamp: MusicTimeStamp
+    // numerator / 2^denominator
+    // ex.) 4/4 => numerator: 4, denominator: 2
+    public let numerator: UInt8
+    public let denominator: UInt8
     /// number of MIDI clocks in a metronome click
-    public var cc: Int
+    public let cc: UInt8
     /// number of notated 32nd-notes in a MIDI quarter-note
-    public var bb: Int
+    public let bb: UInt8
+    
+    var metaType: MetaEventType {
+        return .timeSignature
+    }
+    
+    var bytes: Bytes {
+        return [numerator, denominator, cc, bb]
+    }
 }

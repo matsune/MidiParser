@@ -9,7 +9,7 @@
 import AudioToolbox
 import Foundation
 
-public struct MidiExtendedTempo: MidiEventProtocol {
+public struct MidiExtendedTempo: EventProtocol {
     public var timeStamp: MusicTimeStamp
     public var bpm: Float64
 }

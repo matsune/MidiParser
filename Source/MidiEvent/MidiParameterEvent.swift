@@ -9,7 +9,7 @@
 import AudioToolbox
 import Foundation
 
-public struct MidiParameterEvent: MidiEventProtocol {
+public struct MidiParameterEvent: EventProtocol {
     public var timeStamp: MusicTimeStamp
     public var parameterID: AudioUnitParameterID
     public var scope: AudioUnitScope

@@ -9,7 +9,7 @@
 import AudioToolbox
 import Foundation
 
-public struct MidiChannelMessage: MidiEventProtocol {
+public struct MidiChannelMessage: EventProtocol {
     public var timeStamp: MusicTimeStamp
     public var status: UInt8
     public var data1: UInt8

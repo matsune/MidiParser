@@ -40,8 +40,8 @@ extension UInt8 {
     }
 }
 
-func write(bytes: Bytes, inData: inout UInt8) {
-    withUnsafeMutablePointer(to: &inData) {
+func write(bytes: Bytes, to data: inout UInt8) {
+    withUnsafeMutablePointer(to: &data) {
         for i in 0 ..< bytes.count {
             $0.advanced(by: i).pointee = bytes[i]
         }

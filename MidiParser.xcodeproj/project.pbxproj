@@ -85,6 +85,8 @@
 		13C66BCC20F480C000DD8D1D /* HeaderChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BC820F4809D00DD8D1D /* HeaderChunk.swift */; };
 		13C66BD120F49C3100DD8D1D /* Byte.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BCE20F4984B00DD8D1D /* Byte.swift */; };
 		13C66BD220F49C3200DD8D1D /* Byte.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BCE20F4984B00DD8D1D /* Byte.swift */; };
+		13C66BDC20F4E7DD00DD8D1D /* MidiMetaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BD920F4E7B100DD8D1D /* MidiMetaEvent.swift */; };
+		13C66BDD20F4E7DE00DD8D1D /* MidiMetaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BD920F4E7B100DD8D1D /* MidiMetaEvent.swift */; };
 		2A899B4C9B4C95177ADFFCDC /* Pods_MidiParserTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E04F0BBD16957D960E1B2CD /* Pods_MidiParserTests.framework */; };
 		A9776738786A16DE6010E112 /* Pods_MidiParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8977925237111AA7EEAA9A5A /* Pods_MidiParser.framework */; };
 /* End PBXBuildFile section */
@@ -151,6 +153,7 @@
 		13C66BC220F3B99D00DD8D1D /* MidiKeySignatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiKeySignatureTests.swift; sourceTree = "<group>"; };
 		13C66BC820F4809D00DD8D1D /* HeaderChunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderChunk.swift; sourceTree = "<group>"; };
 		13C66BCE20F4984B00DD8D1D /* Byte.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Byte.swift; sourceTree = "<group>"; };
+		13C66BD920F4E7B100DD8D1D /* MidiMetaEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiMetaEvent.swift; sourceTree = "<group>"; };
 		1FF43606FB3AB9F309D04341 /* Pods-MidiParserTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParserTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParserTests/Pods-MidiParserTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2290DA5469624C447CF07436 /* Pods-MidiParser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParser/Pods-MidiParser.debug.xcconfig"; sourceTree = "<group>"; };
 		2E04F0BBD16957D960E1B2CD /* Pods_MidiParserTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MidiParserTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -261,6 +264,7 @@
 				13C66B2720F0B9F200DD8D1D /* MidiKeySignature.swift */,
 				13C66B2520F0B9F200DD8D1D /* MidiTimeSignature.swift */,
 				13C66B7A20F3774500DD8D1D /* MetaEvent.swift */,
+				13C66BD920F4E7B100DD8D1D /* MidiMetaEvent.swift */,
 			);
 			path = Meta;
 			sourceTree = "<group>";
@@ -626,6 +630,7 @@
 				13C66B3F20F0B9F200DD8D1D /* MidiEventInfo.swift in Sources */,
 				13C66B5320F0B9F200DD8D1D /* MidiTrack.swift in Sources */,
 				13C66B5120F0B9F200DD8D1D /* MidiTempoTrack.swift in Sources */,
+				13C66BDC20F4E7DD00DD8D1D /* MidiMetaEvent.swift in Sources */,
 				13C66B4020F0B9F200DD8D1D /* MidiExtendedNoteOnEvent.swift in Sources */,
 				13C66B6920F18BEE00DD8D1D /* MidiInfoKey.swift in Sources */,
 				13C66B4220F0B9F200DD8D1D /* MidiChannelMessage.swift in Sources */,
@@ -677,6 +682,7 @@
 				13C66BA820F3AB4400DD8D1D /* MidiExtendedTempo.swift in Sources */,
 				13C66BA620F3AB4400DD8D1D /* MidiEventUserData.swift in Sources */,
 				13C66BB320F3AB5000DD8D1D /* SequenceTrackProperty.swift in Sources */,
+				13C66BDD20F4E7DE00DD8D1D /* MidiMetaEvent.swift in Sources */,
 				13C66BAB20F3AB4A00DD8D1D /* KeySignature.swift in Sources */,
 				13C66BB020F3AB5000DD8D1D /* MidiNoteTrack.swift in Sources */,
 				13C66BA520F3AB4400DD8D1D /* MidiNote.swift in Sources */,

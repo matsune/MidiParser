@@ -9,7 +9,7 @@
 import AudioToolbox
 import Foundation
 
-public struct MidiKeySignature: MidiEventProtocol {
+public struct MidiKeySignature: EventProtocol {
     public var timeStamp: MusicTimeStamp
     public var keySig: KeySignature
     

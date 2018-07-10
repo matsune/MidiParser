@@ -22,21 +22,8 @@ public final class MidiNoteTrack: MidiTrack {
     
     public var trackName = "" {
         didSet {
-            iterator.enumerate { info, finished in
-                guard let info = info, MidiEventType(info.type) == .meta,
-                let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
-                MetaEventType(byte: metaEvent.metaEventType) == .sequenceTrackName else {
-                    return
-                }
-                iterator.delete()
-                finished = true
-            }
-            let data = Bytes(trackName.utf8)
-            var metaEvent = MIDIMetaEvent()
-            metaEvent.metaEventType = UInt8(MetaEventType.sequenceTrackName.rawValue)
-            metaEvent.dataLength = UInt32(data.count)
-            write(bytes: data, inData: &metaEvent.data)
-            check(MusicTrackNewMetaEvent(_musicTrack, 0, &metaEvent), label: "MusicTrackNewMetaEvent")
+            deleteTrackName()
+            add(metaEvent: MidiMetaEvent(timeStamp: 0, metaType: .sequenceTrackName, bytes: Bytes(trackName.utf8)))
         }
     }
     
@@ -76,6 +63,18 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
+    public var trackLength: MusicTimeStamp {
+        get {
+            var data: MusicTimeStamp = 0
+            getProperty(.trackLength, data: &data)
+            return data
+        }
+        set {
+            var data = newValue
+            setProperty(.trackLength, data: &data)
+        }
+    }
+    
     override init(musicTrack: MusicTrack) {
         super.init(musicTrack: musicTrack)
         reloadEvents()
@@ -87,8 +86,7 @@ public final class MidiNoteTrack: MidiTrack {
         channels = []
         
         iterator.enumerate { eventInfo, _ in
-            guard let eventInfo = eventInfo,
-                let eventData = eventInfo.data else {
+            guard let eventData = eventInfo.data else {
                 fatalError("MidiNoteTrack error")
             }
             
@@ -189,5 +187,21 @@ extension MidiNoteTrack: RandomAccessCollection {
     
     public var endIndex: Int {
         return notes.endIndex
+    }
+}
+
+// MARK: track name
+extension MidiNoteTrack {
+    // delete current trackName meta event
+    private func deleteTrackName() {
+        iterator.enumerate { info, finished in
+            guard MidiEventType(info.type) == .meta,
+                let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
+                MetaEventType(byte: metaEvent.metaEventType) == .sequenceTrackName else {
+                    return
+            }
+            iterator.deleteEvent()
+            finished = true
+        }
     }
 }
