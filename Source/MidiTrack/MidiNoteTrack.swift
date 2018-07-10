@@ -10,16 +10,19 @@ import AudioToolbox
 import Foundation
 
 public final class MidiNoteTrack: MidiTrack {
-    public private(set) var notes: [MidiNote] = [] {
+    let _musicTrack: MusicTrack
+    let iterator: MidiEventIterator
+    
+    public private(set) var notes: [MidiNote] {
         didSet {
             notes.sort(by: { $0.timeStamp < $1.timeStamp })
         }
     }
     
-    public private(set) var keySignatures: [MidiKeySignature] = []
+    public private(set) var keySignatures: [MidiKeySignature]
     
-    public private(set) var channels: [MIDIChannelMessage] = []
-    public private(set) var patch = MidiPatch(program: 0)
+//    public private(set) var channels: [MIDIChannelMessage] = []
+//    public private(set) var patch = MidiPatch(program: 0)
     
     public var trackName = "" {
         didSet {
@@ -76,16 +79,14 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    override init(musicTrack: MusicTrack) {
-        super.init(musicTrack: musicTrack)
-        reloadEvents()
-    }
-    
-    private func reloadEvents() {
-        notes = []
-        keySignatures = []
-        channels = []
+    init(musicTrack: MusicTrack) {
+        self._musicTrack = musicTrack
+        let iterator = MidiEventIterator(track: musicTrack)
+        self.iterator = iterator
         
+        var name = ""
+        var ns: [MidiNote] = []
+        var keySigs: [MidiKeySignature] = []
         iterator.enumerate { eventInfo, _ in
             guard let eventData = eventInfo.data else {
                 fatalError("MidiNoteTrack error")
@@ -101,15 +102,14 @@ public final class MidiNoteTrack: MidiTrack {
                                         velocity: noteMessage.velocity,
                                         channel: noteMessage.channel,
                                         releaseVelocity: noteMessage.releaseVelocity)
-                    notes.append(note)
-                    // Channel 9 is reserved for the use with percussion instruments.
+                    ns.append(note)
                 case .meta:
                     let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
                     var data: Bytes = []
                     for i in 0 ..< Int(header.dataLength) {
                         data.append(eventData.advanced(by: MemoryLayout<MetaEventHeader>.size).advanced(by: i).load(as: Byte.self))
                     }
-                    
+
                     if let metaType = MetaEventType(byte: header.metaType) {
                         switch metaType {
                         case .keySignature:
@@ -117,24 +117,27 @@ public final class MidiNoteTrack: MidiTrack {
                             // data[0] sf
                             // data[1] 0x00 => major, 0x01 => minor
                             let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp, sf: data[0], isMajor: data[1] == 0)
-                            keySignatures.append(keySignature)
+                            keySigs.append(keySignature)
                         case .sequenceTrackName:
-                            self.trackName = data.string
+                            name = data.string
                         default:
                             break
                         }
                     }
-                case .midiChannelMessage:
-                    let channelMessage = eventData.load(as: MIDIChannelMessage.self)
-                    channels.append(channelMessage)
-                    if channelMessage.status.hexString.first == "C" {
-                        patch = MidiPatch(program: Int(channelMessage.data1))
-                    }
+//                case .midiChannelMessage:
+//                    let channelMessage = eventData.load(as: MIDIChannelMessage.self)
+//                    channels.append(channelMessage)
+//                    if channelMessage.status.hexString.first == "C" {
+//                        patch = MidiPatch(program: Int(channelMessage.data1))
+//                    }
                 default:
                     break
                 }
             }
         }
+        self.trackName = name
+        self.notes = ns
+        self.keySignatures = keySigs
     }
     
     public func add(timeStamp: MusicTimeStamp,

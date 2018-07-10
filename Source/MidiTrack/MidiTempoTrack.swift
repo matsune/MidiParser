@@ -10,19 +10,20 @@ import AudioToolbox
 import Foundation
 
 public final class MidiTempoTrack: MidiTrack {
-    public private(set) var timeSignatures: [MidiTimeSignature] = []
+    let _musicTrack: MusicTrack
+    let iterator: MidiEventIterator
     
-    public private(set) var extendedTempos: [MidiExtendedTempo] = []
+    public private(set) var timeSignatures: [MidiTimeSignature]
     
-    override init(musicTrack: MusicTrack) {
-        super.init(musicTrack: musicTrack)
-        reloadEvents()
-    }
+    public private(set) var extendedTempos: [MidiExtendedTempo]
     
-    private func reloadEvents() {
-        timeSignatures = []
-        extendedTempos = []
+    init(musicTrack: MusicTrack) {
+        self._musicTrack = musicTrack
+        let iterator = MidiEventIterator(track: musicTrack)
+        self.iterator = iterator
         
+        var timeSigs: [MidiTimeSignature] = []
+        var extTempos: [MidiExtendedTempo] = []
         iterator.enumerate { eventInfo, _ in
             guard let eventData = eventInfo.data else {
                 fatalError("MidiTempoTrack error")
@@ -41,19 +42,21 @@ public final class MidiTempoTrack: MidiTrack {
                         switch metaType {
                         case .timeSignature:
                             let timeSig = MidiTimeSignature(timeStamp: eventInfo.timeStamp, numerator: data[0], denominator: data[1], cc: data[2], bb: data[3])
-                            timeSignatures.append(timeSig)
+                            timeSigs.append(timeSig)
                         default:
                             break
                         }
                     }
                 case .extendedTempo:
                     let extendedTempo = MidiExtendedTempo(timeStamp: eventInfo.timeStamp, bpm: eventData.load(as: ExtendedTempoEvent.self).bpm)
-                    extendedTempos.append(extendedTempo)
+                    extTempos.append(extendedTempo)
                 default:
                     break
                 }
             }
         }
+        self.timeSignatures = timeSigs
+        self.extendedTempos = extTempos
     }
     
     public func setTimeSignatures(_ timeSignatures: [MidiTimeSignature]) {

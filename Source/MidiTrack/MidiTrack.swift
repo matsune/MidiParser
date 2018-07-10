@@ -9,17 +9,14 @@
 import AudioToolbox
 import Foundation
 
-/// Superclass of `MidiTempoTrack` and `MidiNoteTrack`
-public class MidiTrack {
+protocol MidiTrack {
     // swiftlint:disable identifier_name
-    let _musicTrack: MusicTrack
-    let iterator: MidiEventIterator
-    
-    init(musicTrack: MusicTrack) {
-        _musicTrack = musicTrack
-        iterator = MidiEventIterator(track: _musicTrack)
-    }
-    
+    var _musicTrack: MusicTrack { get }
+    var iterator: MidiEventIterator { get }
+    init(musicTrack: MusicTrack)
+}
+
+extension MidiTrack {
     func getProperty<T>(_ property: SequenceTrackProperty, data: inout T) {
         var length = sizeof(T.self)
         check(MusicTrackGetProperty(_musicTrack, property.inPropertyID, &data, &length),
