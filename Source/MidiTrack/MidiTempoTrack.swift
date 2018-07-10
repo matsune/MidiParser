@@ -37,7 +37,7 @@ public final class MidiTempoTrack: MidiTrack {
                         data.append(eventData.advanced(by: MemoryLayout<MetaEventHeader>.size).advanced(by: i).load(as: UInt8.self))
                     }
                     
-                    if let metaType = MetaEventType(decimal: header.metaType) {
+                    if let metaType = MetaEventType(byte: header.metaType) {
                         switch metaType {
                         case .timeSignature:
                             let numerator = Int(data[0])

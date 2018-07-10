@@ -9,9 +9,9 @@
 import Foundation
 
 struct HeaderChunk {
-    var ident: (UInt8, UInt8, UInt8, UInt8)     // MThd
-    var length: (UInt8, UInt8, UInt8, UInt8)    // 00 00 00 06
-    var format: (UInt8, UInt8)                  // 00 0[0|1|2]
-    var n: (UInt8, UInt8)
-    var division: (UInt8, UInt8)
+    var ident: DWord     // MThd
+    var length: DWord    // 00 00 00 06
+    var format: Word                  // 00 0[0|1|2]
+    var n: Word
+    var division: Word
 }

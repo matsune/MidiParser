@@ -12,7 +12,7 @@ import XCTest
 extension MetaEventType: EnumCollection {}
 
 final class MetaEventTypeTests: XCTestCase {
-    var values: [UInt8]!
+    var values: Bytes!
     
     override func setUp() {
         super.setUp()
@@ -30,7 +30,7 @@ final class MetaEventTypeTests: XCTestCase {
         let expects = MetaEventType.allValues
         
         for i in 0 ..< values.count {
-            XCTAssertEqual(MetaEventType(decimal: values[i]), expects[i])
+            XCTAssertEqual(MetaEventType(byte: values[i]), expects[i])
         }
     }
     
@@ -38,7 +38,7 @@ final class MetaEventTypeTests: XCTestCase {
         (0 ... 128)
             .filter { !values.contains($0) }
             .forEach {
-                XCTAssertNil(MetaEventType(decimal: $0))
+                XCTAssertNil(MetaEventType(byte: $0))
             }
     }
 }

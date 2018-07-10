@@ -25,7 +25,7 @@ public final class MidiNoteTrack: MidiTrack {
             iterator.enumerate { info, finished in
                 guard let info = info, MidiEventType(info.type) == .meta,
                 let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
-                MetaEventType(decimal: metaEvent.metaEventType) == .sequenceTrackName else {
+                MetaEventType(byte: metaEvent.metaEventType) == .sequenceTrackName else {
                     return
                 }
                 iterator.delete()
@@ -33,7 +33,7 @@ public final class MidiNoteTrack: MidiTrack {
             }
             let data = [UInt8](trackName.utf8)
             var metaEvent = MIDIMetaEvent()
-            metaEvent.metaEventType = 3
+            metaEvent.metaEventType = UInt8(MetaEventType.sequenceTrackName.rawValue)
             metaEvent.dataLength = UInt32(data.count)
             withUnsafeMutablePointer(to: &metaEvent.data) {
                 for i in 0..<data.count {
@@ -113,12 +113,12 @@ public final class MidiNoteTrack: MidiTrack {
 //                    isDrumTrack = noteMessage.channel == 9
                 case .meta:
                     let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
-                    var data: [UInt8] = []
+                    var data: Bytes = []
                     for i in 0 ..< Int(header.dataLength) {
-                        data.append(eventData.advanced(by: MemoryLayout<MetaEventHeader>.size).advanced(by: i).load(as: UInt8.self))
+                        data.append(eventData.advanced(by: MemoryLayout<MetaEventHeader>.size).advanced(by: i).load(as: Byte.self))
                     }
                     
-                    if let metaType = MetaEventType(decimal: header.metaType) {
+                    if let metaType = MetaEventType(byte: header.metaType) {
                         switch metaType {
                         case .keySignature:
                             // ex.) 0xFF 0x59 0x02 0x04(data[0]) 0x00(data[1])
@@ -127,7 +127,7 @@ public final class MidiNoteTrack: MidiTrack {
                             let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp, sf: data[0], isMajor: data[1] == 0)
                             keySignatures.append(keySignature)
                         case .sequenceTrackName:
-                            self.trackName = data.map { String(format: "%c", $0) }.reduce("", +)
+                            self.trackName = data.string
                         default:
                             break
                         }

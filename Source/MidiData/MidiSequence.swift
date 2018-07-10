@@ -44,7 +44,7 @@ final class MidiSequence {
         let header = data.withUnsafeBytes {
             UnsafeRawBufferPointer(start: $0, count: Int(sizeof(HeaderChunk.self))).load(as: HeaderChunk.self)
         }
-        format = header.format.1
+        format = UInt8(header.format.val)
         let inFlags: MusicSequenceLoadFlags = format == 0 ? .smf_ChannelsToTracks : .smf_PreserveTracks
         check(MusicSequenceFileLoadData(_musicSequence, data as CFData, .midiType, inFlags),
               label: "MusicSequenceFileLoadData")

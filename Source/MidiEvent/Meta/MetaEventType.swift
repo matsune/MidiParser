@@ -29,30 +29,27 @@ import Foundation
  0x7F    Sequencer specific event
  -----------------------
  */
-enum MetaEventType: String {
-    case trackSequenceNumber = "0"
-    case textEvent = "1"
-    case copyright = "2"
-    case sequenceTrackName = "3"
-    case trackInstrumentName = "4"
-    case lyric = "5"
-    case marker = "6"
-    case cuePoint = "7"
-    case programName = "8"
-    case deviceName = "9"
-    case midiChannel = "20"
-    case midiPort = "21"
-    case endTrack = "2f"
-    case setTempo = "51"
-    case smpteOffset = "54"
-    case timeSignature = "58"
-    case keySignature = "59"
-    case sequencerSpecific = "7f"
+enum MetaEventType: Int {
+    case trackSequenceNumber = 0
+    case textEvent = 1
+    case copyright = 2
+    case sequenceTrackName = 3
+    case trackInstrumentName = 4
+    case lyric = 5
+    case marker = 6
+    case cuePoint = 7
+    case programName = 8
+    case deviceName = 9
+    case midiChannel = 32
+    case midiPort = 33
+    case endTrack = 47
+    case setTempo = 81
+    case smpteOffset = 84
+    case timeSignature = 88
+    case keySignature = 89
+    case sequencerSpecific = 127
     
-    init?(decimal: UInt8) {
-        guard let type = MetaEventType(rawValue: String(decimal, radix: 16)) else {
-            return nil
-        }
-        self = type
+    init?(byte: Byte) {
+        self.init(rawValue: Int(byte))
     }
 }
