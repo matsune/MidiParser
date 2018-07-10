@@ -42,10 +42,11 @@ class LoadDataTests: XCTestCase {
 
         XCTAssertEqual(midi.infoDictionary[MidiInfoKey.tempo] as! Int, 120)
         
-        midi.tempoTrack.timeSignatures.removeAll()
-        midi.tempoTrack.timeSignatures = [MidiTimeSignature(timeStamp: 0, numerator: 6, denominator: 3, cc: 24, bb: 8)]
+        midi.tempoTrack.setTimeSignatures([MidiTimeSignature(timeStamp: 0, numerator: 6, denominator: 3, cc: 24, bb: 8)])
         XCTAssertEqual(midi.infoDictionary[.timeSignature] as? String, "6/8")
-        print(midi.infoDictionary)
+        
+        midi.noteTracks[0].setKeySignatures([MidiKeySignature(timeStamp: 0, key: .major(.A))])
+        XCTAssertEqual(midi.infoDictionary[.keySignature] as? String, "A")
         
         let noteCount = midi.noteTracks[1].count
         midi.noteTracks[1].deleteNote(at: 10)

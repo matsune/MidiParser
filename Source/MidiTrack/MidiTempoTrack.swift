@@ -10,24 +10,7 @@ import AudioToolbox
 import Foundation
 
 public final class MidiTempoTrack: MidiTrack {
-    public var timeSignatures: [MidiTimeSignature] = [] {
-        didSet {
-            if !isReload {
-                var count = 0
-                iterator.enumerate { (info, finished) in
-                    if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
-                        MetaEventType(byte: metaEvent.metaEventType) == .timeSignature {
-                        iterator.deleteEvent()
-                        count += 1
-                        finished = count >= oldValue.count
-                    }
-                }
-                timeSignatures.forEach {
-                    add(metaEvent: $0)
-                }
-            }
-        }
-    }
+    public private(set) var timeSignatures: [MidiTimeSignature] = []
     
     public private(set) var extendedTempos: [MidiExtendedTempo] = []
 
@@ -35,9 +18,7 @@ public final class MidiTempoTrack: MidiTrack {
     
     override init(musicTrack: MusicTrack) {
         super.init(musicTrack: musicTrack)
-        isReload = true
         reloadEvents()
-        isReload = false
     }
     
     private func reloadEvents() {
@@ -75,5 +56,21 @@ public final class MidiTempoTrack: MidiTrack {
                 }
             }
         }
+    }
+    
+    public func setTimeSignatures(_ timeSignatures: [MidiTimeSignature]) {
+        var count = 0
+        iterator.enumerate { (info, finished) in
+            if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
+                MetaEventType(byte: metaEvent.metaEventType) == .timeSignature {
+                iterator.deleteEvent()
+                count += 1
+                finished = count >= self.timeSignatures.count
+            }
+        }
+        timeSignatures.forEach {
+            add(metaEvent: $0)
+        }
+        self.timeSignatures = timeSignatures
     }
 }

@@ -9,7 +9,8 @@
 import AudioToolbox
 import Foundation
 
-public struct MidiKeySignature: EventProtocol {
+// 0xFF 0x59 0x02 0x[sf] 0x[ml]
+public struct MidiKeySignature: MetaEventProtocol {
     public var timeStamp: MusicTimeStamp
     public var keySig: KeySignature
     
@@ -21,9 +22,17 @@ public struct MidiKeySignature: EventProtocol {
     init(timeStamp: MusicTimeStamp, sf: UInt8, isMajor: Bool) {
         self.timeStamp = timeStamp
         if isMajor {
-            self.keySig = .major(MajorKey(sf: sf))
+            self.keySig = .major(MajorKey(rawValue: sf) ?? .C)
         } else {
-            self.keySig = .minor(MinorKey(sf: sf))
+            self.keySig = .minor(MinorKey(rawValue: sf) ?? .A)
         }
+    }
+    
+    var metaType: MetaEventType {
+        return .keySignature
+    }
+    
+    var bytes: Bytes {
+        return keySig.bytes
     }
 }

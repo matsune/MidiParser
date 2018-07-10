@@ -9,35 +9,54 @@
 import AudioToolbox
 import Foundation
 
-// 0, 1, 2, 3, 4, 5, 6, 7, -1(255), -2, -3, -4, -5, -6, -7
+//  sf: 0, 1, 2, 3, 4, 5, 6, 7, 255, 254, 253, 252, 251, 250, 249
 
 public enum KeySignature: Equatable {
     case major(MajorKey)
     case minor(MinorKey)
-}
-
-private func sfToRawValue(_ sf: UInt8) -> Int {
-    if 0...7 ~= sf {
-        return Int(sf)
-    } else if 249 ... 255 ~= sf {
-        // 255 -> 8, 254 -> 9 ...
-        return 263 - Int(sf)
-    }
-    return 0
-}
-
-public enum MajorKey: Int {
-    case C, G, D, A, E, B, Fsharp, Csharp, F, Bflat, Eflat, Aflat, Dflat, Gflat, Cflat
     
-    init(sf: UInt8) {
-        self.init(rawValue: sfToRawValue(sf))!
+    var bytes: Bytes {
+        switch self {
+        case let .major(key):
+            return [key.rawValue, 0]
+        case let .minor(key):
+            return [key.rawValue, 1]
+        }
     }
 }
 
-public enum MinorKey: Int {
-    case A, E, B, Fsharp, Csharp, Gsharp, Dsharp, Asharp, D, G, C, F, Bflat, Eflat, Aflat
-    
-    init(sf: UInt8) {
-        self.init(rawValue: sfToRawValue(sf))!
-    }
+public enum MajorKey: UInt8 {
+    case C = 0
+    case G = 1
+    case D = 2
+    case A = 3
+    case E = 4
+    case B = 5
+    case Fsharp = 6
+    case Csharp = 7
+    case F = 255
+    case Bflat = 254
+    case Eflat = 253
+    case Aflat = 252
+    case Dflat = 251
+    case Gflat = 250
+    case Cflat = 249
+}
+
+public enum MinorKey: UInt8 {
+    case A = 0
+    case E = 1
+    case B = 2
+    case Fsharp = 3
+    case Csharp = 4
+    case Gsharp = 5
+    case Dsharp = 6
+    case Asharp = 7
+    case D = 255
+    case G = 254
+    case C = 253
+    case F = 252
+    case Bflat = 251
+    case Eflat = 250
+    case Aflat = 249
 }

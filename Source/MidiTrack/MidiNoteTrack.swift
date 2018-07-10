@@ -17,6 +17,7 @@ public final class MidiNoteTrack: MidiTrack {
     }
     
     public private(set) var keySignatures: [MidiKeySignature] = []
+    
     public private(set) var channels: [MIDIChannelMessage] = []
     public private(set) var patch = MidiPatch(program: 0)
     
@@ -170,6 +171,22 @@ public final class MidiNoteTrack: MidiTrack {
     public func deleteNote(at index: Int) {
         let note = notes.remove(at: index)
         iterator.delete(note: note)
+    }
+    
+    public func setKeySignatures(_ keySignatures: [MidiKeySignature]) {
+        var count = 0
+        iterator.enumerate { (info, finished) in
+            if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
+                MetaEventType(byte: metaEvent.metaEventType) == .keySignature {
+                iterator.deleteEvent()
+                count += 1
+                finished = count >= self.keySignatures.count
+            }
+        }
+        keySignatures.forEach {
+            add(metaEvent: $0)
+        }
+        self.keySignatures = keySignatures
     }
 }
 
