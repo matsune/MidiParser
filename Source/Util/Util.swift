@@ -34,14 +34,16 @@ func sizeof<T>(_ type: T.Type) -> UInt32 {
     return UInt32(MemoryLayout<T>.size)
 }
 
-extension String {
-    var decimal: Int? {
-        return Int(self, radix: 16)
-    }
-}
-
 extension UInt8 {
     var hexString: String {
         return String(self, radix: 16).uppercased()
+    }
+}
+
+func write(bytes: Bytes, inData: inout UInt8) {
+    withUnsafeMutablePointer(to: &inData) {
+        for i in 0 ..< bytes.count {
+            $0.advanced(by: i).pointee = bytes[i]
+        }
     }
 }

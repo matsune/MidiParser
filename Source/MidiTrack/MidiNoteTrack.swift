@@ -31,15 +31,11 @@ public final class MidiNoteTrack: MidiTrack {
                 iterator.delete()
                 finished = true
             }
-            let data = [UInt8](trackName.utf8)
+            let data = Bytes(trackName.utf8)
             var metaEvent = MIDIMetaEvent()
             metaEvent.metaEventType = UInt8(MetaEventType.sequenceTrackName.rawValue)
             metaEvent.dataLength = UInt32(data.count)
-            withUnsafeMutablePointer(to: &metaEvent.data) {
-                for i in 0..<data.count {
-                    $0.advanced(by: i).pointee = data[i]
-                }
-            }
+            write(bytes: data, inData: &metaEvent.data)
             check(MusicTrackNewMetaEvent(_musicTrack, 0, &metaEvent), label: "MusicTrackNewMetaEvent")
         }
     }
@@ -80,8 +76,6 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-//    public private(set) var isDrumTrack = false
-    
     override init(musicTrack: MusicTrack) {
         super.init(musicTrack: musicTrack)
         reloadEvents()
@@ -110,7 +104,6 @@ public final class MidiNoteTrack: MidiTrack {
                                         releaseVelocity: noteMessage.releaseVelocity)
                     notes.append(note)
                     // Channel 9 is reserved for the use with percussion instruments.
-//                    isDrumTrack = noteMessage.channel == 9
                 case .meta:
                     let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
                     var data: Bytes = []
