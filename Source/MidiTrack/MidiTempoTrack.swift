@@ -13,8 +13,6 @@ public final class MidiTempoTrack: MidiTrack {
     public private(set) var timeSignatures: [MidiTimeSignature] = []
     
     public private(set) var extendedTempos: [MidiExtendedTempo] = []
-
-    private var isReload = true
     
     override init(musicTrack: MusicTrack) {
         super.init(musicTrack: musicTrack)
@@ -72,5 +70,20 @@ public final class MidiTempoTrack: MidiTrack {
             add(metaEvent: $0)
         }
         self.timeSignatures = timeSignatures
+    }
+    
+    public func setExtendedTempos(_ extendedTempos: [MidiExtendedTempo]) {
+        var count = 0
+        iterator.enumerate { (info, finished) in
+            if let _ = info.data?.assumingMemoryBound(to: ExtendedTempoEvent.self).pointee {
+                iterator.deleteEvent()
+                count += 1
+                finished = count >= self.extendedTempos.count
+            }
+        }
+        extendedTempos.forEach {
+            add(extendedTempo: $0)
+        }
+        self.extendedTempos = extendedTempos
     }
 }

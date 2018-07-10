@@ -39,8 +39,9 @@ class LoadDataTests: XCTestCase {
         XCTAssertEqual(midi.tempoTrack.timeSignatures[0].cc, 24)
         XCTAssertEqual(midi.tempoTrack.timeSignatures[0].bb, 8)
         XCTAssertEqual(midi.tempoTrack.extendedTempos[0].bpm, 120)
-
-        XCTAssertEqual(midi.infoDictionary[MidiInfoKey.tempo] as! Int, 120)
+        
+        midi.tempoTrack.setExtendedTempos([MidiExtendedTempo(timeStamp: 40, bpm: 200)])
+        XCTAssertEqual(midi.infoDictionary[MidiInfoKey.tempo] as? Int, 200)
         
         midi.tempoTrack.setTimeSignatures([MidiTimeSignature(timeStamp: 0, numerator: 6, denominator: 3, cc: 24, bb: 8)])
         XCTAssertEqual(midi.infoDictionary[.timeSignature] as? String, "6/8")

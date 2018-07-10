@@ -11,8 +11,8 @@ import Foundation
 
 // 0xFF 0x59 0x02 0x[sf] 0x[ml]
 public struct MidiKeySignature: MetaEventProtocol {
-    public var timeStamp: MusicTimeStamp
-    public var keySig: KeySignature
+    public let timeStamp: MusicTimeStamp
+    public let keySig: KeySignature
     
     public init(timeStamp: MusicTimeStamp, key: KeySignature) {
         self.timeStamp = timeStamp

@@ -11,7 +11,7 @@ import Foundation
 typealias MetaEventHeader = (metaType: UInt8, dataLength: UInt32)
 
 public struct MetaEvent {
-    public var metaType: UInt8
-    public var dataLength: UInt32
-    public var data: [UInt8]
+    public let metaType: UInt8
+    public let dataLength: UInt32
+    public let data: [UInt8]
 }

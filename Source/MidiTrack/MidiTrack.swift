@@ -40,4 +40,9 @@ public class MidiTrack {
         check(MusicTrackNewMetaEvent(_musicTrack, metaEvent.timeStamp, &e),
               label: "MusicTrackNewMetaEvent")
     }
+    
+    func add(extendedTempo: MidiExtendedTempo) {
+        check(MusicTrackNewExtendedTempoEvent(_musicTrack, extendedTempo.timeStamp, extendedTempo.bpm),
+              label: "MusicTrackNewExtendedTempoEvent")
+    }
 }
