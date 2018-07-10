@@ -12,7 +12,7 @@ import Foundation
 public final class MidiTempoTrack: MidiTrack {
     public private(set) var timeSignatures: [MidiTimeSignature] = []
     public private(set) var extendedTempos: [MidiExtendedTempo] = []
-    
+
     override init(musicTrack: MusicTrack) {
         super.init(musicTrack: musicTrack)
         reloadEvents()

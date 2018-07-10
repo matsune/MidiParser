@@ -15,6 +15,7 @@ public enum MidiError: Error {
 
 final class MidiSequence {
     private let _musicSequence: MusicSequence
+    private var format: UInt8 = 1
     
     init() {
         var sequencePtr: MusicSequence?
@@ -34,14 +35,19 @@ final class MidiSequence {
               label: "MusicSequenceDisposeTrack", level: .ignore)
     }
     
-    func load(data: Data, inFileTypeHint: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceLoadFlags = .smf_ChannelsToTracks) {
-        check(MusicSequenceFileLoadData(_musicSequence, data as CFData, inFileTypeHint, inFlags),
+    func load(data: Data) {
+        // Check format of SMF in header chunk
+        // SMF has 3 types of formats, Format 0 has only 1 truck chunk.
+        // Format 1 and 2 have number of using trucks
+        // Preffered to use Format 0 -> .smf_ChannelsToTracks
+        // Format 1/2 -> .smf_PreserveTracks
+        let header = data.withUnsafeBytes {
+            UnsafeRawBufferPointer(start: $0, count: Int(sizeof(HeaderChunk.self))).load(as: HeaderChunk.self)
+        }
+        format = header.format.1
+        let inFlags: MusicSequenceLoadFlags = format == 0 ? .smf_ChannelsToTracks : .smf_PreserveTracks
+        check(MusicSequenceFileLoadData(_musicSequence, data as CFData, .midiType, inFlags),
               label: "MusicSequenceFileLoadData")
-    }
-    
-    func load(url: URL, inFileTypeHint: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceLoadFlags = .smf_ChannelsToTracks) {
-        check(MusicSequenceFileLoad(_musicSequence, url as CFURL, inFileTypeHint, inFlags),
-              label: "MusicSequenceFileLoad")
     }
     
     func createData(inFileType: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceFileFlags = .eraseFile, inResolution: Int16 = 480) -> Data? {

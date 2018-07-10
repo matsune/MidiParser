@@ -30,13 +30,15 @@ class LoadDataTests: XCTestCase {
          - 120 bpm
          
          */
-        guard let url = Bundle(for: type(of: self)).url(forResource: "MIDI_sample", withExtension: "mid") else {
+        guard let url = Bundle(for: type(of: self)).url(forResource: "MIDI_sample", withExtension: "mid"),
+            let data = try? Data(contentsOf: url) else {
             XCTFail()
             return
         }
         let midi = MidiData()
-        midi.load(url: url)
+        midi.load(data: data)
         print(midi.infoDictionary)
+        
         XCTAssertEqual(midi.tempoTrack.timeSignatures.count, 1)
         XCTAssertEqual(midi.tempoTrack.timeSignatures[0].numerator, 4)
         XCTAssertEqual(midi.tempoTrack.timeSignatures[0].denominator, 4)
@@ -44,12 +46,16 @@ class LoadDataTests: XCTestCase {
         XCTAssertEqual(midi.tempoTrack.timeSignatures[0].bb, 8)
         XCTAssertEqual(midi.tempoTrack.extendedTempos[0].bpm, 120)
         XCTAssertEqual(midi.sequenceType, .beats)
-        
+
         let noteCount = midi.noteTracks[0].count
         midi.noteTracks[0].deleteNote(at: 10)
         XCTAssertEqual(noteCount - 1, midi.noteTracks[0].count)
         midi.noteTracks[0].add(note: MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 10, channel: 0, releaseVelocity: 0))
         XCTAssertEqual(noteCount, midi.noteTracks[0].count)
+
+//        let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
+//        print(tmp)
+//        try! midi.writeData(to: tmp)
     }
     
 }

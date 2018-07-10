@@ -17,28 +17,16 @@ public final class MidiData {
     init() {
         sequence = MidiSequence()
         tempoTrack = MidiTempoTrack(musicTrack: sequence.tempoTrack)
-        var tracks: [MidiNoteTrack] = []
-        for i in 0 ..< sequence.trackCount {
-            if let track = sequence.track(at: i) {
-                tracks.append(MidiNoteTrack(musicTrack: track))
-            }
-        }
-        noteTracks = tracks
+        noteTracks = []
     }
     
     deinit {
         disposeTracks()
     }
     
-    public func load(data: Data, inFileTypeHint: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceLoadFlags = .smf_ChannelsToTracks) {
+    public func load(data: Data) {
         disposeTracks()
-        sequence.load(data: data, inFileTypeHint: inFileTypeHint, inFlags: inFlags)
-        retainTracks()
-    }
-    
-    public func load(url: URL, inFileTypeHint: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceLoadFlags = .smf_ChannelsToTracks) {
-        disposeTracks()
-        sequence.load(url: url, inFileTypeHint: inFileTypeHint, inFlags: inFlags)
+        sequence.load(data: data)
         retainTracks()
     }
     
@@ -53,7 +41,8 @@ public final class MidiData {
         var tracks: [MidiNoteTrack] = []
         for i in 0 ..< sequence.trackCount {
             if let track = sequence.track(at: i) {
-                tracks.append(MidiNoteTrack(musicTrack: track))
+                let t = MidiNoteTrack(musicTrack: track)
+                tracks.append(t)
             }
         }
         noteTracks = tracks
