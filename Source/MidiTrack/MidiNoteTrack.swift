@@ -10,7 +10,7 @@ import AudioToolbox
 import Foundation
 
 public final class MidiNoteTrack: MidiTrack {
-    private var notes: [MidiNote] = [] {
+    public private(set) var notes: [MidiNote] = [] {
         didSet {
             notes.sort(by: { $0.timeStamp < $1.timeStamp })
         }
@@ -19,7 +19,30 @@ public final class MidiNoteTrack: MidiTrack {
     public private(set) var keySignatures: [MidiKeySignature] = []
     public private(set) var channels: [MIDIChannelMessage] = []
     public private(set) var patch = MidiPatch(program: 0)
-    public var sequenceTrackName = ""
+    
+    public var trackName = "" {
+        didSet {
+            iterator.enumerate { info, finished in
+                guard let info = info, MidiEventType(info.type) == .meta,
+                let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
+                MetaEventType(decimal: metaEvent.metaEventType) == .sequenceTrackName else {
+                    return
+                }
+                iterator.delete()
+                finished = true
+            }
+            let data = [UInt8](trackName.utf8)
+            var metaEvent = MIDIMetaEvent()
+            metaEvent.metaEventType = 3
+            metaEvent.dataLength = UInt32(data.count)
+            withUnsafeMutablePointer(to: &metaEvent.data) {
+                for i in 0..<data.count {
+                    $0.advanced(by: i).pointee = data[i]
+                }
+            }
+            check(MusicTrackNewMetaEvent(_musicTrack, 0, &metaEvent), label: "MusicTrackNewMetaEvent")
+        }
+    }
     
     public var isMute: Bool {
         get {
@@ -57,7 +80,7 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    public private(set) var isDrumTrack = false
+//    public private(set) var isDrumTrack = false
     
     override init(musicTrack: MusicTrack) {
         super.init(musicTrack: musicTrack)
@@ -69,7 +92,7 @@ public final class MidiNoteTrack: MidiTrack {
         keySignatures = []
         channels = []
         
-        iterator.enumerate { eventInfo in
+        iterator.enumerate { eventInfo, _ in
             guard let eventInfo = eventInfo,
                 let eventData = eventInfo.data else {
                 fatalError("MidiNoteTrack error")
@@ -79,7 +102,6 @@ public final class MidiNoteTrack: MidiTrack {
                 switch eventType {
                 case .midiNoteMessage:
                     let noteMessage = eventData.load(as: MIDINoteMessage.self)
-                    
                     let note = MidiNote(timeStamp: eventInfo.timeStamp,
                                         duration: noteMessage.duration,
                                         note: noteMessage.note,
@@ -88,7 +110,7 @@ public final class MidiNoteTrack: MidiTrack {
                                         releaseVelocity: noteMessage.releaseVelocity)
                     notes.append(note)
                     // Channel 9 is reserved for the use with percussion instruments.
-                    isDrumTrack = noteMessage.channel == 9
+//                    isDrumTrack = noteMessage.channel == 9
                 case .meta:
                     let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
                     var data: [UInt8] = []
@@ -105,13 +127,14 @@ public final class MidiNoteTrack: MidiTrack {
                             let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp, sf: data[0], isMajor: data[1] == 0)
                             keySignatures.append(keySignature)
                         case .sequenceTrackName:
-                            sequenceTrackName = data.map { String(format: "%c", $0) }.reduce("", +)
+                            self.trackName = data.map { String(format: "%c", $0) }.reduce("", +)
                         default:
                             break
                         }
                     }
                 case .midiChannelMessage:
                     let channelMessage = eventData.load(as: MIDIChannelMessage.self)
+                    channels.append(channelMessage)
                     if channelMessage.status.hexString.first == "C" {
                         patch = MidiPatch(program: Int(channelMessage.data1))
                     }

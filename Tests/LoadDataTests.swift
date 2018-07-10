@@ -47,15 +47,17 @@ class LoadDataTests: XCTestCase {
         XCTAssertEqual(midi.tempoTrack.extendedTempos[0].bpm, 120)
         XCTAssertEqual(midi.sequenceType, .beats)
 
-        let noteCount = midi.noteTracks[0].count
-        midi.noteTracks[0].deleteNote(at: 10)
-        XCTAssertEqual(noteCount - 1, midi.noteTracks[0].count)
-        midi.noteTracks[0].add(note: MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 10, channel: 0, releaseVelocity: 0))
-        XCTAssertEqual(noteCount, midi.noteTracks[0].count)
+        let noteCount = midi.noteTracks[1].count
+        midi.noteTracks[1].deleteNote(at: 10)
+        XCTAssertEqual(noteCount - 1, midi.noteTracks[1].count)
+        midi.noteTracks[1].add(note: MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 10, channel: 0, releaseVelocity: 0))
+        XCTAssertEqual(noteCount, midi.noteTracks[1].count)
 
-//        let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
-//        print(tmp)
-//        try! midi.writeData(to: tmp)
+        midi.noteTracks[1].trackName = "aaa"
+        XCTAssertEqual(midi.noteTracks[1].trackName, "aaa")
+        let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
+        print(tmp)
+        try! midi.writeData(to: tmp)
     }
     
 }

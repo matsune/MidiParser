@@ -40,9 +40,9 @@ public final class MidiData {
         tempoTrack = MidiTempoTrack(musicTrack: sequence.tempoTrack)
         var tracks: [MidiNoteTrack] = []
         for i in 0 ..< sequence.trackCount {
-            if let track = sequence.track(at: i) {
-                let t = MidiNoteTrack(musicTrack: track)
-                tracks.append(t)
+            if let musicTrack = sequence.track(at: i) {
+                let track = MidiNoteTrack(musicTrack: musicTrack)
+                tracks.append(track)
             }
         }
         noteTracks = tracks

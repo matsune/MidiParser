@@ -69,11 +69,12 @@ final class MidiEventIterator {
         check(MusicEventIteratorSeek(_iterator, timestamp), label: "MusicEventIteratorSeek")
     }
     
-    func enumerate(seekTime: MusicTimeStamp = 0, block: (MidiEventInfo?) -> Void) {
+    func enumerate(seekTime: MusicTimeStamp = 0, block: (MidiEventInfo?, inout Bool) -> Void) {
         seek(in: seekTime)
+        var finished: Bool = false
         while hasCurrentEvent {
-            block(currentEvent)
-            if !hasNextEvent { break }
+            block(currentEvent, &finished)
+            if finished || !hasNextEvent { break }
             nextEvent()
         }
     }
@@ -83,14 +84,18 @@ final class MidiEventIterator {
     }
     
     func delete(note: MidiNote) {
-        enumerate(seekTime: note.timeStamp) { info in
+        enumerate(seekTime: note.timeStamp) { info, _ in
             if let info = info,
                 info.type == kMusicEventType_MIDINoteMessage,
                 let noteMessage = info.data?.load(as: MIDINoteMessage.self),
                 note.convert() == noteMessage {
-                check(MusicEventIteratorDeleteEvent(_iterator), label: "MusicEventIteratorDeleteEvent")
+                delete()
             }
         }
+    }
+    
+    func delete() {
+        check(MusicEventIteratorDeleteEvent(_iterator), label: "MusicEventIteratorDeleteEvent")
     }
 }
 

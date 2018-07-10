@@ -22,7 +22,7 @@ public final class MidiTempoTrack: MidiTrack {
         timeSignatures = []
         extendedTempos = []
         
-        iterator.enumerate { eventInfo in
+        iterator.enumerate { eventInfo, _ in
             guard let eventInfo = eventInfo,
                 let eventData = eventInfo.data else {
                 fatalError("MidiTempoTrack error")
