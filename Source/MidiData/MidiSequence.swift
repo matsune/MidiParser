@@ -9,10 +9,6 @@
 import AudioToolbox
 import Foundation
 
-public enum MidiError: Error {
-    case writeURL
-}
-
 final class MidiSequence {
     private let _musicSequence: MusicSequence
     private var format: UInt8 = 1
@@ -71,7 +67,7 @@ final class MidiSequence {
         guard let dict = MusicSequenceGetInfoDictionary(_musicSequence) as? [String: AnyObject] else {
             return [:]
         }
-        return Dictionary(uniqueKeysWithValues: dict.map { (MidiInfoKey(val: $0.key)!, $0.value) })
+        return Dictionary(uniqueKeysWithValues: dict.map { (MidiInfoKey(val: $0.key), $0.value) })
     }
     
     var tempoTrack: MusicTrack {

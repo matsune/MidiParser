@@ -14,7 +14,7 @@ public struct MidiPatch {
     public let patch: GMPatch
     public let family: PatchFamily
     
-    init?(program: Int) {
+    public init?(program: Int) {
         guard 0 ..< 128 ~= program else {
             return nil
         }

@@ -22,10 +22,11 @@ public final class MidiNoteTrack: MidiTrack {
     public var keySignatures: [MidiKeySignature] {
         didSet {
             var count = 0
-            iterator.enumerate { (info, finished) in
+            iterator.enumerate { info, finished, next in
                 if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
                     MetaEventType(byte: metaEvent.metaEventType) == .keySignature {
                     iterator.deleteEvent()
+                    next = false
                     count += 1
                     finished = count >= oldValue.count
                 }
@@ -36,14 +37,32 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
+    public var lyrics: [MidiLyric] = [] {
+        didSet {
+            var count = 0
+            iterator.enumerate { info, finished, next in
+                guard let metaEvent: MIDIMetaEvent = bindEventData(info: info),
+                    MetaEventType(byte: metaEvent.metaEventType) == .lyric else {
+                        return
+                }
+                iterator.deleteEvent()
+                next = false
+                count += 1
+                finished = count >= oldValue.count
+            }
+            lyrics.forEach {
+                add(metaEvent: $0)
+            }
+        }
+    }
+    
 //    public private(set) var channels: [MIDIChannelMessage] = []
 //    public private(set) var patch = MidiPatch(program: 0)
     
     public var trackName = "" {
         didSet {
-            iterator.enumerate { info, finished in
-                guard MidiEventType(info.type) == .meta,
-                    let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
+            iterator.enumerate { info, finished, next in
+                guard let metaEvent: MIDIMetaEvent = bindEventData(info: info),
                     MetaEventType(byte: metaEvent.metaEventType) == .sequenceTrackName else {
                         return
                 }
@@ -110,55 +129,61 @@ public final class MidiNoteTrack: MidiTrack {
         var name = ""
         var ns: [MidiNote] = []
         var keySigs: [MidiKeySignature] = []
-        iterator.enumerate { eventInfo, _ in
-            guard let eventData = eventInfo.data else {
-                fatalError("MidiNoteTrack error")
+        var lyrics: [MidiLyric] = []
+        iterator.enumerate { eventInfo, _, _ in
+            guard let eventData = eventInfo.data,
+                let eventType = MidiEventType(eventInfo.type) else {
+                    return
             }
             
-            if let eventType = MidiEventType(eventInfo.type) {
-                switch eventType {
-                case .midiNoteMessage:
-                    let noteMessage = eventData.load(as: MIDINoteMessage.self)
-                    let note = MidiNote(timeStamp: eventInfo.timeStamp,
-                                        duration: noteMessage.duration,
-                                        note: noteMessage.note,
-                                        velocity: noteMessage.velocity,
-                                        channel: noteMessage.channel,
-                                        releaseVelocity: noteMessage.releaseVelocity)
-                    ns.append(note)
-                case .meta:
-                    let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
-                    var data: Bytes = []
-                    for i in 0 ..< Int(header.dataLength) {
-                        data.append(eventData.advanced(by: MemoryLayout<MetaEventHeader>.size).advanced(by: i).load(as: Byte.self))
-                    }
-
-                    if let metaType = MetaEventType(byte: header.metaType) {
-                        switch metaType {
-                        case .keySignature:
-                            // ex.) 0xFF 0x59 0x02 0x04(data[0]) 0x00(data[1])
-                            // data[0] sf
-                            // data[1] 0x00 => major, 0x01 => minor
-                            let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp, sf: data[0], isMajor: data[1] == 0)
-                            keySigs.append(keySignature)
-                        case .sequenceTrackName:
-                            name = data.string
-                        default:
-                            break
-                        }
-                    }
-//                case .midiChannelMessage:
-//                    let channelMessage = eventData.load(as: MIDIChannelMessage.self)
-//                    channels.append(channelMessage)
-//                    if channelMessage.status.hexString.first == "C" {
-//                        patch = MidiPatch(program: Int(channelMessage.data1))
-//                    }
+            switch eventType {
+            case .midiNoteMessage:
+                let noteMessage = eventData.load(as: MIDINoteMessage.self)
+                let note = MidiNote(timeStamp: eventInfo.timeStamp,
+                                    duration: noteMessage.duration,
+                                    note: noteMessage.note,
+                                    velocity: noteMessage.velocity,
+                                    channel: noteMessage.channel,
+                                    releaseVelocity: noteMessage.releaseVelocity)
+                ns.append(note)
+            case .meta:
+                let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
+                var data: Bytes = []
+                for i in 0 ..< Int(header.dataLength) {
+                    data.append(eventData.advanced(by: MemoryLayout<MetaEventHeader>.size).advanced(by: i).load(as: Byte.self))
+                }
+                
+                guard let metaType = MetaEventType(byte: header.metaType) else {
+                    return
+                }
+                
+                switch metaType {
+                case .keySignature:
+                    // ex.) 0xFF 0x59 0x02 0x04(data[0]) 0x00(data[1])
+                    // data[0] sf
+                    // data[1] 0x00 => major, 0x01 => minor
+                    let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp, sf: data[0], isMajor: data[1] == 0)
+                    keySigs.append(keySignature)
+                case .sequenceTrackName:
+                    name = data.string
+                case .lyric:
+                    lyrics.append(MidiLyric(timeStamp: eventInfo.timeStamp, str: data.string))
                 default:
                     break
                 }
+                //                case .midiChannelMessage:
+                //                    let channelMessage = eventData.load(as: MIDIChannelMessage.self)
+                //                    channels.append(channelMessage)
+                //                    if channelMessage.status.hexString.first == "C" {
+                //                        patch = MidiPatch(program: Int(channelMessage.data1))
+            //                    }
+            default:
+                print(eventType)
+                break
             }
         }
         self.trackName = name
+        self.lyrics = lyrics
         self.notes = ns
         self.keySignatures = keySigs
     }

@@ -8,6 +8,7 @@
 
 import Foundation
 
+// each family has 8 patches
 public enum PatchFamily: Int {
     case piano
     case percussion

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13C66AFE20F0B9AD00DD8D1D"
-               BuildableName = "MidiParser_iOS.framework"
+               BuildableName = "MidiParser.framework"
                BlueprintName = "MidiParser iOS"
                ReferencedContainer = "container:MidiParser.xcodeproj">
             </BuildableReference>
@@ -44,7 +44,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13C66AFE20F0B9AD00DD8D1D"
-            BuildableName = "MidiParser_iOS.framework"
+            BuildableName = "MidiParser.framework"
             BlueprintName = "MidiParser iOS"
             ReferencedContainer = "container:MidiParser.xcodeproj">
          </BuildableReference>
@@ -66,7 +66,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13C66AFE20F0B9AD00DD8D1D"
-            BuildableName = "MidiParser_iOS.framework"
+            BuildableName = "MidiParser.framework"
             BlueprintName = "MidiParser iOS"
             ReferencedContainer = "container:MidiParser.xcodeproj">
          </BuildableReference>
@@ -84,7 +84,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13C66AFE20F0B9AD00DD8D1D"
-            BuildableName = "MidiParser_iOS.framework"
+            BuildableName = "MidiParser.framework"
             BlueprintName = "MidiParser iOS"
             ReferencedContainer = "container:MidiParser.xcodeproj">
          </BuildableReference>

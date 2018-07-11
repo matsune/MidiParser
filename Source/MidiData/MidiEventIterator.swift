@@ -69,15 +69,28 @@ final class MidiEventIterator {
         check(MusicEventIteratorSeek(_iterator, timestamp), label: "MusicEventIteratorSeek")
     }
     
-    func enumerate(seekTime: MusicTimeStamp = 0, block: (MidiEventInfo, inout Bool) -> Void) {
+    /// Enumerate events from `seekTime` to end of track.
+    /// Need to set `next` flag false when you called `deleteEvent()` during block
+    /// because pointer move forward after delete.
+    ///
+    /// - parameter seekTime: start time
+    /// - parameters:
+    ///     - info: current event
+    ///     - finished: flag to break loop
+    ///     - next: flag whether do `nextEvent()`
+    func enumerate(seekTime: MusicTimeStamp = 0, block: (_ info: MidiEventInfo, _ finished: inout Bool, _ next: inout Bool) -> Void) {
         seek(in: seekTime)
-        var finished: Bool = false
-        loop: while hasCurrentEvent {
+        while hasCurrentEvent {
+            var finished: Bool = false
+            var next: Bool = true
+            
             if let info = currentEvent {
-                block(info, &finished)
+                block(info, &finished, &next)
             }
             if finished || !hasNextEvent { break }
-            nextEvent()
+            if next {
+                nextEvent()
+            }
         }
     }
     
@@ -86,7 +99,7 @@ final class MidiEventIterator {
     }
     
     func delete(note: MidiNote) {
-        enumerate(seekTime: note.timeStamp) { info, finished in
+        enumerate(seekTime: note.timeStamp) { info, finished, next in
             if info.type == kMusicEventType_MIDINoteMessage,
                 let noteMessage = info.data?.load(as: MIDINoteMessage.self),
                 note.convert() == noteMessage {

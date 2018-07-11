@@ -32,9 +32,10 @@ public enum MidiInfoKey: String {
     case title
     case trackNumber
     case year
+    case unknown
     
     // swiftlint:disable cyclomatic_complexity
-    init?(val: String) {
+    init(val: String) {
         switch val {
         case kAFInfoDictionary_Album:
             self = .album
@@ -81,7 +82,7 @@ public enum MidiInfoKey: String {
         case kAFInfoDictionary_Year:
             self = .year
         default:
-            return nil
+            self = .unknown
         }
     }
 }
