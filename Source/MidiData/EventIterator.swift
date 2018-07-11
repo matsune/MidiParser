@@ -1,5 +1,5 @@
 //
-//  MidiEventIterator.swift
+//  EventIterator.swift
 //  MidiParser
 //
 //  Created by Yuma Matsune on 2017/11/04.
@@ -9,7 +9,7 @@
 import AudioToolbox
 import Foundation
 
-final class MidiEventIterator {
+final class EventIterator {
     private let _iterator: MusicEventIterator
     
     init(track: MusicTrack) {
@@ -17,7 +17,7 @@ final class MidiEventIterator {
         check(NewMusicEventIterator(track, &iterator), label: "NewMusicEventIterator")
         
         guard let eventIterator = iterator else {
-            fatalError("Could not initialize MidiEventIterator")
+            fatalError("Could not initialize MusicEventIterator")
         }
         _iterator = eventIterator
     }
@@ -49,7 +49,7 @@ final class MidiEventIterator {
         check(MusicEventIteratorPreviousEvent(_iterator), label: "MusicEventIteratorPreviousEvent")
     }
     
-    var currentEvent: MidiEventInfo? {
+    var currentEvent: EventInfo? {
         var eventType: MusicEventType = 0
         var eventTimeStamp: MusicTimeStamp = -1
         var eventData: UnsafeRawPointer?
@@ -62,7 +62,7 @@ final class MidiEventIterator {
                  label: "MusicEventIteratorGetEventInfo", level: .log) != noErr {
             return nil
         }
-        return MidiEventInfo(type: eventType, timeStamp: eventTimeStamp, data: eventData, dataSize: eventDataSize)
+        return EventInfo(type: eventType, timeStamp: eventTimeStamp, data: eventData, dataSize: eventDataSize)
     }
     
     func seek(in timestamp: MusicTimeStamp) {
@@ -79,7 +79,7 @@ final class MidiEventIterator {
     ///     - finished: flag to break loop
     ///     - next: flag whether do `nextEvent()`
     func enumerate(seekTime: MusicTimeStamp = 0,
-                   block: (_ info: MidiEventInfo, _ finished: inout Bool, _ next: inout Bool) -> Void) {
+                   block: (_ info: EventInfo, _ finished: inout Bool, _ next: inout Bool) -> Void) {
         seek(in: seekTime)
         while hasCurrentEvent {
             var finished: Bool = false

@@ -11,7 +11,7 @@ import Foundation
 
 public final class MidiTempoTrack: MidiTrack {
     let _musicTrack: MusicTrack
-    let iterator: MidiEventIterator
+    let iterator: EventIterator
     
     public var timeSignatures: [MidiTimeSignature] {
         didSet {
@@ -51,7 +51,7 @@ public final class MidiTempoTrack: MidiTrack {
     
     init(musicTrack: MusicTrack) {
         _musicTrack = musicTrack
-        let iterator = MidiEventIterator(track: musicTrack)
+        let iterator = EventIterator(track: musicTrack)
         self.iterator = iterator
         
         var timeSigs: [MidiTimeSignature] = []

@@ -1,5 +1,5 @@
 //
-//  MidiEventInfo.swift
+//  EventInfo.swift
 //  MidiParser
 //
 //  Created by Yuma Matsune on 2018/01/19.
@@ -9,7 +9,7 @@
 import AudioToolbox
 import Foundation
 
-struct MidiEventInfo {
+struct EventInfo {
     let type: MusicEventType
     let timeStamp: MusicTimeStamp
     let data: UnsafeRawPointer?

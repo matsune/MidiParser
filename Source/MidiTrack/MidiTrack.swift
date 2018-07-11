@@ -12,12 +12,12 @@ import Foundation
 protocol MidiTrack {
     // swiftlint:disable identifier_name
     var _musicTrack: MusicTrack { get }
-    var iterator: MidiEventIterator { get }
+    var iterator: EventIterator { get }
     init(musicTrack: MusicTrack)
 }
 
 extension MidiTrack {
-    func bindEventData<T>(info: MidiEventInfo) -> T? {
+    func bindEventData<T>(info: EventInfo) -> T? {
         guard let type = MidiEventType(info.type) else {
             return nil
         }

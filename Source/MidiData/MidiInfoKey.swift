@@ -34,7 +34,7 @@ public enum MidiInfoKey: String {
     case year
     case unknown
     
-    // swiftlint:disable cyclomatic_complexity
+    // swiftlint:disable function_body_length cyclomatic_complexity
     init(val: String) {
         switch val {
         case kAFInfoDictionary_Album:

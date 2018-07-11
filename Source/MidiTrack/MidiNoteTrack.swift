@@ -11,7 +11,7 @@ import Foundation
 
 public final class MidiNoteTrack: MidiTrack {
     let _musicTrack: MusicTrack
-    let iterator: MidiEventIterator
+    let iterator: EventIterator
     
     public private(set) var notes: [MidiNote] {
         didSet {
@@ -69,7 +69,7 @@ public final class MidiNoteTrack: MidiTrack {
                 iterator.deleteEvent()
                 finished = true
             }
-            add(metaEvent: MidiMetaEvent(timeStamp: 0, metaType: .sequenceTrackName, bytes: Bytes(trackName.utf8)))
+            add(metaEvent: MetaEvent(timeStamp: 0, metaType: .sequenceTrackName, bytes: Bytes(trackName.utf8)))
         }
     }
     
@@ -123,7 +123,7 @@ public final class MidiNoteTrack: MidiTrack {
     
     init(musicTrack: MusicTrack) {
         _musicTrack = musicTrack
-        let iterator = MidiEventIterator(track: musicTrack)
+        let iterator = EventIterator(track: musicTrack)
         self.iterator = iterator
         
         var name = ""

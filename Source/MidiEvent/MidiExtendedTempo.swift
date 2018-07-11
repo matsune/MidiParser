@@ -10,6 +10,6 @@ import AudioToolbox
 import Foundation
 
 public struct MidiExtendedTempo: EventProtocol {
-    public var timeStamp: MusicTimeStamp
-    public var bpm: Float64
+    public let timeStamp: MusicTimeStamp
+    public let bpm: Float64
 }

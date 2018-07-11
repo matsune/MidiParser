@@ -9,7 +9,9 @@
 import Foundation
 
 typealias Byte = UInt8
+typealias Bytes = [Byte]
 
+// 2 Byte
 struct Word {
     private var value: (UInt8, UInt8)
     
@@ -22,6 +24,7 @@ struct Word {
     }
 }
 
+// 4 Byte
 struct DWord {
     private var value: (UInt8, UInt8, UInt8, UInt8)
     
@@ -36,8 +39,6 @@ struct DWord {
             + UInt32(value.3)
     }
 }
-
-typealias Bytes = [Byte]
 
 extension Collection where Element == Byte {
     var string: String {

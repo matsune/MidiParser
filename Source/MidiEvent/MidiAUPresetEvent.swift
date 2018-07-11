@@ -10,8 +10,8 @@ import AudioToolbox
 import Foundation
 
 public struct MidiAUPreset: EventProtocol {
-    public var timeStamp: MusicTimeStamp
-    public var scope: AudioUnit
-    public var element: AudioUnitElement
-    public var preset: Unmanaged<CoreFoundation.CFPropertyList>
+    public let timeStamp: MusicTimeStamp
+    public let scope: AudioUnit
+    public let element: AudioUnitElement
+    public let preset: Unmanaged<CoreFoundation.CFPropertyList>
 }

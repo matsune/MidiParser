@@ -10,12 +10,26 @@ import AudioToolbox
 import Foundation
 
 public struct MidiNote: EventProtocol {
-    public var timeStamp: MusicTimeStamp
-    public var duration: Float32
-    public var note: UInt8
-    public var velocity: UInt8
-    public var channel: UInt8
-    public var releaseVelocity: UInt8 = 0
+    public let timeStamp: MusicTimeStamp
+    public let duration: Float32
+    public let note: UInt8
+    public let velocity: UInt8
+    public let channel: UInt8
+    public let releaseVelocity: UInt8
+    
+    public init(timeStamp: MusicTimeStamp,
+                duration: Float32,
+                note: UInt8,
+                velocity: UInt8,
+                channel: UInt8,
+                releaseVelocity: UInt8 = 0) {
+        self.timeStamp = timeStamp
+        self.duration = duration
+        self.note = note
+        self.velocity = velocity
+        self.channel = channel
+        self.releaseVelocity = releaseVelocity
+    }
     
     func convert() -> MIDINoteMessage {
         return MIDINoteMessage(channel: channel,

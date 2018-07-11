@@ -10,9 +10,9 @@ import AudioToolbox
 import Foundation
 
 public struct MidiExtendedNoteOnEvent: EventProtocol {
-    public var timeStamp: MusicTimeStamp
-    public var instrumentID: MusicDeviceInstrumentID
-    public var groupID: MusicDeviceGroupID
-    public var duration: Float32
-    public var extendedParams: MusicDeviceNoteParams
+    public let timeStamp: MusicTimeStamp
+    public let instrumentID: MusicDeviceInstrumentID
+    public let groupID: MusicDeviceGroupID
+    public let duration: Float32
+    public let extendedParams: MusicDeviceNoteParams
 }

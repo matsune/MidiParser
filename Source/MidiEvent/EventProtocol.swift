@@ -1,5 +1,5 @@
 //
-//  MidiEventProtocol.swift
+//  EventProtocol.swift
 //  MidiParser
 //
 //  Created by Yuma Matsune on 2018/07/08.

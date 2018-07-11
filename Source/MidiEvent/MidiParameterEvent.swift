@@ -10,9 +10,9 @@ import AudioToolbox
 import Foundation
 
 public struct MidiParameterEvent: EventProtocol {
-    public var timeStamp: MusicTimeStamp
-    public var parameterID: AudioUnitParameterID
-    public var scope: AudioUnitScope
-    public var element: AudioUnitElement
-    public var value: AudioUnitParameterValue
+    public let timeStamp: MusicTimeStamp
+    public let parameterID: AudioUnitParameterID
+    public let scope: AudioUnitScope
+    public let element: AudioUnitElement
+    public let value: AudioUnitParameterValue
 }
