@@ -16,15 +16,15 @@ public struct MidiKeySignature: MetaEventProtocol {
     
     public init(timeStamp: MusicTimeStamp, key: KeySignature) {
         self.timeStamp = timeStamp
-        self.keySig = key
+        keySig = key
     }
     
     init(timeStamp: MusicTimeStamp, sf: UInt8, isMajor: Bool) {
         self.timeStamp = timeStamp
         if isMajor {
-            self.keySig = .major(MajorKey(rawValue: sf) ?? .C)
+            keySig = .major(MajorKey(rawValue: sf) ?? .C)
         } else {
-            self.keySig = .minor(MinorKey(rawValue: sf) ?? .A)
+            keySig = .minor(MinorKey(rawValue: sf) ?? .A)
         }
     }
     

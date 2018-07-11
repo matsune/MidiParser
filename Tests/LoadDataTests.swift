@@ -10,7 +10,6 @@
 import XCTest
 
 class LoadDataTests: XCTestCase {
-    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -32,7 +31,7 @@ class LoadDataTests: XCTestCase {
         }
         let midi = MidiData()
         midi.load(data: data)
-
+        
         // sig: 4/4  bpm: 120
         XCTAssertEqual(midi.tempoTrack.timeSignatures[0].numerator, 4)
         XCTAssertEqual(midi.tempoTrack.timeSignatures[0].denominator, 2)
@@ -55,7 +54,7 @@ class LoadDataTests: XCTestCase {
         XCTAssertEqual(noteCount - 1, midi.noteTracks[1].count)
         midi.noteTracks[1].add(note: MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 10, channel: 0, releaseVelocity: 0))
         XCTAssertEqual(noteCount, midi.noteTracks[1].count)
-
+        
         midi.noteTracks[1].trackName = "aaa"
         XCTAssertEqual(midi.noteTracks[1].trackName, "aaa")
         
@@ -68,4 +67,28 @@ class LoadDataTests: XCTestCase {
         try! midi.writeData(to: tmp)
     }
     
+//    func testPokerFace_mid() {
+//        /*
+//         [PokerFace.mid](https://freemidi.org/download2-11544-poker-face-lady-gaga)
+//         */
+//        guard let url = Bundle(for: type(of: self)).url(forResource: "PokerFace", withExtension: "mid"),
+//            let data = try? Data(contentsOf: url) else {
+//                XCTFail()
+//                return
+//        }
+//        let midi = MidiData()
+//        midi.load(data: data)
+//
+//        for i in 0..<midi.noteTracks.count {
+//            midi.noteTracks[i].lyrics = []
+//        }
+//        midi.noteTracks.forEach {
+//            $0.lyrics.removeAll()
+//        }
+//        print(midi.infoDictionary)
+//
+//        let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
+//        print(tmp)
+//        try! midi.writeData(to: tmp)
+//    }
 }

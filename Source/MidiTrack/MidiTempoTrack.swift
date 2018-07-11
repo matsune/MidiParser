@@ -36,7 +36,7 @@ public final class MidiTempoTrack: MidiTrack {
             var count = 0
             iterator.enumerate { info, finished, next in
                 guard let _: ExtendedTempoEvent = bindEventData(info: info) else {
-                        return
+                    return
                 }
                 iterator.deleteEvent()
                 next = false
@@ -50,7 +50,7 @@ public final class MidiTempoTrack: MidiTrack {
     }
     
     init(musicTrack: MusicTrack) {
-        self._musicTrack = musicTrack
+        _musicTrack = musicTrack
         let iterator = MidiEventIterator(track: musicTrack)
         self.iterator = iterator
         
@@ -67,7 +67,11 @@ public final class MidiTempoTrack: MidiTrack {
                 let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
                 var data: Bytes = []
                 for i in 0 ..< Int(header.dataLength) {
-                    data.append(eventData.advanced(by: MemoryLayout<MetaEventHeader>.size).advanced(by: i).load(as: UInt8.self))
+                    data.append(eventData
+                        .advanced(by: MemoryLayout<MetaEventHeader>.size)
+                        .advanced(by: i)
+                        .load(as: UInt8.self)
+                    )
                 }
                 
                 guard let metaType = MetaEventType(byte: header.metaType) else {
@@ -76,19 +80,24 @@ public final class MidiTempoTrack: MidiTrack {
                 
                 switch metaType {
                 case .timeSignature:
-                    let timeSig = MidiTimeSignature(timeStamp: eventInfo.timeStamp, numerator: data[0], denominator: data[1], cc: data[2], bb: data[3])
+                    let timeSig = MidiTimeSignature(timeStamp: eventInfo.timeStamp,
+                                                    numerator: data[0],
+                                                    denominator: data[1],
+                                                    cc: data[2],
+                                                    bb: data[3])
                     timeSigs.append(timeSig)
                 default:
                     break
                 }
             case .extendedTempo:
-                let extendedTempo = MidiExtendedTempo(timeStamp: eventInfo.timeStamp, bpm: eventData.load(as: ExtendedTempoEvent.self).bpm)
+                let extendedTempo = MidiExtendedTempo(timeStamp: eventInfo.timeStamp,
+                                                      bpm: eventData.load(as: ExtendedTempoEvent.self).bpm)
                 extTempos.append(extendedTempo)
             default:
                 break
             }
         }
-        self.timeSignatures = timeSigs
-        self.extendedTempos = extTempos
+        timeSignatures = timeSigs
+        extendedTempos = extTempos
     }
 }

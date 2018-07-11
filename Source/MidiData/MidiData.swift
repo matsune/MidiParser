@@ -48,11 +48,16 @@ public final class MidiData {
         noteTracks = tracks
     }
     
-    public func writeData(to url: URL, inFileType: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceFileFlags = .eraseFile, inResolution: Int16 = 480) throws {
+    public func writeData(to url: URL,
+                          inFileType: MusicSequenceFileTypeID = .midiType,
+                          inFlags: MusicSequenceFileFlags = .eraseFile,
+                          inResolution: Int16 = 480) throws {
         try sequence.writeData(to: url, inFileType: inFileType, inFlags: inFlags, inResolution: inResolution)
     }
     
-    public func createData(inFileType: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceFileFlags = .eraseFile, inResolution: Int16 = 480) -> Data? {
+    public func createData(inFileType: MusicSequenceFileTypeID = .midiType,
+                           inFlags: MusicSequenceFileFlags = .eraseFile,
+                           inResolution: Int16 = 480) -> Data? {
         return sequence.createData(inFileType: inFileType, inFlags: inFlags, inResolution: inResolution)
     }
     

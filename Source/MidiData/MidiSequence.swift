@@ -46,7 +46,9 @@ final class MidiSequence {
               label: "MusicSequenceFileLoadData")
     }
     
-    func createData(inFileType: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceFileFlags = .eraseFile, inResolution: Int16 = 480) -> Data? {
+    func createData(inFileType: MusicSequenceFileTypeID = .midiType,
+                    inFlags: MusicSequenceFileFlags = .eraseFile,
+                    inResolution: Int16 = 480) -> Data? {
         var outData: Unmanaged<CFData>?
         check(MusicSequenceFileCreateData(_musicSequence, inFileType, inFlags, inResolution, &outData),
               label: "MusicSequenceFileCreateData")
@@ -56,7 +58,10 @@ final class MidiSequence {
         return nil
     }
     
-    func writeData(to url: URL, inFileType: MusicSequenceFileTypeID = .midiType, inFlags: MusicSequenceFileFlags = .eraseFile, inResolution: Int16 = 480) throws {
+    func writeData(to url: URL,
+                   inFileType: MusicSequenceFileTypeID = .midiType,
+                   inFlags: MusicSequenceFileFlags = .eraseFile,
+                   inResolution: Int16 = 480) throws {
         let status = MusicSequenceFileCreate(_musicSequence, url as CFURL, inFileType, inFlags, inResolution)
         if status != noErr {
             throw MidiError.writeURL

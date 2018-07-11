@@ -14,7 +14,7 @@ struct Word {
     private var value: (UInt8, UInt8)
     
     init(byte1: UInt8, byte2: UInt8) {
-        self.value = (byte1, byte2)
+        value = (byte1, byte2)
     }
     
     var val: UInt16 {
@@ -26,7 +26,7 @@ struct DWord {
     private var value: (UInt8, UInt8, UInt8, UInt8)
     
     init(byte1: UInt8, byte2: UInt8, byte3: UInt8, byte4: UInt8) {
-        self.value = (byte1, byte2, byte3, byte4)
+        value = (byte1, byte2, byte3, byte4)
     }
     
     var val: UInt32 {

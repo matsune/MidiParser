@@ -3,6 +3,7 @@ disabled_rules:
 - large_tuple
 - force_cast
 - force_try
+- identifier_name
 
 opt_in_rules:
 - attributes
@@ -30,8 +31,4 @@ excluded:
 - Carthage/
 - vendor/
 - Tests/
-
-line_length: 300
-identifier_name:
-  min_length: 1
 

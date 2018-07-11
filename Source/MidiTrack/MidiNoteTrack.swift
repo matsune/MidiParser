@@ -43,7 +43,7 @@ public final class MidiNoteTrack: MidiTrack {
             iterator.enumerate { info, finished, next in
                 guard let metaEvent: MIDIMetaEvent = bindEventData(info: info),
                     MetaEventType(byte: metaEvent.metaEventType) == .lyric else {
-                        return
+                    return
                 }
                 iterator.deleteEvent()
                 next = false
@@ -61,10 +61,10 @@ public final class MidiNoteTrack: MidiTrack {
     
     public var trackName = "" {
         didSet {
-            iterator.enumerate { info, finished, next in
+            iterator.enumerate { info, finished, _ in
                 guard let metaEvent: MIDIMetaEvent = bindEventData(info: info),
                     MetaEventType(byte: metaEvent.metaEventType) == .sequenceTrackName else {
-                        return
+                    return
                 }
                 iterator.deleteEvent()
                 finished = true
@@ -122,7 +122,7 @@ public final class MidiNoteTrack: MidiTrack {
     }
     
     init(musicTrack: MusicTrack) {
-        self._musicTrack = musicTrack
+        _musicTrack = musicTrack
         let iterator = MidiEventIterator(track: musicTrack)
         self.iterator = iterator
         
@@ -133,7 +133,7 @@ public final class MidiNoteTrack: MidiTrack {
         iterator.enumerate { eventInfo, _, _ in
             guard let eventData = eventInfo.data,
                 let eventType = MidiEventType(eventInfo.type) else {
-                    return
+                return
             }
             
             switch eventType {
@@ -150,7 +150,12 @@ public final class MidiNoteTrack: MidiTrack {
                 let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
                 var data: Bytes = []
                 for i in 0 ..< Int(header.dataLength) {
-                    data.append(eventData.advanced(by: MemoryLayout<MetaEventHeader>.size).advanced(by: i).load(as: Byte.self))
+                    data.append(
+                        eventData
+                            .advanced(by: MemoryLayout<MetaEventHeader>.size)
+                            .advanced(by: i)
+                            .load(as: Byte.self)
+                    )
                 }
                 
                 guard let metaType = MetaEventType(byte: header.metaType) else {
@@ -162,7 +167,9 @@ public final class MidiNoteTrack: MidiTrack {
                     // ex.) 0xFF 0x59 0x02 0x04(data[0]) 0x00(data[1])
                     // data[0] sf
                     // data[1] 0x00 => major, 0x01 => minor
-                    let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp, sf: data[0], isMajor: data[1] == 0)
+                    let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp,
+                                                        sf: data[0],
+                                                        isMajor: data[1] == 0)
                     keySigs.append(keySignature)
                 case .sequenceTrackName:
                     name = data.string
@@ -171,21 +178,20 @@ public final class MidiNoteTrack: MidiTrack {
                 default:
                     break
                 }
-                //                case .midiChannelMessage:
-                //                    let channelMessage = eventData.load(as: MIDIChannelMessage.self)
-                //                    channels.append(channelMessage)
-                //                    if channelMessage.status.hexString.first == "C" {
-                //                        patch = MidiPatch(program: Int(channelMessage.data1))
+            //                case .midiChannelMessage:
+            //                    let channelMessage = eventData.load(as: MIDIChannelMessage.self)
+            //                    channels.append(channelMessage)
+            //                    if channelMessage.status.hexString.first == "C" {
+            //                        patch = MidiPatch(program: Int(channelMessage.data1))
             //                    }
             default:
-                print(eventType)
                 break
             }
         }
-        self.trackName = name
+        trackName = name
         self.lyrics = lyrics
-        self.notes = ns
-        self.keySignatures = keySigs
+        notes = ns
+        keySignatures = keySigs
     }
     
     public func add(timeStamp: MusicTimeStamp,

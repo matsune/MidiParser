@@ -22,15 +22,15 @@ extension MidiTrack {
             return nil
         }
         switch type {
-        case .extendedNote where T.self == ExtendedNoteOnEvent.self: fallthrough
-        case .extendedTempo where T.self == ExtendedTempoEvent.self: fallthrough
-        case .user where T.self == MusicEventUserData.self: fallthrough
-        case .meta where T.self == MIDIMetaEvent.self: fallthrough
-        case .midiNoteMessage where T.self == MIDINoteMessage.self: fallthrough
-        case .midiChannelMessage where T.self == MIDIChannelMessage.self: fallthrough
-        case .midiRawData where T.self == MIDIRawData.self: fallthrough
-        case .parameter where T.self == ParameterEvent.self: fallthrough
-        case .auPreset where T.self == AUPresetEvent.self:
+        case .extendedNote where T.self == ExtendedNoteOnEvent.self,
+             .extendedTempo where T.self == ExtendedTempoEvent.self,
+             .user where T.self == MusicEventUserData.self,
+             .meta where T.self == MIDIMetaEvent.self,
+             .midiNoteMessage where T.self == MIDINoteMessage.self,
+             .midiChannelMessage where T.self == MIDIChannelMessage.self,
+             .midiRawData where T.self == MIDIRawData.self,
+             .parameter where T.self == ParameterEvent.self,
+             .auPreset where T.self == AUPresetEvent.self:
             return info.data?.assumingMemoryBound(to: T.self).pointee
         default:
             return nil
