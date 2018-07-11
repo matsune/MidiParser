@@ -13,9 +13,38 @@ public final class MidiTempoTrack: MidiTrack {
     let _musicTrack: MusicTrack
     let iterator: MidiEventIterator
     
-    public private(set) var timeSignatures: [MidiTimeSignature]
+    public var timeSignatures: [MidiTimeSignature] {
+        didSet {
+            var count = 0
+            iterator.enumerate { (info, finished) in
+                if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
+                    MetaEventType(byte: metaEvent.metaEventType) == .timeSignature {
+                    iterator.deleteEvent()
+                    count += 1
+                    finished = count >= oldValue.count
+                }
+            }
+            timeSignatures.forEach {
+                add(metaEvent: $0)
+            }
+        }
+    }
     
-    public private(set) var extendedTempos: [MidiExtendedTempo]
+    public var extendedTempos: [MidiExtendedTempo] {
+        didSet {
+            var count = 0
+            iterator.enumerate { (info, finished) in
+                if let _ = info.data?.assumingMemoryBound(to: ExtendedTempoEvent.self).pointee {
+                    iterator.deleteEvent()
+                    count += 1
+                    finished = count >= oldValue.count
+                }
+            }
+            extendedTempos.forEach {
+                add(extendedTempo: $0)
+            }
+        }
+    }
     
     init(musicTrack: MusicTrack) {
         self._musicTrack = musicTrack
@@ -57,36 +86,5 @@ public final class MidiTempoTrack: MidiTrack {
         }
         self.timeSignatures = timeSigs
         self.extendedTempos = extTempos
-    }
-    
-    public func setTimeSignatures(_ timeSignatures: [MidiTimeSignature]) {
-        var count = 0
-        iterator.enumerate { (info, finished) in
-            if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
-                MetaEventType(byte: metaEvent.metaEventType) == .timeSignature {
-                iterator.deleteEvent()
-                count += 1
-                finished = count >= self.timeSignatures.count
-            }
-        }
-        timeSignatures.forEach {
-            add(metaEvent: $0)
-        }
-        self.timeSignatures = timeSignatures
-    }
-    
-    public func setExtendedTempos(_ extendedTempos: [MidiExtendedTempo]) {
-        var count = 0
-        iterator.enumerate { (info, finished) in
-            if let _ = info.data?.assumingMemoryBound(to: ExtendedTempoEvent.self).pointee {
-                iterator.deleteEvent()
-                count += 1
-                finished = count >= self.extendedTempos.count
-            }
-        }
-        extendedTempos.forEach {
-            add(extendedTempo: $0)
-        }
-        self.extendedTempos = extendedTempos
     }
 }

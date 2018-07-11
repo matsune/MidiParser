@@ -19,14 +19,37 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    public private(set) var keySignatures: [MidiKeySignature]
+    public var keySignatures: [MidiKeySignature] {
+        didSet {
+            var count = 0
+            iterator.enumerate { (info, finished) in
+                if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
+                    MetaEventType(byte: metaEvent.metaEventType) == .keySignature {
+                    iterator.deleteEvent()
+                    count += 1
+                    finished = count >= oldValue.count
+                }
+            }
+            keySignatures.forEach {
+                add(metaEvent: $0)
+            }
+        }
+    }
     
 //    public private(set) var channels: [MIDIChannelMessage] = []
 //    public private(set) var patch = MidiPatch(program: 0)
     
     public var trackName = "" {
         didSet {
-            deleteTrackName()
+            iterator.enumerate { info, finished in
+                guard MidiEventType(info.type) == .meta,
+                    let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
+                    MetaEventType(byte: metaEvent.metaEventType) == .sequenceTrackName else {
+                        return
+                }
+                iterator.deleteEvent()
+                finished = true
+            }
             add(metaEvent: MidiMetaEvent(timeStamp: 0, metaType: .sequenceTrackName, bytes: Bytes(trackName.utf8)))
         }
     }
@@ -175,22 +198,6 @@ public final class MidiNoteTrack: MidiTrack {
         let note = notes.remove(at: index)
         iterator.delete(note: note)
     }
-    
-    public func setKeySignatures(_ keySignatures: [MidiKeySignature]) {
-        var count = 0
-        iterator.enumerate { (info, finished) in
-            if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
-                MetaEventType(byte: metaEvent.metaEventType) == .keySignature {
-                iterator.deleteEvent()
-                count += 1
-                finished = count >= self.keySignatures.count
-            }
-        }
-        keySignatures.forEach {
-            add(metaEvent: $0)
-        }
-        self.keySignatures = keySignatures
-    }
 }
 
 extension MidiNoteTrack: RandomAccessCollection {
@@ -207,21 +214,5 @@ extension MidiNoteTrack: RandomAccessCollection {
     
     public var endIndex: Int {
         return notes.endIndex
-    }
-}
-
-// MARK: track name
-extension MidiNoteTrack {
-    // delete current trackName meta event
-    private func deleteTrackName() {
-        iterator.enumerate { info, finished in
-            guard MidiEventType(info.type) == .meta,
-                let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
-                MetaEventType(byte: metaEvent.metaEventType) == .sequenceTrackName else {
-                    return
-            }
-            iterator.deleteEvent()
-            finished = true
-        }
     }
 }
