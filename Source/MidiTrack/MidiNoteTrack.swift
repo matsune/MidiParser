@@ -218,12 +218,12 @@ public final class MidiNoteTrack: MidiTrack {
         keySignatures = keySigs
     }
     
-    public func add(timeStamp: MusicTimeStamp,
-                    duration: Float32,
-                    note: UInt8,
-                    velocity: UInt8,
-                    channel: UInt8,
-                    releaseVelocity: UInt8 = 0) {
+    public func addNote(timeStamp: MusicTimeStamp,
+                        duration: Float32,
+                        note: UInt8,
+                        velocity: UInt8,
+                        channel: UInt8,
+                        releaseVelocity: UInt8 = 0) {
         var message = MIDINoteMessage(channel: channel,
                                       note: note,
                                       velocity: velocity,
@@ -269,5 +269,11 @@ extension MidiNoteTrack: RandomAccessCollection {
     
     public var endIndex: Int {
         return notes.endIndex
+    }
+}
+
+extension MidiNoteTrack: Equatable {
+    public static func == (lhs: MidiNoteTrack, rhs: MidiNoteTrack) -> Bool {
+        return lhs._musicTrack == rhs._musicTrack
     }
 }

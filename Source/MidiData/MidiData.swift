@@ -74,8 +74,21 @@ public final class MidiData {
         return sequence.infoDictionary
     }
     
-    public func addTrack() {
+    @discardableResult
+    public func addTrack() -> MidiNoteTrack {
         let track = sequence.newTrack()
         noteTracks.append(track)
+        return track
+    }
+    
+    public func removeTrack(at index: Int) {
+        sequence.dispose(track: noteTracks[index])
+        noteTracks.remove(at: index)
+    }
+    
+    public func remove(track: MidiNoteTrack) {
+        if let idx = noteTracks.index(of: track) {
+            removeTrack(at: idx)
+        }
     }
 }
