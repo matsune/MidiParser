@@ -58,37 +58,12 @@ class LoadDataTests: XCTestCase {
         midi.noteTracks[1].trackName = "aaa"
         XCTAssertEqual(midi.noteTracks[1].trackName, "aaa")
         
-        print(midi.noteTracks[1].trackLength)
         midi.noteTracks[1].trackLength = 500
         XCTAssertEqual(midi.noteTracks[1].trackLength, 500)
         
-        let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
-        print(tmp)
-        try! midi.writeData(to: tmp)
-    }
-    
-//    func testPokerFace_mid() {
-//        /*
-//         [PokerFace.mid](https://freemidi.org/download2-11544-poker-face-lady-gaga)
-//         */
-//        guard let url = Bundle(for: type(of: self)).url(forResource: "PokerFace", withExtension: "mid"),
-//            let data = try? Data(contentsOf: url) else {
-//                XCTFail()
-//                return
-//        }
-//        let midi = MidiData()
-//        midi.load(data: data)
-//
-//        for i in 0..<midi.noteTracks.count {
-//            midi.noteTracks[i].lyrics = []
-//        }
-//        midi.noteTracks.forEach {
-//            $0.lyrics.removeAll()
-//        }
-//        print(midi.infoDictionary)
-//
+        XCTAssertEqual(midi.tempoTrack.timeResolution, 480)
 //        let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
 //        print(tmp)
 //        try! midi.writeData(to: tmp)
-//    }
+    }
 }

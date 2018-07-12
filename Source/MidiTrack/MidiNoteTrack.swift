@@ -121,18 +121,6 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    public var loopInfo: MusicTrackLoopInfo {
-        get {
-            var data = MusicTrackLoopInfo(loopDuration: 0, numberOfLoops: 1)
-            getProperty(.loopInfo, data: &data)
-            return data
-        }
-        set {
-            var data = newValue
-            setProperty(.loopInfo, data: &data)
-        }
-    }
-    
     init(musicTrack: MusicTrack) {
         _musicTrack = musicTrack
         let iterator = EventIterator(track: musicTrack)

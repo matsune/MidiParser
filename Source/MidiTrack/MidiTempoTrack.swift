@@ -100,4 +100,10 @@ public final class MidiTempoTrack: MidiTrack {
         timeSignatures = timeSigs
         extendedTempos = extTempos
     }
+    
+    public var timeResolution: Int16 {
+        var data: Int16 = 0
+        getProperty(.timeResolution, data: &data)
+        return data
+    }
 }
