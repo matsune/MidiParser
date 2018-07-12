@@ -307,6 +307,15 @@ public final class MidiNoteTrack: MidiTrack {
         check(MusicTrackCut(_musicTrack, inStartTime, inEndTime), label: "MusicTrackCut", level: .log)
         reload()
     }
+    
+    public func merge(from inStartTime: MusicTimeStamp,
+                      to inEndTime: MusicTimeStamp,
+                      destTrack: MidiNoteTrack,
+                      insertTime: MusicTimeStamp) {
+        check(MusicTrackMerge(_musicTrack, inStartTime, inEndTime, destTrack._musicTrack, insertTime),
+              label: "MusicTrackMerge")
+        destTrack.reload()
+    }
 }
 
 extension MidiNoteTrack: RandomAccessCollection {
