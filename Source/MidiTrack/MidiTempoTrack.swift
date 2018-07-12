@@ -13,17 +13,21 @@ public final class MidiTempoTrack: MidiTrack {
     let _musicTrack: MusicTrack
     let iterator: EventIterator
     
-    public var timeSignatures: [MidiTimeSignature] {
+    public var timeSignatures: [MidiTimeSignature] = [] {
         didSet {
+            if isReload {
+                return
+            }
+            
             var count = 0
             iterator.enumerate { info, finished, next in
-                if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
+                if let metaEvent: MIDIMetaEvent = bindEventData(info: info),
                     MetaEventType(byte: metaEvent.metaEventType) == .timeSignature {
                     iterator.deleteEvent()
                     next = false
                     count += 1
-                    finished = count >= oldValue.count
                 }
+                finished = count >= oldValue.count
             }
             timeSignatures.forEach {
                 add(metaEvent: $0)
@@ -31,16 +35,19 @@ public final class MidiTempoTrack: MidiTrack {
         }
     }
     
-    public var extendedTempos: [MidiExtendedTempo] {
+    public var extendedTempos: [MidiExtendedTempo] = [] {
         didSet {
+            if isReload {
+                return
+            }
+            
             var count = 0
             iterator.enumerate { info, finished, next in
-                guard let _: ExtendedTempoEvent = bindEventData(info: info) else {
-                    return
+                if let _: ExtendedTempoEvent = bindEventData(info: info) {
+                    iterator.deleteEvent()
+                    next = false
+                    count += 1
                 }
-                iterator.deleteEvent()
-                next = false
-                count += 1
                 finished = count >= oldValue.count
             }
             extendedTempos.forEach {
@@ -51,11 +58,21 @@ public final class MidiTempoTrack: MidiTrack {
     
     init(musicTrack: MusicTrack) {
         _musicTrack = musicTrack
-        let iterator = EventIterator(track: musicTrack)
-        self.iterator = iterator
+        iterator = EventIterator(track: musicTrack)
+        reload()
+    }
+    
+    private var isReload = false
+    
+    func reload() {
+        isReload = true
+        defer {
+            isReload = false
+        }
         
-        var timeSigs: [MidiTimeSignature] = []
-        var extTempos: [MidiExtendedTempo] = []
+        timeSignatures.removeAll()
+        extendedTempos.removeAll()
+        
         iterator.enumerate { eventInfo, _, _ in
             guard let eventData = eventInfo.data,
                 let eventType = MidiEventType(eventInfo.type) else {
@@ -85,20 +102,18 @@ public final class MidiTempoTrack: MidiTrack {
                                                     denominator: data[1],
                                                     cc: data[2],
                                                     bb: data[3])
-                    timeSigs.append(timeSig)
+                    timeSignatures.append(timeSig)
                 default:
                     break
                 }
             case .extendedTempo:
                 let extendedTempo = MidiExtendedTempo(timeStamp: eventInfo.timeStamp,
                                                       bpm: eventData.load(as: ExtendedTempoEvent.self).bpm)
-                extTempos.append(extendedTempo)
+                extendedTempos.append(extendedTempo)
             default:
                 break
             }
         }
-        timeSignatures = timeSigs
-        extendedTempos = extTempos
     }
     
     public var timeResolution: Int16 {

@@ -98,17 +98,6 @@ final class EventIterator {
     func deleteEvent() {
         check(MusicEventIteratorDeleteEvent(_iterator), label: "MusicEventIteratorDeleteEvent")
     }
-    
-    func delete(note: MidiNote) {
-        enumerate(seekTime: note.timeStamp) { info, finished, _ in
-            if info.type == kMusicEventType_MIDINoteMessage,
-                let noteMessage = info.data?.load(as: MIDINoteMessage.self),
-                note.convert() == noteMessage {
-                deleteEvent()
-                finished = true
-            }
-        }
-    }
 }
 
 extension MIDINoteMessage: Equatable {

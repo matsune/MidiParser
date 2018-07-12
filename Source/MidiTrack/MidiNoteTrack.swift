@@ -13,14 +13,22 @@ public final class MidiNoteTrack: MidiTrack {
     let _musicTrack: MusicTrack
     let iterator: EventIterator
     
-    public private(set) var notes: [MidiNote] {
+    public private(set) var notes: [MidiNote] = [] {
         didSet {
+            if isReload {
+                return
+            }
+            
             notes.sort(by: { $0.timeStamp < $1.timeStamp })
         }
     }
     
-    public var keySignatures: [MidiKeySignature] {
+    public var keySignatures: [MidiKeySignature] = [] {
         didSet {
+            if isReload {
+                return
+            }
+            
             var count = 0
             iterator.enumerate { info, finished, next in
                 if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
@@ -28,8 +36,8 @@ public final class MidiNoteTrack: MidiTrack {
                     iterator.deleteEvent()
                     next = false
                     count += 1
-                    finished = count >= oldValue.count
                 }
+                finished = count >= oldValue.count
             }
             keySignatures.forEach {
                 add(metaEvent: $0)
@@ -39,15 +47,18 @@ public final class MidiNoteTrack: MidiTrack {
     
     public var lyrics: [MidiLyric] = [] {
         didSet {
+            if isReload {
+                return
+            }
+            
             var count = 0
             iterator.enumerate { info, finished, next in
-                guard let metaEvent: MIDIMetaEvent = bindEventData(info: info),
-                    MetaEventType(byte: metaEvent.metaEventType) == .lyric else {
-                    return
+                if let metaEvent: MIDIMetaEvent = bindEventData(info: info),
+                    MetaEventType(byte: metaEvent.metaEventType) == .lyric {
+                    iterator.deleteEvent()
+                    next = false
+                    count += 1
                 }
-                iterator.deleteEvent()
-                next = false
-                count += 1
                 finished = count >= oldValue.count
             }
             lyrics.forEach {
@@ -61,6 +72,10 @@ public final class MidiNoteTrack: MidiTrack {
     
     public var trackName = "" {
         didSet {
+            if isReload {
+                return
+            }
+            
             iterator.enumerate { info, finished, _ in
                 guard let metaEvent: MIDIMetaEvent = bindEventData(info: info),
                     MetaEventType(byte: metaEvent.metaEventType) == .sequenceTrackName else {
@@ -147,13 +162,23 @@ public final class MidiNoteTrack: MidiTrack {
     
     init(musicTrack: MusicTrack) {
         _musicTrack = musicTrack
-        let iterator = EventIterator(track: musicTrack)
-        self.iterator = iterator
+        iterator = EventIterator(track: musicTrack)
+        reload()
+    }
+    
+    private var isReload = false
+    
+    func reload() {
+        isReload = true
+        defer {
+            isReload = false
+        }
         
-        var name = ""
-        var ns: [MidiNote] = []
-        var keySigs: [MidiKeySignature] = []
-        var lyrics: [MidiLyric] = []
+        notes.removeAll()
+        keySignatures.removeAll()
+        lyrics.removeAll()
+        trackName = ""
+        
         iterator.enumerate { eventInfo, _, _ in
             guard let eventData = eventInfo.data,
                 let eventType = MidiEventType(eventInfo.type) else {
@@ -169,7 +194,7 @@ public final class MidiNoteTrack: MidiTrack {
                                     velocity: noteMessage.velocity,
                                     channel: noteMessage.channel,
                                     releaseVelocity: noteMessage.releaseVelocity)
-                ns.append(note)
+                notes.append(note)
             case .meta:
                 let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
                 var data: Bytes = []
@@ -194,28 +219,18 @@ public final class MidiNoteTrack: MidiTrack {
                     let keySignature = MidiKeySignature(timeStamp: eventInfo.timeStamp,
                                                         sf: data[0],
                                                         isMajor: data[1] == 0)
-                    keySigs.append(keySignature)
+                    keySignatures.append(keySignature)
                 case .sequenceTrackName:
-                    name = data.string
+                    trackName = data.string
                 case .lyric:
                     lyrics.append(MidiLyric(timeStamp: eventInfo.timeStamp, str: data.string))
                 default:
                     break
                 }
-            //                case .midiChannelMessage:
-            //                    let channelMessage = eventData.load(as: MIDIChannelMessage.self)
-            //                    channels.append(channelMessage)
-            //                    if channelMessage.status.hexString.first == "C" {
-            //                        patch = MidiPatch(program: Int(channelMessage.data1))
-            //                    }
             default:
                 break
             }
         }
-        trackName = name
-        self.lyrics = lyrics
-        notes = ns
-        keySignatures = keySigs
     }
     
     public func addNote(timeStamp: MusicTimeStamp,
@@ -249,9 +264,20 @@ public final class MidiNoteTrack: MidiTrack {
         notes.append(note)
     }
     
-    public func deleteNote(at index: Int) {
+    public func removeNote(at index: Int) {
         let note = notes.remove(at: index)
-        iterator.delete(note: note)
+        iterator.enumerate(seekTime: note.timeStamp) { info, finished, _ in
+            if info.type == kMusicEventType_MIDINoteMessage,
+                let noteMessage = info.data?.load(as: MIDINoteMessage.self),
+                note.convert() == noteMessage {
+                iterator.deleteEvent()
+                finished = true
+            }
+        }
+    }
+    
+    func cut(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp) {
+        check(MusicTrackCut(_musicTrack, inStartTime, inEndTime), label: "MusicTrackCut")
     }
 }
 

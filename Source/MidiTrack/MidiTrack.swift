@@ -14,9 +14,15 @@ protocol MidiTrack {
     var _musicTrack: MusicTrack { get }
     var iterator: EventIterator { get }
     init(musicTrack: MusicTrack)
+    func reload()
 }
 
 extension MidiTrack {
+    public func clearEvents(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp) {
+        check(MusicTrackClear(_musicTrack, inStartTime, inEndTime), label: "MusicTrackClear")
+        reload()
+    }
+    
     func bindEventData<T>(info: EventInfo) -> T? {
         guard let type = MidiEventType(info.type) else {
             return nil
