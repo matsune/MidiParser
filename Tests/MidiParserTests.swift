@@ -41,26 +41,30 @@ final class MidiParserTests: XCTestCase {
         XCTAssertEqual(track1.count, 0)
         
         track1.add(notes: [
-            MidiNote(timeStamp: 0, duration: 10, note: 40, velocity: 100, channel: 0),
-            MidiNote(timeStamp: 5, duration: 10, note: 40, velocity: 100, channel: 0)
+            MidiNote(timeStamp: 0, duration: 1, note: 40, velocity: 100, channel: 0),
+            MidiNote(timeStamp: 5, duration: 1, note: 40, velocity: 100, channel: 0)
         ])
         
         let track2 = midi.addTrack()
         track2.add(notes: [
-            MidiNote(timeStamp: 10, duration: 10, note: 40, velocity: 100, channel: 0),
-            MidiNote(timeStamp: 15, duration: 10, note: 40, velocity: 100, channel: 0)
+            MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 100, channel: 0),
+            MidiNote(timeStamp: 15, duration: 1, note: 40, velocity: 100, channel: 0)
         ])
         
         track1.merge(from: 0, to: 10, destTrack: track2, insertTime: 0)
+        XCTAssertEqual(track2.notes[0].timeStamp, 0)
+        XCTAssertEqual(track2.notes[1].timeStamp, 5)
+        XCTAssertEqual(track2.notes[2].timeStamp, 10)
+        XCTAssertEqual(track2.notes[3].timeStamp, 15)
         
-        XCTAssertEqual(track1.notes.count, 2)
-        XCTAssertEqual(track2.notes.count, 4)
-        
-        XCTAssertEqual(track1.notes(from: 0, to: 10).count, 2)
-        track1.moveEvents(from: 0, to: 10, inMoveTime: 10)
-        XCTAssertEqual(track1.notes(from: 0, to: 10).count, 0)
-//        midi.remove(track: track)
-//
+        track1.copyInsert(from: 0, to: 10, destTrack: track2, insertTime: 0)
+        XCTAssertEqual(track2.notes[0].timeStamp, 0)
+        XCTAssertEqual(track2.notes[1].timeStamp, 5)
+        XCTAssertEqual(track2.notes[2].timeStamp, 10)
+        XCTAssertEqual(track2.notes[3].timeStamp, 15)
+        XCTAssertEqual(track2.notes[4].timeStamp, 20)
+        XCTAssertEqual(track2.notes[5].timeStamp, 25)
+
         let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
         print(tmp)
         try! midi.writeData(to: tmp)

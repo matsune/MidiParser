@@ -317,6 +317,15 @@ public final class MidiNoteTrack: MidiTrack {
         destTrack.reload()
     }
     
+    public func copyInsert(from inStartTime: MusicTimeStamp,
+                           to inEndTime: MusicTimeStamp,
+                           destTrack: MidiNoteTrack,
+                           insertTime: MusicTimeStamp) {
+        check(MusicTrackCopyInsert(_musicTrack, inStartTime, inEndTime, destTrack._musicTrack, insertTime),
+              label: "MusicTrackCopyInsert")
+        destTrack.reload()
+    }
+    
     public func notes(from: MusicTimeStamp, to: MusicTimeStamp) -> [MidiNote] {
         return notes.filter { from ..< to ~= $0.timeStamp }
     }
