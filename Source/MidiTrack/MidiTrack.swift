@@ -74,4 +74,14 @@ extension MidiTrack {
         check(MusicTrackNewExtendedTempoEvent(_musicTrack, extendedTempo.timeStamp, extendedTempo.bpm),
               label: "MusicTrackNewExtendedTempoEvent")
     }
+    
+    func add(patch: MidiPatch) {
+        let status = 192 + patch.channel
+        var channelMessage = MIDIChannelMessage(status: status,
+                                                data1: UInt8(patch.patch.rawValue),
+                                                data2: 0,
+                                                reserved: 0)
+        check(MusicTrackNewMIDIChannelEvent(_musicTrack, 0, &channelMessage),
+              label: "MusicTrackNewMIDIChannelEvent")
+    }
 }

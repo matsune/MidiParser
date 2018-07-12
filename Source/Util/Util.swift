@@ -40,6 +40,12 @@ extension UInt8 {
     }
 }
 
+extension String.SubSequence {
+    var number: UInt8? {
+        return UInt8(self, radix: 16)
+    }
+}
+
 func write(bytes: Bytes, to data: inout UInt8) {
     withUnsafeMutablePointer(to: &data) {
         for i in 0 ..< bytes.count {

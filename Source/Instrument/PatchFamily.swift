@@ -9,7 +9,7 @@
 import Foundation
 
 // each family has 8 patches
-public enum PatchFamily: Int {
+public enum PatchFamily: UInt8 {
     case piano
     case percussion
     case organ

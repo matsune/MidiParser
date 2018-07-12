@@ -67,8 +67,25 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-//    public private(set) var channels: [MIDIChannelMessage] = []
-//    public private(set) var patch = MidiPatch(program: 0)
+    public var patch: MidiPatch? {
+        didSet {
+            if isReload {
+                return
+            }
+            
+            iterator.enumerate { info, finished, _ in
+                if let metaEvent: MIDIChannelMessage = bindEventData(info: info),
+                    metaEvent.status.hexString == "C" {
+                    iterator.deleteEvent()
+                    finished = true
+                }
+            }
+            
+            if let patch = patch {
+                add(patch: patch)
+            }
+        }
+    }
     
     public var trackName = "" {
         didSet {
@@ -226,6 +243,18 @@ public final class MidiNoteTrack: MidiTrack {
                     lyrics.append(MidiLyric(timeStamp: eventInfo.timeStamp, str: data.string))
                 default:
                     break
+                }
+            case .midiChannelMessage:
+                if let channelMessage: MIDIChannelMessage = bindEventData(info: eventInfo),
+                    let status = channelMessage.status.hexString.first,
+                    let channel = channelMessage.status.hexString.suffix(1).number,
+                    let gmPatch = GMPatch(rawValue: channelMessage.data1) {
+                    switch status {
+                    case "C":
+                        patch = MidiPatch(channel: channel, patch: gmPatch)
+                    default:
+                        break
+                    }
                 }
             default:
                 break

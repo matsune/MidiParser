@@ -47,8 +47,8 @@ final class MidiParserTests: XCTestCase {
         
         let track2 = midi.addTrack()
         track2.add(notes: [
-            MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 100, channel: 0),
-            MidiNote(timeStamp: 15, duration: 1, note: 40, velocity: 100, channel: 0)
+            MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 100, channel: 1),
+            MidiNote(timeStamp: 15, duration: 1, note: 40, velocity: 100, channel: 1)
         ])
         
         track1.merge(from: 0, to: 10, destTrack: track2, insertTime: 0)
@@ -64,7 +64,7 @@ final class MidiParserTests: XCTestCase {
         XCTAssertEqual(track2.notes[3].timeStamp, 15)
         XCTAssertEqual(track2.notes[4].timeStamp, 20)
         XCTAssertEqual(track2.notes[5].timeStamp, 25)
-
+        
         let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
         print(tmp)
         try! midi.writeData(to: tmp)
