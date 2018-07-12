@@ -64,10 +64,10 @@ class LoadDataTests: XCTestCase {
         XCTAssertEqual(midi.tempoTrack.timeResolution, 480)
         
         midi.noteTracks[1].clearEvents(from: 0, to: midi.noteTracks[1].trackLength)
-        XCTAssertEqual(midi.noteTracks[1].count, 0)
+        XCTAssert(midi.noteTracks[1].isEmpty)
         
         let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
         print(tmp)
-        try! midi.writeData(to: tmp)
+//        try! midi.writeData(to: tmp)
     }
 }

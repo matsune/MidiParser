@@ -255,13 +255,15 @@ public final class MidiNoteTrack: MidiTrack {
     }
     
     public func add(note: MidiNote) {
-        var message = MIDINoteMessage(channel: note.channel,
-                                      note: note.note,
-                                      velocity: note.velocity,
-                                      releaseVelocity: note.releaseVelocity,
-                                      duration: note.duration)
-        check(MusicTrackNewMIDINoteEvent(_musicTrack, note.timeStamp, &message), label: "MusicTrackNewMIDINoteEvent")
-        notes.append(note)
+        add(notes: [note])
+    }
+    
+    public func add(notes: [MidiNote]) {
+        notes.forEach {
+            var message = $0.convert()
+            check(MusicTrackNewMIDINoteEvent(_musicTrack, $0.timeStamp, &message), label: "MusicTrackNewMIDINoteEvent")
+        }
+        self.notes.append(contentsOf: notes)
     }
     
     public func removeNote(at index: Int) {
@@ -276,8 +278,34 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    func cut(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp) {
-        check(MusicTrackCut(_musicTrack, inStartTime, inEndTime), label: "MusicTrackCut")
+    public func clearNotes(from: MusicTimeStamp, to: MusicTimeStamp) {
+        iterator.enumerate(seekTime: from) { info, finished, next in
+            if info.type == kMusicEventType_MIDINoteMessage,
+                from ..< to ~= info.timeStamp {
+                iterator.deleteEvent()
+                next = false
+            }
+            finished = info.timeStamp >= to
+        }
+        notes = notes.filter { !(from ..< to ~= $0.timeStamp) }
+    }
+    
+    public func clearNotes() {
+        var count = 0
+        iterator.enumerate { info, finished, next in
+            if let _: MIDINoteMessage = bindEventData(info: info) {
+                iterator.deleteEvent()
+                next = false
+                count += 1
+            }
+            finished = count >= notes.count
+        }
+        notes.removeAll()
+    }
+    
+    public func cut(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp) {
+        check(MusicTrackCut(_musicTrack, inStartTime, inEndTime), label: "MusicTrackCut", level: .log)
+        reload()
     }
 }
 
