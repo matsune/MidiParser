@@ -29,6 +29,18 @@ extension MidiTrack {
         reload()
     }
     
+    public var destAUNode: AUNode {
+        get {
+            var data = AUNode()
+            check(MusicTrackGetDestNode(_musicTrack, &data), label: "MusicTrackGetDestNode",
+                  level: .log)
+            return data
+        }
+        set {
+            check(MusicTrackSetDestNode(_musicTrack, newValue), label: "MusicTrackSetDestNode")
+        }
+    }
+    
     func bindEventData<T>(info: EventInfo) -> T? {
         guard let type = MidiEventType(info.type) else {
             return nil
