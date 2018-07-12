@@ -121,6 +121,30 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
+    public var loopInfo: MusicTrackLoopInfo {
+        get {
+            var data = MusicTrackLoopInfo(loopDuration: 0, numberOfLoops: 1)
+            getProperty(.loopInfo, data: &data)
+            return data
+        }
+        set {
+            var data = newValue
+            setProperty(.loopInfo, data: &data)
+        }
+    }
+    
+    public var automatedParameters: UInt32 {
+        get {
+            var data: UInt32 = 0
+            getProperty(.automatedParameters, data: &data)
+            return data
+        }
+        set {
+            var data = newValue
+            setProperty(.automatedParameters, data: &data)
+        }
+    }
+    
     init(musicTrack: MusicTrack) {
         _musicTrack = musicTrack
         let iterator = EventIterator(track: musicTrack)
