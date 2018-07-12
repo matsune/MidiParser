@@ -316,6 +316,10 @@ public final class MidiNoteTrack: MidiTrack {
               label: "MusicTrackMerge")
         destTrack.reload()
     }
+    
+    public func notes(from: MusicTimeStamp, to: MusicTimeStamp) -> [MidiNote] {
+        return notes.filter { from ..< to ~= $0.timeStamp }
+    }
 }
 
 extension MidiNoteTrack: RandomAccessCollection {

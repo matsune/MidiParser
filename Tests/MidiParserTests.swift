@@ -56,6 +56,9 @@ final class MidiParserTests: XCTestCase {
         XCTAssertEqual(track1.notes.count, 2)
         XCTAssertEqual(track2.notes.count, 4)
         
+        XCTAssertEqual(track1.notes(from: 0, to: 10).count, 2)
+        track1.moveEvents(from: 0, to: 10, inMoveTime: 10)
+        XCTAssertEqual(track1.notes(from: 0, to: 10).count, 0)
 //        midi.remove(track: track)
 //
         let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")

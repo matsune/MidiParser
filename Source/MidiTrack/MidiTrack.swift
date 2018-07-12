@@ -23,6 +23,12 @@ extension MidiTrack {
         reload()
     }
     
+    public func moveEvents(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp, inMoveTime: MusicTimeStamp) {
+        check(MusicTrackMoveEvents(_musicTrack, inStartTime, inEndTime, inMoveTime),
+              label: "MusicTrackMoveEvents")
+        reload()
+    }
+    
     func bindEventData<T>(info: EventInfo) -> T? {
         guard let type = MidiEventType(info.type) else {
             return nil
