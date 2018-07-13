@@ -14,7 +14,7 @@ public final class MidiData {
     public private(set) var tempoTrack: MidiTempoTrack
     public private(set) var noteTracks: [MidiNoteTrack]
     
-    init() {
+    public init() {
         sequence = MidiSequence()
         tempoTrack = MidiTempoTrack(musicTrack: sequence.tempoTrack)
         noteTracks = []
