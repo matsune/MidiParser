@@ -88,6 +88,7 @@ extension MidiTrack {
     }
     
     func add(patch: MidiPatch) {
+        // 0xCn ; n is channel number
         let status = 192 + patch.channel
         var channelMessage = MIDIChannelMessage(status: status,
                                                 data1: UInt8(patch.patch.rawValue),
