@@ -91,8 +91,8 @@
 		13C66BD220F49C3200DD8D1D /* Byte.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BCE20F4984B00DD8D1D /* Byte.swift */; };
 		13C66BDC20F4E7DD00DD8D1D /* MetaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */; };
 		13C66BDD20F4E7DE00DD8D1D /* MetaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */; };
-		434B1D18C85F9986FE4E521E /* Pods_MidiParser_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2694BE12DA72961EA8526BCE /* Pods_MidiParser_macOS.framework */; };
-		E20A0EF54082841DF1F976FB /* Pods_MidiParser_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2114A13BA66D9D6E61771FA /* Pods_MidiParser_iOS.framework */; };
+		73BD662CF4689D4B7B91E26E /* Pods_MidiParser_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B56C8F2C0790D40B79D6464 /* Pods_MidiParser_iOS.framework */; };
+		D048BAB47A8E7E393D1A24DF /* Pods_MidiParser_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50696B7740EAC6084BD90DA3 /* Pods_MidiParser_macOS.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,7 +113,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		031407221027D145C650ADA4 /* Pods-MidiParser macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParser macOS/Pods-MidiParser macOS.release.xcconfig"; sourceTree = "<group>"; };
 		1379EA6F20F60A3200348301 /* MidiError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiError.swift; sourceTree = "<group>"; };
 		1379EA7620F64C7C00348301 /* MidiLyric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiLyric.swift; sourceTree = "<group>"; };
 		1379EA8120F65F8700348301 /* MetaEventProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaEventProtocol.swift; sourceTree = "<group>"; };
@@ -161,11 +160,12 @@
 		13C66BC820F4809D00DD8D1D /* HeaderChunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderChunk.swift; sourceTree = "<group>"; };
 		13C66BCE20F4984B00DD8D1D /* Byte.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Byte.swift; sourceTree = "<group>"; };
 		13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaEvent.swift; sourceTree = "<group>"; };
-		13C7B3EBC6430D786FAAF9B8 /* Pods-MidiParser iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParser iOS/Pods-MidiParser iOS.release.xcconfig"; sourceTree = "<group>"; };
-		2694BE12DA72961EA8526BCE /* Pods_MidiParser_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MidiParser_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D6256F133F148F268B6C146 /* Pods-MidiParser macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParser macOS/Pods-MidiParser macOS.debug.xcconfig"; sourceTree = "<group>"; };
-		94DDAEC0493C37602F2DBDB3 /* Pods-MidiParser iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParser iOS/Pods-MidiParser iOS.debug.xcconfig"; sourceTree = "<group>"; };
-		A2114A13BA66D9D6E61771FA /* Pods_MidiParser_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MidiParser_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CBC9E0E46C393CDD008FF74 /* Pods-MidiParser macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParser macOS/Pods-MidiParser macOS.debug.xcconfig"; sourceTree = "<group>"; };
+		50696B7740EAC6084BD90DA3 /* Pods_MidiParser_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MidiParser_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B56C8F2C0790D40B79D6464 /* Pods_MidiParser_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MidiParser_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAD84F8715DB728BBCC0D333 /* Pods-MidiParser iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParser iOS/Pods-MidiParser iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		F37EFB0FE9F956740641D62B /* Pods-MidiParser macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParser macOS/Pods-MidiParser macOS.release.xcconfig"; sourceTree = "<group>"; };
+		FBCB547A17A8B71F42C55A48 /* Pods-MidiParser iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-MidiParser iOS/Pods-MidiParser iOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,7 +173,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E20A0EF54082841DF1F976FB /* Pods_MidiParser_iOS.framework in Frameworks */,
+				73BD662CF4689D4B7B91E26E /* Pods_MidiParser_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,7 +189,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				434B1D18C85F9986FE4E521E /* Pods_MidiParser_macOS.framework in Frameworks */,
+				D048BAB47A8E7E393D1A24DF /* Pods_MidiParser_macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,8 +228,8 @@
 				13C66B9820F3AB2300DD8D1D /* Source */,
 				13C66BB520F3ABD000DD8D1D /* Supporting Files */,
 				13C66B0C20F0B9AE00DD8D1D /* Tests */,
-				4831FBD0E98A1CD1D70EB600 /* Pods */,
-				C0219EC3A22EDDF75C0CE4FD /* Frameworks */,
+				250232A5FBDB832E2B51CBB7 /* Pods */,
+				47925AFD8A479EF20B72F247 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -363,22 +363,22 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
-		4831FBD0E98A1CD1D70EB600 /* Pods */ = {
+		250232A5FBDB832E2B51CBB7 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				94DDAEC0493C37602F2DBDB3 /* Pods-MidiParser iOS.debug.xcconfig */,
-				13C7B3EBC6430D786FAAF9B8 /* Pods-MidiParser iOS.release.xcconfig */,
-				2D6256F133F148F268B6C146 /* Pods-MidiParser macOS.debug.xcconfig */,
-				031407221027D145C650ADA4 /* Pods-MidiParser macOS.release.xcconfig */,
+				AAD84F8715DB728BBCC0D333 /* Pods-MidiParser iOS.debug.xcconfig */,
+				FBCB547A17A8B71F42C55A48 /* Pods-MidiParser iOS.release.xcconfig */,
+				2CBC9E0E46C393CDD008FF74 /* Pods-MidiParser macOS.debug.xcconfig */,
+				F37EFB0FE9F956740641D62B /* Pods-MidiParser macOS.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		C0219EC3A22EDDF75C0CE4FD /* Frameworks */ = {
+		47925AFD8A479EF20B72F247 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A2114A13BA66D9D6E61771FA /* Pods_MidiParser_iOS.framework */,
-				2694BE12DA72961EA8526BCE /* Pods_MidiParser_macOS.framework */,
+				9B56C8F2C0790D40B79D6464 /* Pods_MidiParser_iOS.framework */,
+				50696B7740EAC6084BD90DA3 /* Pods_MidiParser_macOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -407,7 +407,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13C66B1320F0B9AE00DD8D1D /* Build configuration list for PBXNativeTarget "MidiParser iOS" */;
 			buildPhases = (
-				35E01E85DAD48E6D51D4AF20 /* [CP] Check Pods Manifest.lock */,
+				BCC3DA2F451B062E1C6BB7E0 /* [CP] Check Pods Manifest.lock */,
 				13C66B5920F0BD9B00DD8D1D /* SwiftFormat */,
 				13C66B5820F0BD2900DD8D1D /* SwiftLint */,
 				13C66AFA20F0B9AD00DD8D1D /* Sources */,
@@ -446,7 +446,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13C66B9220F3A9F100DD8D1D /* Build configuration list for PBXNativeTarget "MidiParser macOS" */;
 			buildPhases = (
-				2BFA412141B41E7FFD20778B /* [CP] Check Pods Manifest.lock */,
+				86FEFB580B9B31709846AE3C /* [CP] Check Pods Manifest.lock */,
 				1379EA7E20F6572200348301 /* SwiftFormat */,
 				1379EA7F20F6573B00348301 /* SwiftLint */,
 				13C66B7C20F3A9F000DD8D1D /* Sources */,
@@ -616,7 +616,7 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" . --exclude Carthage,Pods --trimwhitespace nonblank-lines --stripunusedargs closure-only --disable strongOutlets,trailingCommas --decimalgrouping none";
 		};
-		2BFA412141B41E7FFD20778B /* [CP] Check Pods Manifest.lock */ = {
+		86FEFB580B9B31709846AE3C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -634,7 +634,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		35E01E85DAD48E6D51D4AF20 /* [CP] Check Pods Manifest.lock */ = {
+		BCC3DA2F451B062E1C6BB7E0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -901,7 +901,7 @@
 		};
 		13C66B1420F0B9AE00DD8D1D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 94DDAEC0493C37602F2DBDB3 /* Pods-MidiParser iOS.debug.xcconfig */;
+			baseConfigurationReference = AAD84F8715DB728BBCC0D333 /* Pods-MidiParser iOS.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -929,7 +929,7 @@
 		};
 		13C66B1520F0B9AE00DD8D1D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 13C7B3EBC6430D786FAAF9B8 /* Pods-MidiParser iOS.release.xcconfig */;
+			baseConfigurationReference = FBCB547A17A8B71F42C55A48 /* Pods-MidiParser iOS.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -994,7 +994,7 @@
 		};
 		13C66B9320F3A9F100DD8D1D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2D6256F133F148F268B6C146 /* Pods-MidiParser macOS.debug.xcconfig */;
+			baseConfigurationReference = 2CBC9E0E46C393CDD008FF74 /* Pods-MidiParser macOS.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -1023,7 +1023,7 @@
 		};
 		13C66B9420F3A9F100DD8D1D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 031407221027D145C650ADA4 /* Pods-MidiParser macOS.release.xcconfig */;
+			baseConfigurationReference = F37EFB0FE9F956740641D62B /* Pods-MidiParser macOS.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
