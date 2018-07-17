@@ -31,6 +31,10 @@ final class MidiParserTests: XCTestCase {
         ])
         XCTAssertEqual(track1.count, 4)
         
+        track1.keySignatures = [MidiKeySignature(timeStamp: 0, key: .minor(.A))]
+        track1.patch = MidiPatch(channel: 0, patch: .cello)
+        track1.trackName = "track1"
+        
         track1.cut(from: 0, to: 5)
         XCTAssertEqual(track1.trackLength, 25)
         

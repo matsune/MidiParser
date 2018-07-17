@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "13C66B8820F3A9F100DD8D1D"
+               BuildableName = "MidiParser macOSTests.xctest"
+               BlueprintName = "MidiParser macOSTests"
+               ReferencedContainer = "container:MidiParser.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "13C66B8020F3A9F000DD8D1D"
+            BuildableName = "MidiParser.framework"
+            BlueprintName = "MidiParser macOS"
+            ReferencedContainer = "container:MidiParser.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

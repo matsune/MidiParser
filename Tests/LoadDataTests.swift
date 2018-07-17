@@ -40,31 +40,36 @@ class LoadDataTests: XCTestCase {
         XCTAssertEqual(midi.tempoTrack.extendedTempos[0].bpm, 120)
         
         midi.tempoTrack.extendedTempos = [MidiExtendedTempo(timeStamp: 0, bpm: 200)]
-        XCTAssertEqual(midi.infoDictionary[MidiInfoKey.tempo] as? Int, 200)
+        XCTAssertEqual(midi.infoDictionary[.tempo] as? Int, 200)
         
         midi.tempoTrack.timeSignatures = [MidiTimeSignature(timeStamp: 0, numerator: 6, denominator: 3, cc: 24, bb: 8)]
         XCTAssertEqual(midi.infoDictionary[.timeSignature] as? String, "6/8")
         
-        midi.noteTracks[0].keySignatures.removeAll()
-        midi.noteTracks[0].keySignatures.append(MidiKeySignature(timeStamp: 0, key: .major(.A)))
+        XCTAssertEqual(midi.noteTracks.count, 5)
+        XCTAssertEqual(midi.noteTracks[0].trackName, "Bass")
+        XCTAssertEqual(midi.noteTracks[1].trackName, "Piano")
+        XCTAssertEqual(midi.noteTracks[2].trackName, "Hi-hat only")
+        XCTAssertEqual(midi.noteTracks[3].trackName, "Drums")
+        XCTAssertEqual(midi.noteTracks[4].trackName, "Jazz Guitar")
+        
+        let firstTrack = midi.noteTracks[0]
+        
+        print(firstTrack[0])
+        
+        firstTrack.keySignatures.removeAll()
+        firstTrack.keySignatures.append(MidiKeySignature(timeStamp: 0, key: .major(.A)))
         XCTAssertEqual(midi.infoDictionary[.keySignature] as? String, "A")
         
-        let noteCount = midi.noteTracks[1].count
-        midi.noteTracks[1].removeNote(at: 10)
-        XCTAssertEqual(noteCount - 1, midi.noteTracks[1].count)
-        midi.noteTracks[1].add(note: MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 10, channel: 0, releaseVelocity: 0))
-        XCTAssertEqual(noteCount, midi.noteTracks[1].count)
-        
-        midi.noteTracks[1].trackName = "aaa"
-        XCTAssertEqual(midi.noteTracks[1].trackName, "aaa")
-        
-        midi.noteTracks[1].trackLength = 500
-        XCTAssertEqual(midi.noteTracks[1].trackLength, 500)
+        let noteCount = firstTrack.count
+        firstTrack.removeNote(at: 10)
+        XCTAssertEqual(noteCount - 1, firstTrack.count)
+        firstTrack.add(note: MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 10, channel: 0, releaseVelocity: 0))
+        XCTAssertEqual(noteCount, firstTrack.count)
         
         XCTAssertEqual(midi.tempoTrack.timeResolution, 480)
         
-        midi.noteTracks[1].clearEvents(from: 0, to: midi.noteTracks[1].trackLength)
-        XCTAssert(midi.noteTracks[1].isEmpty)
+        firstTrack.clearEvents(from: 0, to: firstTrack.trackLength)
+        XCTAssert(midi.noteTracks[0].isEmpty)
         
         let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
         print(tmp)
