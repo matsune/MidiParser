@@ -75,5 +75,5 @@ open with GarageBand...
 
 # Installation
 ## Carthage
-To install using Carthage, add the following line to Cartfile:
+To install using Carthage, add the following line to Cartfile:  
 `github "matsune/MidiParser"`
