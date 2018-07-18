@@ -12,13 +12,13 @@ import Foundation
 public final class MidiTempoTrack: MidiTrack {
     let _musicTrack: MusicTrack
     let iterator: EventIterator
-    
+
     public var timeSignatures: [MidiTimeSignature] = [] {
         didSet {
             if isReload {
                 return
             }
-            
+
             var count = 0
             iterator.enumerate { info, finished, next in
                 if let metaEvent: MIDIMetaEvent = bindEventData(info: info),
@@ -34,13 +34,13 @@ public final class MidiTempoTrack: MidiTrack {
             }
         }
     }
-    
+
     public var extendedTempos: [MidiExtendedTempo] = [] {
         didSet {
             if isReload {
                 return
             }
-            
+
             var count = 0
             iterator.enumerate { info, finished, next in
                 if let _: ExtendedTempoEvent = bindEventData(info: info) {
@@ -55,30 +55,30 @@ public final class MidiTempoTrack: MidiTrack {
             }
         }
     }
-    
+
     init(musicTrack: MusicTrack) {
         _musicTrack = musicTrack
         iterator = EventIterator(track: musicTrack)
         reload()
     }
-    
+
     private var isReload = false
-    
+
     func reload() {
         isReload = true
         defer {
             isReload = false
         }
-        
+
         timeSignatures.removeAll()
         extendedTempos.removeAll()
-        
+
         iterator.enumerate { eventInfo, _, _ in
             guard let eventData = eventInfo.data,
                 let eventType = MidiEventType(eventInfo.type) else {
                 return
             }
-            
+
             switch eventType {
             case .meta:
                 let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
@@ -90,11 +90,11 @@ public final class MidiTempoTrack: MidiTrack {
                         .load(as: UInt8.self)
                     )
                 }
-                
+
                 guard let metaType = MetaEventType(byte: header.metaType) else {
                     return
                 }
-                
+
                 switch metaType {
                 case .timeSignature:
                     let timeSig = MidiTimeSignature(timeStamp: eventInfo.timeStamp,
@@ -115,7 +115,7 @@ public final class MidiTempoTrack: MidiTrack {
             }
         }
     }
-    
+
     public var timeResolution: Int16 {
         var data: Int16 = 0
         getProperty(.timeResolution, data: &data)

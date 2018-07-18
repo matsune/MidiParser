@@ -22,13 +22,13 @@ extension MidiTrack {
         check(MusicTrackClear(_musicTrack, inStartTime, inEndTime), label: "MusicTrackClear")
         reload()
     }
-    
+
     public func moveEvents(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp, inMoveTime: MusicTimeStamp) {
         check(MusicTrackMoveEvents(_musicTrack, inStartTime, inEndTime, inMoveTime),
               label: "MusicTrackMoveEvents")
         reload()
     }
-    
+
     public var destAUNode: AUNode {
         get {
             var data = AUNode()
@@ -40,7 +40,7 @@ extension MidiTrack {
             check(MusicTrackSetDestNode(_musicTrack, newValue), label: "MusicTrackSetDestNode")
         }
     }
-    
+
     func bindEventData<T>(info: EventInfo) -> T? {
         guard let type = MidiEventType(info.type) else {
             return nil
@@ -60,19 +60,19 @@ extension MidiTrack {
             return nil
         }
     }
-    
+
     func getProperty<T>(_ property: SequenceTrackProperty, data: inout T) {
         var length = sizeof(T.self)
         check(MusicTrackGetProperty(_musicTrack, property.inPropertyID, &data, &length),
               label: "[MusicTrackGetProperty] \(property)", level: .fatal)
     }
-    
+
     func setProperty<T>(_ property: SequenceTrackProperty, data: inout T) {
         let length = sizeof(T.self)
         check(MusicTrackSetProperty(_musicTrack, property.inPropertyID, &data, length),
               label: "[MusicTrackSetProperty] \(property)", level: .fatal)
     }
-    
+
     func add(metaEvent: MetaEventProtocol) {
         var e = MIDIMetaEvent()
         e.metaEventType = UInt8(metaEvent.metaType.rawValue)
@@ -81,12 +81,12 @@ extension MidiTrack {
         check(MusicTrackNewMetaEvent(_musicTrack, metaEvent.timeStamp, &e),
               label: "MusicTrackNewMetaEvent")
     }
-    
+
     func add(extendedTempo: MidiExtendedTempo) {
         check(MusicTrackNewExtendedTempoEvent(_musicTrack, extendedTempo.timeStamp, extendedTempo.bpm),
               label: "MusicTrackNewExtendedTempoEvent")
     }
-    
+
     func add(patch: MidiPatch) {
         // 0xCn ; n is channel number
         let status = 192 + patch.channel

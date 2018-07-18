@@ -20,7 +20,7 @@ public enum MidiEventType: CustomDebugStringConvertible {
     case midiRawData
     case parameter
     case auPreset
-    
+
     // swiftlint:disable cyclomatic_complexity
     init?(_ kMusicEventType: UInt32) {
         switch kMusicEventType {
@@ -48,7 +48,7 @@ public enum MidiEventType: CustomDebugStringConvertible {
             return nil
         }
     }
-    
+
     // - MARK: CustomDebugStringConvertible
     public var debugDescription: String {
         switch self {

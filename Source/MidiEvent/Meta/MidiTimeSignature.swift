@@ -19,11 +19,11 @@ public struct MidiTimeSignature: MetaEventProtocol {
     public let cc: UInt8
     /// number of notated 32nd-notes in a MIDI quarter-note
     public let bb: UInt8
-    
+
     var metaType: MetaEventType {
         return .timeSignature
     }
-    
+
     var bytes: Bytes {
         return [numerator, denominator, cc, bb]
     }

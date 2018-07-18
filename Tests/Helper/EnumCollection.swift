@@ -26,7 +26,7 @@ extension EnumCollection {
             }
         }
     }
-    
+
     public static var allValues: [Self] {
         return Array(cases())
     }

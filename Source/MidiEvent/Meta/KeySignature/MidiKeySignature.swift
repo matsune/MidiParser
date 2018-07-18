@@ -13,12 +13,12 @@ import Foundation
 public struct MidiKeySignature: MetaEventProtocol {
     public let timeStamp: MusicTimeStamp
     public let keySig: KeySignature
-    
+
     public init(timeStamp: MusicTimeStamp, key: KeySignature) {
         self.timeStamp = timeStamp
         keySig = key
     }
-    
+
     init(timeStamp: MusicTimeStamp, sf: UInt8, isMajor: Bool) {
         self.timeStamp = timeStamp
         if isMajor {
@@ -27,11 +27,11 @@ public struct MidiKeySignature: MetaEventProtocol {
             keySig = .minor(MinorKey(rawValue: sf) ?? .A)
         }
     }
-    
+
     var metaType: MetaEventType {
         return .keySignature
     }
-    
+
     var bytes: Bytes {
         return keySig.bytes
     }

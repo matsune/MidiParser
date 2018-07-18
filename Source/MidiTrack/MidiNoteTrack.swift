@@ -12,23 +12,23 @@ import Foundation
 public final class MidiNoteTrack: MidiTrack {
     let _musicTrack: MusicTrack
     let iterator: EventIterator
-    
+
     public private(set) var notes: [MidiNote] = [] {
         didSet {
             if isReload {
                 return
             }
-            
+
             notes.sort(by: { $0.timeStamp < $1.timeStamp })
         }
     }
-    
+
     public var keySignatures: [MidiKeySignature] = [] {
         didSet {
             if isReload {
                 return
             }
-            
+
             var count = 0
             iterator.enumerate { info, finished, next in
                 if let metaEvent = info.data?.assumingMemoryBound(to: MIDIMetaEvent.self).pointee,
@@ -44,13 +44,13 @@ public final class MidiNoteTrack: MidiTrack {
             }
         }
     }
-    
+
     public var lyrics: [MidiLyric] = [] {
         didSet {
             if isReload {
                 return
             }
-            
+
             var count = 0
             iterator.enumerate { info, finished, next in
                 if let metaEvent: MIDIMetaEvent = bindEventData(info: info),
@@ -66,13 +66,13 @@ public final class MidiNoteTrack: MidiTrack {
             }
         }
     }
-    
+
     public var patch: MidiPatch? {
         didSet {
             if isReload {
                 return
             }
-            
+
             iterator.enumerate { info, finished, _ in
                 if let metaEvent: MIDIChannelMessage = bindEventData(info: info),
                     metaEvent.status.hexString == "C" {
@@ -80,19 +80,19 @@ public final class MidiNoteTrack: MidiTrack {
                     finished = true
                 }
             }
-            
+
             if let patch = patch {
                 add(patch: patch)
             }
         }
     }
-    
+
     public var trackName = "" {
         didSet {
             if isReload {
                 return
             }
-            
+
             iterator.enumerate { info, finished, _ in
                 guard let metaEvent: MIDIMetaEvent = bindEventData(info: info),
                     MetaEventType(byte: metaEvent.metaEventType) == .sequenceTrackName else {
@@ -104,7 +104,7 @@ public final class MidiNoteTrack: MidiTrack {
             add(metaEvent: MetaEvent(timeStamp: 0, metaType: .sequenceTrackName, bytes: Bytes(trackName.utf8)))
         }
     }
-    
+
     public var isMute: Bool {
         get {
             var data = false
@@ -116,7 +116,7 @@ public final class MidiNoteTrack: MidiTrack {
             setProperty(.muteStatus, data: &data)
         }
     }
-    
+
     public var isSolo: Bool {
         get {
             var data = false
@@ -128,7 +128,7 @@ public final class MidiNoteTrack: MidiTrack {
             setProperty(.soloStatus, data: &data)
         }
     }
-    
+
     public var offsetTime: MusicTimeStamp {
         get {
             var data: MusicTimeStamp = 0
@@ -140,7 +140,7 @@ public final class MidiNoteTrack: MidiTrack {
             setProperty(.offsetTime, data: &data)
         }
     }
-    
+
     public var trackLength: MusicTimeStamp {
         get {
             var data: MusicTimeStamp = 0
@@ -152,7 +152,7 @@ public final class MidiNoteTrack: MidiTrack {
             setProperty(.trackLength, data: &data)
         }
     }
-    
+
     public var loopInfo: MusicTrackLoopInfo {
         get {
             var data = MusicTrackLoopInfo(loopDuration: 0, numberOfLoops: 1)
@@ -164,7 +164,7 @@ public final class MidiNoteTrack: MidiTrack {
             setProperty(.loopInfo, data: &data)
         }
     }
-    
+
     public var automatedParameters: UInt32 {
         get {
             var data: UInt32 = 0
@@ -176,32 +176,32 @@ public final class MidiNoteTrack: MidiTrack {
             setProperty(.automatedParameters, data: &data)
         }
     }
-    
+
     init(musicTrack: MusicTrack) {
         _musicTrack = musicTrack
         iterator = EventIterator(track: musicTrack)
         reload()
     }
-    
+
     private var isReload = false
-    
+
     func reload() {
         isReload = true
         defer {
             isReload = false
         }
-        
+
         notes.removeAll()
         keySignatures.removeAll()
         lyrics.removeAll()
         trackName = ""
-        
+
         iterator.enumerate { eventInfo, _, _ in
             guard let eventData = eventInfo.data,
                 let eventType = MidiEventType(eventInfo.type) else {
                 return
             }
-            
+
             switch eventType {
             case .midiNoteMessage:
                 let noteMessage = eventData.load(as: MIDINoteMessage.self)
@@ -223,11 +223,11 @@ public final class MidiNoteTrack: MidiTrack {
                             .load(as: Byte.self)
                     )
                 }
-                
+
                 guard let metaType = MetaEventType(byte: header.metaType) else {
                     return
                 }
-                
+
                 switch metaType {
                 case .keySignature:
                     // ex.) 0xFF 0x59 0x02 0x04(data[0]) 0x00(data[1])
@@ -261,7 +261,7 @@ public final class MidiNoteTrack: MidiTrack {
             }
         }
     }
-    
+
     public func addNote(timeStamp: MusicTimeStamp,
                         duration: Float32,
                         note: UInt8,
@@ -282,11 +282,11 @@ public final class MidiNoteTrack: MidiTrack {
         check(MusicTrackNewMIDINoteEvent(_musicTrack, timeStamp, &message), label: "MusicTrackNewMIDINoteEvent")
         notes.append(note)
     }
-    
+
     public func add(note: MidiNote) {
         add(notes: [note])
     }
-    
+
     public func add(notes: [MidiNote]) {
         notes.forEach {
             var message = $0.convert()
@@ -294,7 +294,7 @@ public final class MidiNoteTrack: MidiTrack {
         }
         self.notes.append(contentsOf: notes)
     }
-    
+
     public func removeNote(at index: Int) {
         let note = notes.remove(at: index)
         iterator.enumerate(seekTime: note.timeStamp) { info, finished, _ in
@@ -306,7 +306,7 @@ public final class MidiNoteTrack: MidiTrack {
             }
         }
     }
-    
+
     public func clearNotes(from: MusicTimeStamp, to: MusicTimeStamp) {
         iterator.enumerate(seekTime: from) { info, finished, next in
             if info.type == kMusicEventType_MIDINoteMessage,
@@ -318,7 +318,7 @@ public final class MidiNoteTrack: MidiTrack {
         }
         notes = notes.filter { !(from ..< to ~= $0.timeStamp) }
     }
-    
+
     public func clearNotes() {
         var count = 0
         iterator.enumerate { info, finished, next in
@@ -331,12 +331,12 @@ public final class MidiNoteTrack: MidiTrack {
         }
         notes.removeAll()
     }
-    
+
     public func cut(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp) {
         check(MusicTrackCut(_musicTrack, inStartTime, inEndTime), label: "MusicTrackCut", level: .log)
         reload()
     }
-    
+
     public func merge(from inStartTime: MusicTimeStamp,
                       to inEndTime: MusicTimeStamp,
                       destTrack: MidiNoteTrack,
@@ -345,7 +345,7 @@ public final class MidiNoteTrack: MidiTrack {
               label: "MusicTrackMerge")
         destTrack.reload()
     }
-    
+
     public func copyInsert(from inStartTime: MusicTimeStamp,
                            to inEndTime: MusicTimeStamp,
                            destTrack: MidiNoteTrack,
@@ -354,7 +354,7 @@ public final class MidiNoteTrack: MidiTrack {
               label: "MusicTrackCopyInsert")
         destTrack.reload()
     }
-    
+
     public func notes(from: MusicTimeStamp, to: MusicTimeStamp) -> [MidiNote] {
         return notes.filter { from ..< to ~= $0.timeStamp }
     }
@@ -363,15 +363,15 @@ public final class MidiNoteTrack: MidiTrack {
 extension MidiNoteTrack: RandomAccessCollection {
     public typealias Element = MidiNote
     public typealias Index = Int
-    
+
     public subscript(position: Int) -> MidiNote {
         return notes[position]
     }
-    
+
     public var startIndex: Int {
         return notes.startIndex
     }
-    
+
     public var endIndex: Int {
         return notes.endIndex
     }

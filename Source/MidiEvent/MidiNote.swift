@@ -16,7 +16,7 @@ public struct MidiNote: EventProtocol {
     public let velocity: UInt8
     public let channel: UInt8
     public let releaseVelocity: UInt8
-    
+
     public init(timeStamp: MusicTimeStamp,
                 duration: Float32,
                 note: UInt8,
@@ -30,7 +30,7 @@ public struct MidiNote: EventProtocol {
         self.channel = channel
         self.releaseVelocity = releaseVelocity
     }
-    
+
     func convert() -> MIDINoteMessage {
         return MIDINoteMessage(channel: channel,
                                note: note,

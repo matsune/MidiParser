@@ -15,7 +15,7 @@ public struct MidiPatch {
     public let channel: UInt8
     public let patch: GMPatch
     public let family: PatchFamily
-    
+
     public init(channel: UInt8, patch: GMPatch) {
         self.channel = channel
         self.patch = patch

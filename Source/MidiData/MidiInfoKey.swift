@@ -33,7 +33,7 @@ public enum MidiInfoKey: String {
     case trackNumber
     case year
     case unknown
-    
+
     // swiftlint:disable function_body_length cyclomatic_complexity
     init(val: String) {
         switch val {

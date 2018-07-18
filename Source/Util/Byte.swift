@@ -14,11 +14,11 @@ typealias Bytes = [Byte]
 // 2 Byte
 struct Word {
     private var value: (UInt8, UInt8)
-    
+
     init(byte1: UInt8, byte2: UInt8) {
         value = (byte1, byte2)
     }
-    
+
     var val: UInt16 {
         return UInt16(value.0) * 16 + UInt16(value.1)
     }
@@ -27,11 +27,11 @@ struct Word {
 // 4 Byte
 struct DWord {
     private var value: (UInt8, UInt8, UInt8, UInt8)
-    
+
     init(byte1: UInt8, byte2: UInt8, byte3: UInt8, byte4: UInt8) {
         value = (byte1, byte2, byte3, byte4)
     }
-    
+
     var val: UInt32 {
         return UInt32(value.0) * 16 * 16 * 16
             + UInt32(value.1) * 16 * 16

@@ -16,11 +16,11 @@ final class MidiEventTypeTests: XCTestCase {
     override func setUp() {
         super.setUp()
     }
-    
+
     override func tearDown() {
         super.tearDown()
     }
-    
+
     func testMidiEventType() {
         let values = [
             kMusicEventType_NULL,
@@ -36,11 +36,11 @@ final class MidiEventTypeTests: XCTestCase {
         ]
         let expects = MidiEventType.allValues
         assert(values.count == expects.count)
-        
+
         for i in 0 ..< values.count {
             XCTAssertEqual(MidiEventType(values[i]), expects[i])
         }
-        
+
         precondition(!values.contains(1000))
         XCTAssertNil(MidiEventType(1000))
     }

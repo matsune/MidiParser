@@ -13,29 +13,29 @@ public final class MidiData {
     private let sequence: MidiSequence
     public private(set) var tempoTrack: MidiTempoTrack
     public private(set) var noteTracks: [MidiNoteTrack]
-    
+
     public init() {
         sequence = MidiSequence()
         tempoTrack = MidiTempoTrack(musicTrack: sequence.tempoTrack)
         noteTracks = []
     }
-    
+
     deinit {
         disposeTracks()
     }
-    
+
     public func load(data: Data) {
         disposeTracks()
         sequence.load(data: data)
         retainTracks()
     }
-    
+
     private func disposeTracks() {
         sequence.dispose(track: tempoTrack)
         noteTracks.forEach { sequence.dispose(track: $0) }
         noteTracks.removeAll()
     }
-    
+
     private func retainTracks() {
         tempoTrack = MidiTempoTrack(musicTrack: sequence.tempoTrack)
         var tracks: [MidiNoteTrack] = []
@@ -47,20 +47,20 @@ public final class MidiData {
         }
         noteTracks = tracks
     }
-    
+
     public func writeData(to url: URL,
                           inFileType: MusicSequenceFileTypeID = .midiType,
                           inFlags: MusicSequenceFileFlags = .eraseFile,
                           inResolution: Int16 = 480) throws {
         try sequence.writeData(to: url, inFileType: inFileType, inFlags: inFlags, inResolution: inResolution)
     }
-    
+
     public func createData(inFileType: MusicSequenceFileTypeID = .midiType,
                            inFlags: MusicSequenceFileFlags = .eraseFile,
                            inResolution: Int16 = 480) -> Data? {
         return sequence.createData(inFileType: inFileType, inFlags: inFlags, inResolution: inResolution)
     }
-    
+
     public var sequenceType: MusicSequenceType {
         get {
             return sequence.sequenceType
@@ -69,23 +69,23 @@ public final class MidiData {
             sequence.sequenceType = newValue
         }
     }
-    
+
     public var infoDictionary: [MidiInfoKey: AnyObject] {
         return sequence.infoDictionary
     }
-    
+
     @discardableResult
     public func addTrack() -> MidiNoteTrack {
         let track = sequence.newTrack()
         noteTracks.append(track)
         return track
     }
-    
+
     public func removeTrack(at index: Int) {
         sequence.dispose(track: noteTracks[index])
         noteTracks.remove(at: index)
     }
-    
+
     public func remove(track: MidiNoteTrack) {
         if let idx = noteTracks.index(of: track) {
             removeTrack(at: idx)

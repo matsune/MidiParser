@@ -11,44 +11,44 @@ import Foundation
 
 final class EventIterator {
     private let _iterator: MusicEventIterator
-    
+
     init(track: MusicTrack) {
         var iterator: MusicEventIterator?
         check(NewMusicEventIterator(track, &iterator), label: "NewMusicEventIterator")
-        
+
         guard let eventIterator = iterator else {
             fatalError("Could not initialize MusicEventIterator")
         }
         _iterator = eventIterator
     }
-    
+
     deinit {
         check(DisposeMusicEventIterator(_iterator),
               label: "DisposeMusicEventIterator", level: .log)
     }
-    
+
     var hasNextEvent: Bool {
         var hasNextEvent: DarwinBoolean = false
         check(MusicEventIteratorHasNextEvent(_iterator, &hasNextEvent),
               label: "MusicEventIteratorHasNextEvent", level: .log)
         return hasNextEvent.boolValue
     }
-    
+
     var hasCurrentEvent: Bool {
         var hasCurrentEvent: DarwinBoolean = false
         check(MusicEventIteratorHasCurrentEvent(_iterator, &hasCurrentEvent),
               label: "MusicEventIteratorHasCurrentEvent", level: .log)
         return hasCurrentEvent.boolValue
     }
-    
+
     func nextEvent() {
         check(MusicEventIteratorNextEvent(_iterator), label: "MusicEventIteratorNextEvent")
     }
-    
+
     func previousEvent() {
         check(MusicEventIteratorPreviousEvent(_iterator), label: "MusicEventIteratorPreviousEvent")
     }
-    
+
     var currentEvent: EventInfo? {
         var eventType: MusicEventType = 0
         var eventTimeStamp: MusicTimeStamp = -1
@@ -64,11 +64,11 @@ final class EventIterator {
         }
         return EventInfo(type: eventType, timeStamp: eventTimeStamp, data: eventData, dataSize: eventDataSize)
     }
-    
+
     func seek(in timestamp: MusicTimeStamp) {
         check(MusicEventIteratorSeek(_iterator, timestamp), label: "MusicEventIteratorSeek")
     }
-    
+
     /// Enumerate events from `seekTime` to end of track.
     /// Need to set `next` flag false when you called `deleteEvent()` during block
     /// because pointer move forward after delete.
@@ -84,7 +84,7 @@ final class EventIterator {
         while hasCurrentEvent {
             var finished: Bool = false
             var next: Bool = true
-            
+
             if let info = currentEvent {
                 block(info, &finished, &next)
             }
@@ -94,7 +94,7 @@ final class EventIterator {
             }
         }
     }
-    
+
     func deleteEvent() {
         check(MusicEventIteratorDeleteEvent(_iterator), label: "MusicEventIteratorDeleteEvent")
     }

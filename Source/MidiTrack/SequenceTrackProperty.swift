@@ -17,7 +17,7 @@ enum SequenceTrackProperty {
     case automatedParameters
     case trackLength
     case timeResolution
-    
+
     var inPropertyID: UInt32 {
         switch self {
         case .loopInfo:

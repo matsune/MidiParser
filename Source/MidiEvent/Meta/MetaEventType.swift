@@ -48,7 +48,7 @@ enum MetaEventType: Int {
     case timeSignature = 88
     case keySignature = 89
     case sequencerSpecific = 127
-    
+
     init?(byte: Byte) {
         self.init(rawValue: Int(byte))
     }
