@@ -355,8 +355,8 @@ public final class MidiNoteTrack: MidiTrack {
         destTrack.reload()
     }
 
-    public func notes(from: MusicTimeStamp, to: MusicTimeStamp) -> [MidiNote] {
-        return notes.filter { from ..< to ~= $0.timeStamp }
+    public func notes(in range: Range<MusicTimeStamp>) -> [MidiNote] {
+        return notes.filter { range ~= $0.timeStamp }
     }
 }
 
