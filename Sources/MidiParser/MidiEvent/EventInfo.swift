@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 struct EventInfo {
     let type: MusicEventType

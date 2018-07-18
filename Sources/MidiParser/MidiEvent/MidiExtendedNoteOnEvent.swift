@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 public struct MidiExtendedNoteOnEvent: EventProtocol {
     public let timeStamp: MusicTimeStamp

@@ -6,8 +6,6 @@
 //  Copyright © 2018年 matsune. All rights reserved.
 //
 
-import Foundation
-
 // General MIDI Instrument Patch Map defines 128 instruments with program number 0 to 127.
 public enum GMPatch: UInt8 {
     // 0-7 PIANO

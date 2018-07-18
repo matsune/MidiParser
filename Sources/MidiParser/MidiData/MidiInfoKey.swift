@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 public enum MidiInfoKey: String {
     case album

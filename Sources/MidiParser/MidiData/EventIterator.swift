@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 final class EventIterator {
     private let _iterator: MusicEventIterator

@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 // 0xFF 0x59 0x02 0x[sf] 0x[ml]
 public struct MidiKeySignature: MetaEventProtocol {

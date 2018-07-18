@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 struct MetaEvent: MetaEventProtocol {
     let timeStamp: MusicTimeStamp

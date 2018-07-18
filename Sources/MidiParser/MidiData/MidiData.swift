@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 public final class MidiData {
     private let sequence: MidiSequence

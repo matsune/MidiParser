@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 /// Standard MIDI Patch Assignments
 /// [Microsoft documents](https://docs.microsoft.com/en-us/windows/desktop/multimedia/standard-midi-patch-assignments)

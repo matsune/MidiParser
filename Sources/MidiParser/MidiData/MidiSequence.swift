@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 final class MidiSequence {
     private let _musicSequence: MusicSequence

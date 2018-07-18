@@ -6,8 +6,6 @@
 //  Copyright © 2018 Yuma Matsune. All rights reserved.
 //
 
-import Foundation
-
 protocol MetaEventProtocol: EventProtocol {
     var metaType: MetaEventType { get }
     var bytes: Bytes { get }

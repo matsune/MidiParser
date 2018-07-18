@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 public final class MidiTempoTrack: MidiTrack {
     let _musicTrack: MusicTrack

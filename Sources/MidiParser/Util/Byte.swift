@@ -6,8 +6,6 @@
 //  Copyright © 2018 Yuma Matsune. All rights reserved.
 //
 
-import Foundation
-
 typealias Byte = UInt8
 typealias Bytes = [Byte]
 

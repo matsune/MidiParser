@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 enum SequenceTrackProperty {
     case loopInfo

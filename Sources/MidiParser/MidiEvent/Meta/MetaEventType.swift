@@ -6,8 +6,6 @@
 //  Copyright © 2017年 matsune. All rights reserved.
 //
 
-import Foundation
-
 /*
  -----------------------
  Type    Event

@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 protocol MidiTrack {
     // swiftlint:disable identifier_name

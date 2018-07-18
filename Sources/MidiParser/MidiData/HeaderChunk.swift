@@ -6,8 +6,6 @@
 //  Copyright © 2018 Yuma Matsune. All rights reserved.
 //
 
-import Foundation
-
 struct HeaderChunk {
     var ident: DWord // MThd
     var length: DWord // 00 00 00 06

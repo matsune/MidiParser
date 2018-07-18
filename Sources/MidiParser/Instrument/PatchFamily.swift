@@ -6,8 +6,6 @@
 //  Copyright © 2018年 matsune. All rights reserved.
 //
 
-import Foundation
-
 // each family has 8 patches
 public enum PatchFamily: UInt8 {
     case piano

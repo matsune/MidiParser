@@ -7,7 +7,6 @@
 //
 
 import AudioToolbox
-import Foundation
 
 public struct MidiTimeSignature: MetaEventProtocol {
     public let timeStamp: MusicTimeStamp

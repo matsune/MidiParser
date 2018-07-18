@@ -6,8 +6,6 @@
 //  Copyright © 2018 Yuma Matsune. All rights reserved.
 //
 
-import Foundation
-
 protocol EnumCollection: Hashable {
     static var allValues: [Self] { get }
 }
