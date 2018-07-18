@@ -307,16 +307,16 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
 
-    public func clearNotes(from: MusicTimeStamp, to: MusicTimeStamp) {
-        iterator.enumerate(seekTime: from) { info, finished, next in
+    public func clearNotes(in range: Range<MusicTimeStamp>) {
+        iterator.enumerate(seekTime: range.lowerBound) { info, finished, next in
             if info.type == kMusicEventType_MIDINoteMessage,
-                from ..< to ~= info.timeStamp {
+                range ~= info.timeStamp {
                 iterator.deleteEvent()
                 next = false
             }
-            finished = info.timeStamp >= to
+            finished = info.timeStamp >= range.upperBound
         }
-        notes = notes.filter { !(from ..< to ~= $0.timeStamp) }
+        notes = notes.filter { !(range ~= $0.timeStamp) }
     }
 
     public func clearNotes() {
