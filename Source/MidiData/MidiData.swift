@@ -14,6 +14,10 @@ public final class MidiData {
     public private(set) var tempoTrack: MidiTempoTrack
     public private(set) var noteTracks: [MidiNoteTrack]
     
+    public var format: UInt8 {
+        return sequence.format
+    }
+    
     public init() {
         sequence = MidiSequence()
         tempoTrack = MidiTempoTrack(musicTrack: sequence.tempoTrack)

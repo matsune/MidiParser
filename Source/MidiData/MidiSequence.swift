@@ -11,7 +11,7 @@ import Foundation
 
 final class MidiSequence {
     private let _musicSequence: MusicSequence
-    private var format: UInt8 = 1
+    var format: UInt8 = 1
     
     init() {
         var sequencePtr: MusicSequence?
