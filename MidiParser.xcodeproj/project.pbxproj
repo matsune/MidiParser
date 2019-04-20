@@ -91,8 +91,6 @@
 		13C66BD220F49C3200DD8D1D /* Byte.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BCE20F4984B00DD8D1D /* Byte.swift */; };
 		13C66BDC20F4E7DD00DD8D1D /* MetaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */; };
 		13C66BDD20F4E7DE00DD8D1D /* MetaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */; };
-		1D2FC49A8A7D19CF9F445A31 /* Pods_MidiParser_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D8C136756C230D5DB925B59 /* Pods_MidiParser_iOS.framework */; };
-		F88F98285DE5B0C72166580C /* Pods_MidiParser_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B52F4053F37146AEB0105BC9 /* Pods_MidiParser_macOS.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,12 +160,6 @@
 		13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaEvent.swift; sourceTree = "<group>"; };
 		13E83063226B0528009DD486 /* MidiParser-iOS.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "MidiParser-iOS.xcconfig"; sourceTree = "<group>"; };
 		13E83064226B0587009DD486 /* MidiParser-macOS.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "MidiParser-macOS.xcconfig"; sourceTree = "<group>"; };
-		371600DAE8B3D08938433315 /* Pods-MidiParser macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser macOS.release.xcconfig"; path = "Target Support Files/Pods-MidiParser macOS/Pods-MidiParser macOS.release.xcconfig"; sourceTree = "<group>"; };
-		5804708CD873C81B8EE3C1F3 /* Pods-MidiParser iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser iOS.debug.xcconfig"; path = "Target Support Files/Pods-MidiParser iOS/Pods-MidiParser iOS.debug.xcconfig"; sourceTree = "<group>"; };
-		6D8C136756C230D5DB925B59 /* Pods_MidiParser_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MidiParser_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B52F4053F37146AEB0105BC9 /* Pods_MidiParser_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MidiParser_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C64F531BDFE308847001D784 /* Pods-MidiParser macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser macOS.debug.xcconfig"; path = "Target Support Files/Pods-MidiParser macOS/Pods-MidiParser macOS.debug.xcconfig"; sourceTree = "<group>"; };
-		EE20C2923EF19B56CBA05A17 /* Pods-MidiParser iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MidiParser iOS.release.xcconfig"; path = "Target Support Files/Pods-MidiParser iOS/Pods-MidiParser iOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,7 +167,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1D2FC49A8A7D19CF9F445A31 /* Pods_MidiParser_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,7 +182,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F88F98285DE5B0C72166580C /* Pods_MidiParser_macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,7 +221,6 @@
 				13C66BB520F3ABD000DD8D1D /* Supporting Files */,
 				13C66B0C20F0B9AE00DD8D1D /* Tests */,
 				250232A5FBDB832E2B51CBB7 /* Pods */,
-				CA2C4B23F5D498DBFCE128FA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -370,21 +359,8 @@
 		250232A5FBDB832E2B51CBB7 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5804708CD873C81B8EE3C1F3 /* Pods-MidiParser iOS.debug.xcconfig */,
-				EE20C2923EF19B56CBA05A17 /* Pods-MidiParser iOS.release.xcconfig */,
-				C64F531BDFE308847001D784 /* Pods-MidiParser macOS.debug.xcconfig */,
-				371600DAE8B3D08938433315 /* Pods-MidiParser macOS.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		CA2C4B23F5D498DBFCE128FA /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6D8C136756C230D5DB925B59 /* Pods_MidiParser_iOS.framework */,
-				B52F4053F37146AEB0105BC9 /* Pods_MidiParser_macOS.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -411,9 +387,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13C66B1320F0B9AE00DD8D1D /* Build configuration list for PBXNativeTarget "MidiParser iOS" */;
 			buildPhases = (
-				D35D3E3577D43B7DC9EAF236 /* [CP] Check Pods Manifest.lock */,
-				13C66B5920F0BD9B00DD8D1D /* SwiftFormat */,
-				13C66B5820F0BD2900DD8D1D /* SwiftLint */,
 				13C66AFA20F0B9AD00DD8D1D /* Sources */,
 				13C66AFB20F0B9AD00DD8D1D /* Frameworks */,
 				13C66AFC20F0B9AD00DD8D1D /* Headers */,
@@ -450,9 +423,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13C66B9220F3A9F100DD8D1D /* Build configuration list for PBXNativeTarget "MidiParser macOS" */;
 			buildPhases = (
-				2F8F0E81A050C68490DFBC3C /* [CP] Check Pods Manifest.lock */,
-				1379EA7E20F6572200348301 /* SwiftFormat */,
-				1379EA7F20F6573B00348301 /* SwiftLint */,
 				13C66B7C20F3A9F000DD8D1D /* Sources */,
 				13C66B7D20F3A9F000DD8D1D /* Frameworks */,
 				13C66B7E20F3A9F000DD8D1D /* Headers */,
@@ -563,109 +533,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		1379EA7E20F6572200348301 /* SwiftFormat */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = SwiftFormat;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" . --exclude Carthage,Pods --trimwhitespace nonblank-lines --stripunusedargs closure-only --disable strongOutlets,trailingCommas --decimalgrouping none";
-		};
-		1379EA7F20F6573B00348301 /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint";
-		};
-		13C66B5820F0BD2900DD8D1D /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint";
-		};
-		13C66B5920F0BD9B00DD8D1D /* SwiftFormat */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = SwiftFormat;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" . --exclude Carthage,Pods --trimwhitespace nonblank-lines --stripunusedargs closure-only --disable strongOutlets,trailingCommas --decimalgrouping none";
-		};
-		2F8F0E81A050C68490DFBC3C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MidiParser macOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D35D3E3577D43B7DC9EAF236 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MidiParser iOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		13C66AFA20F0B9AD00DD8D1D /* Sources */ = {
