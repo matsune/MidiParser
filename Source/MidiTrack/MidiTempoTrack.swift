@@ -87,8 +87,7 @@ public final class MidiTempoTrack: MidiTrack {
                     data.append(eventData
                         .advanced(by: MemoryLayout<MetaEventHeader>.size)
                         .advanced(by: i)
-                        .load(as: UInt8.self)
-                    )
+                        .load(as: UInt8.self))
                 }
                 
                 guard let metaType = MetaEventType(byte: header.metaType) else {
