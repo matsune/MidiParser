@@ -91,7 +91,7 @@ public final class MidiData {
     }
     
     public func remove(track: MidiNoteTrack) {
-        if let idx = noteTracks.index(of: track) {
+        if let idx = noteTracks.firstIndex(of: track) {
             removeTrack(at: idx)
         }
     }
