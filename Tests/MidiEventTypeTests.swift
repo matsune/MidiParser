@@ -10,7 +10,6 @@ import AudioToolbox
 @testable import MidiParser
 import XCTest
 
-extension MidiEventType: EnumCollection {}
 
 final class MidiEventTypeTests: XCTestCase {
     override func setUp() {
@@ -34,7 +33,7 @@ final class MidiEventTypeTests: XCTestCase {
             kMusicEventType_Parameter,
             kMusicEventType_AUPreset
         ]
-        let expects = MidiEventType.allValues
+        let expects = MidiEventType.allCases
         assert(values.count == expects.count)
         
         for i in 0 ..< values.count {

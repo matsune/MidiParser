@@ -9,7 +9,7 @@
 import AudioToolbox
 import Foundation
 
-public enum MidiEventType: CustomDebugStringConvertible {
+public enum MidiEventType: CustomDebugStringConvertible, CaseIterable {
     case null
     case extendedNote
     case extendedTempo

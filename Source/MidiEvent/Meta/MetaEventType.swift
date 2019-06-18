@@ -29,7 +29,7 @@ import Foundation
  0x7F    Sequencer specific event
  -----------------------
  */
-enum MetaEventType: Int {
+enum MetaEventType: Int, CaseIterable {
     case trackSequenceNumber = 0
     case textEvent = 1
     case copyright = 2

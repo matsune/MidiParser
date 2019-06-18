@@ -9,14 +9,12 @@
 @testable import MidiParser
 import XCTest
 
-extension GMPatch: EnumCollection {}
-
 final class PatchTests: XCTestCase {
     private var allValues: [GMPatch]!
     
     override func setUp() {
         super.setUp()
-        allValues = GMPatch.allValues
+        allValues = GMPatch.allCases
         assert(allValues.count == 128)
     }
     
