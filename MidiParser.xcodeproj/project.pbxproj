@@ -91,6 +91,7 @@
 		13C66BD220F49C3200DD8D1D /* Byte.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BCE20F4984B00DD8D1D /* Byte.swift */; };
 		13C66BDC20F4E7DD00DD8D1D /* MetaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */; };
 		13C66BDD20F4E7DE00DD8D1D /* MetaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */; };
+		E745FE0022B99A1700077D24 /* ByteDWordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E745FDFF22B99A1700077D24 /* ByteDWordTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -160,6 +161,7 @@
 		13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaEvent.swift; sourceTree = "<group>"; };
 		13E83063226B0528009DD486 /* MidiParser-iOS.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "MidiParser-iOS.xcconfig"; sourceTree = "<group>"; };
 		13E83064226B0587009DD486 /* MidiParser-macOS.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "MidiParser-macOS.xcconfig"; sourceTree = "<group>"; };
+		E745FDFF22B99A1700077D24 /* ByteDWordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteDWordTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,6 +240,7 @@
 		13C66B0C20F0B9AE00DD8D1D /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E745FDFE22B97AA800077D24 /* Util */,
 				13C66B5A20F0C1F800DD8D1D /* MIDI_sample.mid */,
 				13C66B0F20F0B9AE00DD8D1D /* Info.plist */,
 				13C66BBF20F3AF8500DD8D1D /* LoadDataTests.swift */,
@@ -361,6 +364,14 @@
 			children = (
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		E745FDFE22B97AA800077D24 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				E745FDFF22B99A1700077D24 /* ByteDWordTests.swift */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -580,6 +591,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13C66B6720F0F28500DD8D1D /* MidiEventTypeTests.swift in Sources */,
+				E745FE0022B99A1700077D24 /* ByteDWordTests.swift in Sources */,
 				13C66BC020F3AF8500DD8D1D /* LoadDataTests.swift in Sources */,
 				13C66BC320F3B99D00DD8D1D /* MidiKeySignatureTests.swift in Sources */,
 				13C66B6320F0ED4C00DD8D1D /* EnumCollection.swift in Sources */,
@@ -717,7 +729,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -774,7 +786,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -804,7 +816,7 @@
 				PRODUCT_NAME = MidiParser;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -831,7 +843,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = matsune.MidiParser;
 				PRODUCT_NAME = MidiParser;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -850,7 +862,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = matsune.MidiParserTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -869,7 +881,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = matsune.MidiParserTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -899,7 +911,7 @@
 				PRODUCT_NAME = MidiParser;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -928,7 +940,7 @@
 				PRODUCT_NAME = MidiParser;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -950,7 +962,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "matsune.MidiParser-macOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -972,7 +984,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "matsune.MidiParser-macOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
