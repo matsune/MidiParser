@@ -46,11 +46,11 @@ class LoadDataTests: XCTestCase {
         XCTAssertEqual(midi.infoDictionary[.timeSignature] as? String, "6/8")
         
         XCTAssertEqual(midi.noteTracks.count, 5)
-        XCTAssertEqual(midi.noteTracks[0].trackName, "Bass")
-        XCTAssertEqual(midi.noteTracks[1].trackName, "Piano")
-        XCTAssertEqual(midi.noteTracks[2].trackName, "Hi-hat only")
-        XCTAssertEqual(midi.noteTracks[3].trackName, "Drums")
-        XCTAssertEqual(midi.noteTracks[4].trackName, "Jazz Guitar")
+        XCTAssertEqual(midi.noteTracks[0].name, "Bass")
+        XCTAssertEqual(midi.noteTracks[1].name, "Piano")
+        XCTAssertEqual(midi.noteTracks[2].name, "Hi-hat only")
+        XCTAssertEqual(midi.noteTracks[3].name, "Drums")
+        XCTAssertEqual(midi.noteTracks[4].name, "Jazz Guitar")
         
         let firstTrack = midi.noteTracks[0]
         

@@ -87,7 +87,7 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    public var trackName = "" {
+    public var name = "" {
         didSet {
             if isReload {
                 return
@@ -101,7 +101,7 @@ public final class MidiNoteTrack: MidiTrack {
                 iterator.deleteEvent()
                 finished = true
             }
-            add(metaEvent: MetaEvent(timeStamp: 0, metaType: .sequenceTrackName, bytes: Bytes(trackName.utf8)))
+            add(metaEvent: MetaEvent(timeStamp: 0, metaType: .sequenceTrackName, bytes: Bytes(name.utf8)))
         }
     }
     
@@ -194,7 +194,7 @@ public final class MidiNoteTrack: MidiTrack {
         notes.removeAll()
         keySignatures.removeAll()
         lyrics.removeAll()
-        trackName = ""
+        name = ""
         
         iterator.enumerate { eventInfo, _, _ in
             guard let eventData = eventInfo.data,
@@ -238,7 +238,7 @@ public final class MidiNoteTrack: MidiTrack {
                                                         isMajor: data[1] == 0)
                     keySignatures.append(keySignature)
                 case .sequenceTrackName:
-                    trackName = data.string
+                    name = data.string
                 case .lyric:
                     lyrics.append(MidiLyric(timeStamp: eventInfo.timeStamp, str: data.string))
                 default:
