@@ -91,7 +91,8 @@
 		13C66BD220F49C3200DD8D1D /* Byte.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BCE20F4984B00DD8D1D /* Byte.swift */; };
 		13C66BDC20F4E7DD00DD8D1D /* MetaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */; };
 		13C66BDD20F4E7DE00DD8D1D /* MetaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */; };
-		E745FE0022B99A1700077D24 /* ByteDWordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E745FDFF22B99A1700077D24 /* ByteDWordTests.swift */; };
+		E745FE0522BA244800077D24 /* ByteDWordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E745FE0222BA242F00077D24 /* ByteDWordTests.swift */; };
+		E745FE0622BA244A00077D24 /* ByteDWordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E745FE0222BA242F00077D24 /* ByteDWordTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -161,7 +162,7 @@
 		13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaEvent.swift; sourceTree = "<group>"; };
 		13E83063226B0528009DD486 /* MidiParser-iOS.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "MidiParser-iOS.xcconfig"; sourceTree = "<group>"; };
 		13E83064226B0587009DD486 /* MidiParser-macOS.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "MidiParser-macOS.xcconfig"; sourceTree = "<group>"; };
-		E745FDFF22B99A1700077D24 /* ByteDWordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteDWordTests.swift; sourceTree = "<group>"; };
+		E745FE0222BA242F00077D24 /* ByteDWordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ByteDWordTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -369,7 +370,7 @@
 		E745FDFE22B97AA800077D24 /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				E745FDFF22B99A1700077D24 /* ByteDWordTests.swift */,
+				E745FE0222BA242F00077D24 /* ByteDWordTests.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -591,12 +592,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				13C66B6720F0F28500DD8D1D /* MidiEventTypeTests.swift in Sources */,
-				E745FE0022B99A1700077D24 /* ByteDWordTests.swift in Sources */,
 				13C66BC020F3AF8500DD8D1D /* LoadDataTests.swift in Sources */,
 				13C66BC320F3B99D00DD8D1D /* MidiKeySignatureTests.swift in Sources */,
 				13C66B6320F0ED4C00DD8D1D /* EnumCollection.swift in Sources */,
 				13C66B0E20F0B9AE00DD8D1D /* MidiParserTests.swift in Sources */,
 				13C66B6120F0E8C300DD8D1D /* PatchTests.swift in Sources */,
+				E745FE0522BA244800077D24 /* ByteDWordTests.swift in Sources */,
 				13C66B5D20F0CAC600DD8D1D /* MetaEventTypeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -651,6 +652,7 @@
 				13C66BB820F3AC5500DD8D1D /* MidiEventTypeTests.swift in Sources */,
 				13C66BB720F3AC5500DD8D1D /* MetaEventTypeTests.swift in Sources */,
 				13C66BB920F3AC5500DD8D1D /* MidiParserTests.swift in Sources */,
+				E745FE0622BA244A00077D24 /* ByteDWordTests.swift in Sources */,
 				13C66BBA20F3AC5500DD8D1D /* PatchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -801,7 +803,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 8G7ZB52773;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -829,7 +831,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 8G7ZB52773;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -894,7 +896,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 8G7ZB52773;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -923,7 +925,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 8G7ZB52773;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
