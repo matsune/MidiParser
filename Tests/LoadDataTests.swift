@@ -88,23 +88,3 @@ extension LoadDataTests {
     }
     
 }
-
-private extension LoadDataTests {
-    typealias FileName = String
-    typealias FileComponents = (name: String, ext: String)
-    
-    func data(fromFileName fileName: FileName) -> Data {
-        func getComponent(fromFileName fileName: FileName) -> FileComponents {
-            let components = fileName.split(separator: ".").compactMap({ String($0) })
-            return FileComponents(name: components[0], ext: components[1])
-        }
-        
-        let fileComponents = getComponent(fromFileName: fileName)
-        
-        guard let url = Bundle(for: type(of: self)).url(forResource: fileComponents.name, withExtension: fileComponents.ext), let data = try? Data(contentsOf: url) else {
-            return Data()
-        }
-        
-        return data
-    }
-}

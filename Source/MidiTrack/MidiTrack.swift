@@ -18,6 +18,7 @@ protocol MidiTrack {
 }
 
 extension MidiTrack {
+    
     public func clearEvents(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp) {
         check(MusicTrackClear(_musicTrack, inStartTime, inEndTime), label: "MusicTrackClear")
         reload()
