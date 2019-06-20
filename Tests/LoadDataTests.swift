@@ -9,16 +9,10 @@
 @testable import MidiParser
 import XCTest
 
-class LoadDataTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+final class LoadDataTests: XCTestCase {
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
+    private let sut = MidiData()
+    private let midiFileController = MidiFileController(bundleSource: LoadDataTests.self)
     
     func testLoadedMidi() {
         /*
@@ -31,6 +25,10 @@ class LoadDataTests: XCTestCase {
         }
         let midi = MidiData()
         midi.load(data: data)
+        
+        
+        //let track = midi.noteTracks[0]
+        //track.iterator.nextEvent()
         
         // sig: 4/4  bpm: 120
         XCTAssertEqual(midi.tempoTrack.timeSignatures[0].numerator, 4)
@@ -74,5 +72,39 @@ class LoadDataTests: XCTestCase {
         let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
         print(tmp)
 //        try! midi.writeData(to: tmp)
+    }
+}
+
+extension LoadDataTests {
+    
+    func testMidiFile_Load_ReturnsNoteTracks() {
+        do {
+            let data = try midiFileController.data(fromFileName: "MIDI_sample.mid")
+            sut.load(data: data)
+            XCTAssertEqual(sut.noteTracks.count, 5)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+}
+
+private extension LoadDataTests {
+    typealias FileName = String
+    typealias FileComponents = (name: String, ext: String)
+    
+    func data(fromFileName fileName: FileName) -> Data {
+        func getComponent(fromFileName fileName: FileName) -> FileComponents {
+            let components = fileName.split(separator: ".").compactMap({ String($0) })
+            return FileComponents(name: components[0], ext: components[1])
+        }
+        
+        let fileComponents = getComponent(fromFileName: fileName)
+        
+        guard let url = Bundle(for: type(of: self)).url(forResource: fileComponents.name, withExtension: fileComponents.ext), let data = try? Data(contentsOf: url) else {
+            return Data()
+        }
+        
+        return data
     }
 }
