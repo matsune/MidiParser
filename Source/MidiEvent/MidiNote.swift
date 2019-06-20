@@ -17,12 +17,7 @@ public struct MidiNote: EventProtocol {
     public let channel: UInt8
     public let releaseVelocity: UInt8
     
-    public init(timeStamp: MusicTimeStamp,
-                duration: Float32,
-                note: UInt8,
-                velocity: UInt8,
-                channel: UInt8,
-                releaseVelocity: UInt8 = 0) {
+    public init(timeStamp: MusicTimeStamp, duration: Float32, note: UInt8, velocity: UInt8, channel: UInt8, releaseVelocity: UInt8 = 0) {
         self.timeStamp = timeStamp
         self.duration = duration
         self.note = note
@@ -32,10 +27,18 @@ public struct MidiNote: EventProtocol {
     }
     
     func convert() -> MIDINoteMessage {
-        return MIDINoteMessage(channel: channel,
-                               note: note,
-                               velocity: velocity,
-                               releaseVelocity: releaseVelocity,
-                               duration: duration)
+        return MIDINoteMessage(channel: channel, note: note, velocity: velocity, releaseVelocity: releaseVelocity, duration: duration)
     }
+}
+
+public extension MidiNote {
+    
+    func timeStampInTicks(forBeatsPerMinute beatsPerMinute: BeatsPerMinute, andTicksPerBeat ticksPerBeat: TicksPerBeat) -> Ticks {
+        return timeStamp.toTicks(forBeatsPerMinute: beatsPerMinute, andTicksPerBeat: ticksPerBeat)
+    }
+    
+    func durationInTicks(forBeatsPerMinute beatsPerMinute: BeatsPerMinute, andTicksPerBeat ticksPerBeat: TicksPerBeat) -> Ticks {
+        return MusicTimeStamp(duration).toTicks(forBeatsPerMinute: beatsPerMinute, andTicksPerBeat: ticksPerBeat)
+    }
+    
 }
