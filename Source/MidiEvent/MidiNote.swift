@@ -10,15 +10,21 @@ import AudioToolbox
 import Foundation
 
 public struct MidiNote: EventProtocol {
+    
+    private let regularTempoTimeStamp: MusicTimeStamp
+    
+    public let ticks: Ticks
     public let timeStamp: MusicTimeStamp
     public let duration: Float32
     public let note: UInt8
     public let velocity: UInt8
     public let channel: UInt8
     public let releaseVelocity: UInt8
-    
-    public init(timeStamp: MusicTimeStamp, duration: Float32, note: UInt8, velocity: UInt8, channel: UInt8, releaseVelocity: UInt8 = 0) {
-        self.timeStamp = timeStamp
+
+    public init(regularTimeStamp: MusicTimeStamp, duration: Float32, note: UInt8, velocity: UInt8, channel: UInt8, releaseVelocity: UInt8 = 0, beatsPerMinute: BeatsPerMinute = BeatsPerMinute.regular, ticksPerBeat: TicksPerBeat = TicksPerBeat.regular) {
+        self.regularTempoTimeStamp = regularTimeStamp
+        self.ticks = Milliseconds(regularTimeStamp).toTicks(andTicksPerBeat: ticksPerBeat)
+        self.timeStamp = ticks.toMs(forBeatsPerMinute: beatsPerMinute, andTicksPerBeat: ticksPerBeat).seconds
         self.duration = duration
         self.note = note
         self.velocity = velocity
@@ -26,19 +32,12 @@ public struct MidiNote: EventProtocol {
         self.releaseVelocity = releaseVelocity
     }
     
+}
+
+extension MidiNote {
+
     func convert() -> MIDINoteMessage {
         return MIDINoteMessage(channel: channel, note: note, velocity: velocity, releaseVelocity: releaseVelocity, duration: duration)
     }
-}
 
-public extension MidiNote {
-    
-    func timeStampInTicks(forBeatsPerMinute beatsPerMinute: BeatsPerMinute, andTicksPerBeat ticksPerBeat: TicksPerBeat) -> Ticks {
-        return timeStamp.toTicks(forBeatsPerMinute: beatsPerMinute, andTicksPerBeat: ticksPerBeat)
-    }
-    
-    func durationInTicks(forBeatsPerMinute beatsPerMinute: BeatsPerMinute, andTicksPerBeat ticksPerBeat: TicksPerBeat) -> Ticks {
-        return MusicTimeStamp(duration).toTicks(forBeatsPerMinute: beatsPerMinute, andTicksPerBeat: ticksPerBeat)
-    }
-    
 }
