@@ -11,8 +11,8 @@ import Foundation
 
 final class MidiSequence {
     private let _musicSequence: MusicSequence
-    var format: UInt8 = 1
-    //var format: Format = .preserveTracks
+    
+    var fileFormat: FileFormat = .type1
     
     var infoDictionary: [MidiInfoKey: AnyObject] {
         guard let dict = MusicSequenceGetInfoDictionary(_musicSequence) as? [String: AnyObject] else {
@@ -64,17 +64,24 @@ final class MidiSequence {
 
 extension MidiSequence {
     
-    enum Format: UInt8 {
-        case channelsToTracks
-        case preserveTracks
-        
-        var loadFlags: MusicSequenceLoadFlags {
-            switch self {
-                case .channelsToTracks:
-                    return .smf_ChannelsToTracks
-                case .preserveTracks:
-                    return .smf_PreserveTracks
-            }
+    enum FileFormat: UInt8 {
+        case type0
+        case type1
+        case type2
+    }
+    
+}
+
+extension MidiSequence.FileFormat: CustomStringConvertible {
+    
+    var description: String {
+        switch self {
+            case .type0:
+                return "A type 0 file contains the entire performance, merged onto a single track"
+            case .type1:
+                return "A type 1 files may contain any number of tracks, running synchronously"
+            case .type2:
+                return "A type 2 files may contain any number of tracks, running asynchronously. This type is rarely used"
         }
     }
     
@@ -90,21 +97,29 @@ extension MidiSequence {
 
 extension MidiSequence {
     
+    // Check format of SMF in header chunk
+    // SMF has 3 types of formats, Format 0 has only 1 truck chunk.
+    // Format 1 and 2 have number of using trucks
+    // Preffered to use Format 0 -> .smf_ChannelsToTracks
+    // Format 1/2 -> .smf_PreserveTracks
+    
     func load(data: Data) {
-        // Check format of SMF in header chunk
-        // SMF has 3 types of formats, Format 0 has only 1 truck chunk.
-        // Format 1 and 2 have number of using trucks
-        // Preffered to use Format 0 -> .smf_ChannelsToTracks
-        // Format 1/2 -> .smf_PreserveTracks
+        func getLoadFlag(inFileFormat format: FileFormat) -> MusicSequenceLoadFlags {
+            return format.rawValue == 0 ? .smf_ChannelsToTracks : .smf_PreserveTracks
+        }
+
+        func getFileFormat(fromHeader header: HeaderChunk) -> FileFormat {
+            return FileFormat(rawValue: UInt8(header.format.val)) ?? .type1
+        }
+        
         let header = data.withUnsafeBytes {
             UnsafeRawBufferPointer(start: $0, count: Int(sizeof(HeaderChunk.self))).load(as: HeaderChunk.self)
         }
-        format = UInt8(header.format.val)
-        let inFlags: MusicSequenceLoadFlags = format == 0 ? .smf_ChannelsToTracks : .smf_PreserveTracks
+      
+        fileFormat = getFileFormat(fromHeader: header)
+        let loadFlag = getLoadFlag(inFileFormat: fileFormat)
         
-        //format = Format(rawValue: UInt8(header.format.val)) ?? .preserveTracks
-        //let inFlags: MusicSequenceLoadFlags = format.loadFlags
-        check(MusicSequenceFileLoadData(_musicSequence, data as CFData, .midiType, inFlags), label: "MusicSequenceFileLoadData")
+        check(MusicSequenceFileLoadData(_musicSequence, data as CFData, .midiType, loadFlag), label: "MusicSequenceFileLoadData")
     }
     
 }
@@ -133,14 +148,13 @@ extension MidiSequence {
     
     func newTrack() -> MidiNoteTrack {
         var musicTrack: MusicTrack?
-        check(MusicSequenceNewTrack(_musicSequence, &musicTrack),
-              label: "MusicSequenceNewTrack")
+        check(MusicSequenceNewTrack(_musicSequence, &musicTrack), label: "MusicSequenceNewTrack")
         return MidiNoteTrack(musicTrack: musicTrack!)
     }
     
     func createData(inFileType: MusicSequenceFileTypeID = .midiType,
                     inFlags: MusicSequenceFileFlags = .eraseFile,
-                    inResolution: Int16 = 480) -> Data? {
+                    inResolution: Int16 = Int16(TicksPerBeat.regular.value)) -> Data? {
         var outData: Unmanaged<CFData>?
         check(MusicSequenceFileCreateData(_musicSequence, inFileType, inFlags, inResolution, &outData),
               label: "MusicSequenceFileCreateData")
@@ -153,7 +167,7 @@ extension MidiSequence {
     func writeData(to url: URL,
                    inFileType: MusicSequenceFileTypeID = .midiType,
                    inFlags: MusicSequenceFileFlags = .eraseFile,
-                   inResolution: Int16 = 480) throws {
+                   inResolution: Int16 = Int16(TicksPerBeat.regular.value)) throws {
         let status = MusicSequenceFileCreate(_musicSequence, url as CFURL, inFileType, inFlags, inResolution)
         if status != noErr {
             throw MidiError.writeURL
