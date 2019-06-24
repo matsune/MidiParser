@@ -10,8 +10,13 @@ import AudioToolbox
 import Foundation
 
 public final class MidiTempoTrack: MidiTrack {
-    let _musicTrack: MusicTrack
+    //MARK: - Private Properties
+    private var isReload = false
+    
+    //MARK: - Public Properties
     let iterator: EventIterator
+    
+    public let musicTrack: MusicTrack
     
     public var timeSignatures: [MidiTimeSignature] = [] {
         didSet {
@@ -56,13 +61,21 @@ public final class MidiTempoTrack: MidiTrack {
         }
     }
     
+    public var timeResolution: Int16 {
+        var data: Int16 = 0
+        getProperty(.timeResolution, data: &data)
+        return data
+    }
+    
     init(musicTrack: MusicTrack) {
-        _musicTrack = musicTrack
+        self.musicTrack = musicTrack
         iterator = EventIterator(track: musicTrack)
         reload()
     }
-    
-    private var isReload = false
+
+}
+
+public extension MidiTempoTrack {
     
     func reload() {
         isReload = true
@@ -76,7 +89,7 @@ public final class MidiTempoTrack: MidiTrack {
         iterator.enumerate { eventInfo, _, _ in
             guard let eventData = eventInfo.data,
                 let eventType = MidiEventType(eventInfo.type) else {
-                return
+                    return
             }
             
             switch eventType {
@@ -115,9 +128,4 @@ public final class MidiTempoTrack: MidiTrack {
         }
     }
     
-    public var timeResolution: Int16 {
-        var data: Int16 = 0
-        getProperty(.timeResolution, data: &data)
-        return data
-    }
 }
