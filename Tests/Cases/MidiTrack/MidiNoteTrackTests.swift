@@ -192,7 +192,16 @@ extension MidiNoteTrackTests {
         XCTAssertTrue(sut.isSolo)
         XCTAssertTrue(sut.isMute)
     }
-
+    
+    func testInitFakeTrack_MutateAutomatedParameters_ReturnsSuccess() {
+        let newTrack = sequence.newTrack()
+        let sut = MidiNoteTrack(musicTrack: newTrack.musicTrack)
+        
+        XCTAssertEqual(sut.automatedParameters, 0)
+        
+        sut.automatedParameters = 1
+        XCTAssertEqual(sut.automatedParameters, 1)
+    }
 }
 
 //MARK: - Mutating Notes
