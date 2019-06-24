@@ -35,5 +35,7 @@ final class MidiInfoKeyTests: XCTestCase {
         XCTAssertEqual(MidiInfoKey(val: kAFInfoDictionary_Title), .title)
         XCTAssertEqual(MidiInfoKey(val: kAFInfoDictionary_TrackNumber), .trackNumber)
         XCTAssertEqual(MidiInfoKey(val: kAFInfoDictionary_Year), .year)
+        
+        XCTAssertEqual(MidiInfoKey(val: "unknown"), .unknown)
     }
 }
