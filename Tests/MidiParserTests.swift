@@ -21,13 +21,13 @@ final class MidiParserTests: XCTestCase {
     func testWrite() {
         let midi = MidiData()
         let track1 = midi.addTrack()
-        track1.add(note: MidiNote(timeStamp: 0, duration: 10, note: 50, velocity: 100, channel: 0))
+        track1.add(note: MidiNote(regularTimeStamp: 0, duration: 10, note: 50, velocity: 100, channel: 0))
         XCTAssertEqual(track1.count, 1)
         
         track1.add(notes: [
-            MidiNote(timeStamp: 5, duration: 10, note: 40, velocity: 100, channel: 0),
-            MidiNote(timeStamp: 10, duration: 10, note: 40, velocity: 100, channel: 0),
-            MidiNote(timeStamp: 20, duration: 10, note: 40, velocity: 100, channel: 0)
+            MidiNote(regularTimeStamp: 5, duration: 10, note: 40, velocity: 100, channel: 0),
+            MidiNote(regularTimeStamp: 10, duration: 10, note: 40, velocity: 100, channel: 0),
+            MidiNote(regularTimeStamp: 20, duration: 10, note: 40, velocity: 100, channel: 0)
         ])
         XCTAssertEqual(track1.count, 4)
         
@@ -45,14 +45,14 @@ final class MidiParserTests: XCTestCase {
         XCTAssertEqual(track1.count, 0)
         
         track1.add(notes: [
-            MidiNote(timeStamp: 0, duration: 1, note: 40, velocity: 100, channel: 0),
-            MidiNote(timeStamp: 5, duration: 1, note: 40, velocity: 100, channel: 0)
+            MidiNote(regularTimeStamp: 0, duration: 1, note: 40, velocity: 100, channel: 0),
+            MidiNote(regularTimeStamp: 5, duration: 1, note: 40, velocity: 100, channel: 0)
         ])
         
         let track2 = midi.addTrack()
         track2.add(notes: [
-            MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 100, channel: 1),
-            MidiNote(timeStamp: 15, duration: 1, note: 40, velocity: 100, channel: 1)
+            MidiNote(regularTimeStamp: 10, duration: 1, note: 40, velocity: 100, channel: 1),
+            MidiNote(regularTimeStamp: 15, duration: 1, note: 40, velocity: 100, channel: 1)
         ])
         
         track1.merge(from: 0, to: 10, destTrack: track2, insertTime: 0)

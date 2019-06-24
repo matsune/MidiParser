@@ -61,7 +61,7 @@ final class LoadDataTests: XCTestCase {
         let noteCount = firstTrack.count
         firstTrack.removeNote(at: 10)
         XCTAssertEqual(noteCount - 1, firstTrack.count)
-        firstTrack.add(note: MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 10, channel: 0, releaseVelocity: 0))
+        firstTrack.add(note: MidiNote(regularTimeStamp: 10, duration: 1, note: 40, velocity: 10, channel: 0, releaseVelocity: 0))
         XCTAssertEqual(noteCount, firstTrack.count)
         
         XCTAssertEqual(midi.tempoTrack.timeResolution, 480)
@@ -77,11 +77,44 @@ final class LoadDataTests: XCTestCase {
 
 extension LoadDataTests {
     
-    func testMidiFile_Load_ReturnsNoteTracks() {
+    func testMidiFile_Load_ReturnsTrackCount() {
         do {
             let data = try midiFileController.data(fromFileName: "MIDI_sample.mid")
             sut.load(data: data)
             XCTAssertEqual(sut.noteTracks.count, 5)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    func testMidiFile_Load_ReturnsTimeSignatures() {
+        do {
+            let data = try midiFileController.data(fromFileName: "MIDI_sample.mid")
+            sut.load(data: data)
+            
+            // sig: 4/4  bpm: 120
+            XCTAssertEqual(sut.tempoTrack.timeSignatures[0].numerator, 4)
+            XCTAssertEqual(sut.tempoTrack.timeSignatures[0].denominator, 2)
+            XCTAssertEqual(sut.tempoTrack.timeSignatures[0].cc, 24)
+            XCTAssertEqual(sut.tempoTrack.timeSignatures[0].bb, 8)
+            XCTAssertEqual(sut.tempoTrack.extendedTempos[0].bpm, 120)
+            
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    func testMidiFile_Load_ReturnsTrackNames() {
+        do {
+            let data = try midiFileController.data(fromFileName: "MIDI_sample.mid")
+            sut.load(data: data)
+            
+            XCTAssertEqual(sut.noteTracks[0].name, "Bass")
+            XCTAssertEqual(sut.noteTracks[1].name, "Piano")
+            XCTAssertEqual(sut.noteTracks[2].name, "Hi-hat only")
+            XCTAssertEqual(sut.noteTracks[3].name, "Drums")
+            XCTAssertEqual(sut.noteTracks[4].name, "Jazz Guitar")
+            
         } catch {
             XCTFail(error.localizedDescription)
         }
