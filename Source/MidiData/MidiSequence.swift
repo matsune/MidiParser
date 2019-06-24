@@ -10,12 +10,12 @@ import AudioToolbox
 import Foundation
 
 final class MidiSequence {
-    private let _musicSequence: MusicSequence
+    private let musicSequence: MusicSequence
     
     var fileFormat: FileFormat = .type1
     
     var infoDictionary: [MidiInfoKey: AnyObject] {
-        guard let dict = MusicSequenceGetInfoDictionary(_musicSequence) as? [String: AnyObject] else {
+        guard let dict = MusicSequenceGetInfoDictionary(musicSequence) as? [String: AnyObject] else {
             return [:]
         }
         return Dictionary(uniqueKeysWithValues: dict.map { (MidiInfoKey(val: $0.key), $0.value) })
@@ -23,28 +23,24 @@ final class MidiSequence {
     
     var tempoTrack: MusicTrack {
         var tempoTrack: MusicTrack?
-        check(MusicSequenceGetTempoTrack(_musicSequence, &tempoTrack),
-              label: "MusicSequenceGetTempoTrack", level: .log)
+        check(MusicSequenceGetTempoTrack(musicSequence, &tempoTrack), label: "MusicSequenceGetTempoTrack", level: .log)
         return tempoTrack!
     }
     
     var trackCount: Int {
         var trackCount: UInt32 = 0
-        check(MusicSequenceGetTrackCount(_musicSequence, &trackCount),
-              label: "MusicSequenceGetTrackCount", level: .log)
+        check(MusicSequenceGetTrackCount(musicSequence, &trackCount), label: "MusicSequenceGetTrackCount", level: .log)
         return Int(trackCount)
     }
     
     var sequenceType: MusicSequenceType {
         get {
             var type = MusicSequenceType.beats
-            check(MusicSequenceGetSequenceType(_musicSequence, &type),
-                  label: "MusicSequenceGetSequenceType", level: .log)
+            check(MusicSequenceGetSequenceType(musicSequence, &type), label: "MusicSequenceGetSequenceType", level: .log)
             return type
         }
         set {
-            check(MusicSequenceSetSequenceType(_musicSequence, newValue),
-                  label: "MusicSequenceSetSequenceType", level: .log)
+            check(MusicSequenceSetSequenceType(musicSequence, newValue), label: "MusicSequenceSetSequenceType", level: .log)
         }
     }
     
@@ -54,11 +50,11 @@ final class MidiSequence {
         guard let sequence = sequencePtr else {
             fatalError("Could not initialize MidiSequence")
         }
-        _musicSequence = sequence
+        musicSequence = sequence
     }
     
     deinit {
-        check(DisposeMusicSequence(_musicSequence), label: "DisposeMusicSequence", level: .ignore)
+        check(DisposeMusicSequence(musicSequence), label: "DisposeMusicSequence", level: .ignore)
     }
 }
 
@@ -90,7 +86,7 @@ extension MidiSequence.FileFormat: CustomStringConvertible {
 extension MidiSequence {
     
     func dispose(track: MidiTrack) {
-        check(MusicSequenceDisposeTrack(_musicSequence, track.musicTrack), label: "MusicSequenceDisposeTrack", level: .ignore)
+        check(MusicSequenceDisposeTrack(musicSequence, track.musicTrack), label: "MusicSequenceDisposeTrack", level: .ignore)
     }
     
 }
@@ -119,7 +115,7 @@ extension MidiSequence {
         fileFormat = getFileFormat(fromHeader: header)
         let loadFlag = getLoadFlag(inFileFormat: fileFormat)
         
-        check(MusicSequenceFileLoadData(_musicSequence, data as CFData, .midiType, loadFlag), label: "MusicSequenceFileLoadData")
+        check(MusicSequenceFileLoadData(musicSequence, data as CFData, .midiType, loadFlag), label: "MusicSequenceFileLoadData")
     }
     
 }
@@ -129,15 +125,13 @@ extension MidiSequence {
     
     func index(ofTrack track: MusicTrack) -> Int {
         var trackIndex: UInt32 = 0
-        check(MusicSequenceGetTrackIndex(_musicSequence, track, &trackIndex),
-              label: "MusicSequenceGetTrackIndex", level: .log)
+        check(MusicSequenceGetTrackIndex(musicSequence, track, &trackIndex), label: "MusicSequenceGetTrackIndex", level: .log)
         return Int(trackIndex)
     }
     
     func track(at index: Int) -> MusicTrack? {
         var track: MusicTrack?
-        check(MusicSequenceGetIndTrack(_musicSequence, UInt32(index), &track),
-              label: "MusicSequenceGetIndTrack", level: .log)
+        check(MusicSequenceGetIndTrack(musicSequence, UInt32(index), &track), label: "MusicSequenceGetIndTrack", level: .log)
         return track
     }
     
@@ -148,7 +142,7 @@ extension MidiSequence {
     
     func newTrack() -> MidiNoteTrack {
         var musicTrack: MusicTrack?
-        check(MusicSequenceNewTrack(_musicSequence, &musicTrack), label: "MusicSequenceNewTrack")
+        check(MusicSequenceNewTrack(musicSequence, &musicTrack), label: "MusicSequenceNewTrack")
         return MidiNoteTrack(musicTrack: musicTrack!)
     }
     
@@ -156,7 +150,7 @@ extension MidiSequence {
                     inFlags: MusicSequenceFileFlags = .eraseFile,
                     inResolution: Int16 = Int16(TicksPerBeat.regular.value)) -> Data? {
         var outData: Unmanaged<CFData>?
-        check(MusicSequenceFileCreateData(_musicSequence, inFileType, inFlags, inResolution, &outData),
+        check(MusicSequenceFileCreateData(musicSequence, inFileType, inFlags, inResolution, &outData),
               label: "MusicSequenceFileCreateData")
         if let data = outData {
             return data.takeUnretainedValue() as Data
@@ -168,7 +162,7 @@ extension MidiSequence {
                    inFileType: MusicSequenceFileTypeID = .midiType,
                    inFlags: MusicSequenceFileFlags = .eraseFile,
                    inResolution: Int16 = Int16(TicksPerBeat.regular.value)) throws {
-        let status = MusicSequenceFileCreate(_musicSequence, url as CFURL, inFileType, inFlags, inResolution)
+        let status = MusicSequenceFileCreate(musicSequence, url as CFURL, inFileType, inFlags, inResolution)
         if status != noErr {
             throw MidiError.writeURL
         }

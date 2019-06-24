@@ -69,49 +69,14 @@ extension MidiSequenceTests {
     
         XCTAssertEqual(sequence.fileFormat, .type1)
         XCTAssertEqual(sequence.infoDictionary[.tempo] as! Int, 120)
+        XCTAssertEqual(sequence.trackCount, 0)
+        XCTAssertNotNil(sequence.tempoTrack)
         
-        print(sequence.infoDictionary)
-        print(sequence.sequenceType.rawValue)
-        print(sequence.tempoTrack)
-        print(sequence.trackCount)
+        XCTAssertEqual(sequence.sequenceType, MusicSequenceType.beats)
         
+        sequence.sequenceType = MusicSequenceType.samples
+        XCTAssertEqual(sequence.sequenceType, MusicSequenceType.samples)
+        
+        XCTAssertEqual(sequence.fileFormat.description, "A type 1 files may contain any number of tracks, running synchronously")
     }
-    
-//    func test() {
-//        let sequence = MidiSequence()
-//        sequence.load(data: FakeMidiData.midiDataTempo85)
-//        
-//        print(sequence.trackCount)
-//        //let t = sut.track(at: 0)
-//        //print
-//        print(sequence.infoDictionary)
-//        print(sequence.tempoTrack.debugDescription)
-//        
-//        let parser85 = MidiData()
-//        parser85.load(data: FakeMidiData.midiDataTempo85)
-//        
-//        print(parser85.tempoTrack.extendedTempos[0].bpm)
-//        print(Int(parser85.tempoTrack.extendedTempos[0].bpm))
-//        print(parser85.tempoTrack.timeResolution)
-//        print(parser85.tempoTrack.timeSignatures)
-//    }
-    
-}
-
-private extension MidiSequenceTests {
-    
-    func makeSequence() -> MusicSequence {
-        var sequencePtr: MusicSequence?
-        NewMusicSequence(&sequencePtr)
-        
-        return sequencePtr!
-    }
-    
-    func makeTrack(musicSequence: MusicSequence) -> MusicTrack {
-        var musicTrackPtr: MusicTrack?
-        MusicSequenceNewTrack(musicSequence, &musicTrackPtr)
-        
-        return musicTrackPtr!
-    }
-    
 }
