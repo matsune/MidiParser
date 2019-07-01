@@ -61,7 +61,7 @@ final class LoadDataTests: XCTestCase {
         let noteCount = firstTrack.count
         firstTrack.removeNote(at: 10)
         XCTAssertEqual(noteCount - 1, firstTrack.count)
-        firstTrack.add(note: MidiNote(regularTimeStamp: 10, duration: 1, note: 40, velocity: 10, channel: 0, releaseVelocity: 0))
+        firstTrack.add(note: MidiNote(regularTimeStamp: 10, regularDuration: 1, note: 40, velocity: 10, channel: 0, releaseVelocity: 0))
         XCTAssertEqual(noteCount, firstTrack.count)
         
         XCTAssertEqual(midi.tempoTrack.timeResolution, 480)

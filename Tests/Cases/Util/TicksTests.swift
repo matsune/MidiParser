@@ -45,6 +45,18 @@ extension TicksTests {
     }
 }
 
+//MARK: - Ticks overloading +
+extension TicksTests {
+    
+    func testTicks_GetPlus_ReturnsValueSum () {
+        XCTAssertEqual((Ticks(1) + Ticks(2)).value, 3)
+        XCTAssertEqual((Ticks(1_920) + Ticks(1_920)).value, 3_840)
+        XCTAssertEqual((Ticks(1_920) + Ticks(2_345)).value, 4_265)
+    }
+    
+}
+
+
 //MARK: - Milliseconds
 extension TicksTests {
     

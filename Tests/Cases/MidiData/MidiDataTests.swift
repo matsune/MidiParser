@@ -58,29 +58,35 @@ extension MidiDataTests {
 
         XCTAssertEqual(sut.noteTracks.count, 2)
         
-        XCTAssertEqual(sut.noteTracks[0][0].timeStamp, 4.0)
-        XCTAssertEqual(sut.noteTracks[0][0].duration, 1.0)
-        XCTAssertEqual(sut.noteTracks[0][0].ticks.value, 1_920)
+        XCTAssertEqual(sut.noteTracks[0][0].timeStamp.inSeconds, 4.0)
+        XCTAssertEqual(sut.noteTracks[0][0].timeStamp.inTicks.value, 1_920)
+        XCTAssertEqual(sut.noteTracks[0][0].duration.inSeconds, 1.0)
+        XCTAssertEqual(sut.noteTracks[0][0].duration.inTicks.value, 480)
         
-        XCTAssertEqual(sut.noteTracks[0][1].timeStamp, 5.0)
-        XCTAssertEqual(sut.noteTracks[0][1].duration, 0.5)
-        XCTAssertEqual(sut.noteTracks[0][1].ticks.value, 2_400)
+        XCTAssertEqual(sut.noteTracks[0][1].timeStamp.inSeconds, 5.0)
+        XCTAssertEqual(sut.noteTracks[0][1].timeStamp.inTicks.value, 2_400)
+        XCTAssertEqual(sut.noteTracks[0][1].duration.inSeconds, 0.5)
+        XCTAssertEqual(sut.noteTracks[0][1].duration.inTicks.value, 240)
         
-        XCTAssertEqual(sut.noteTracks[0][2].timeStamp, 5.5)
-        XCTAssertEqual(sut.noteTracks[0][2].duration, 0.5)
-        XCTAssertEqual(sut.noteTracks[0][2].ticks.value, 2640)
+        XCTAssertEqual(sut.noteTracks[0][2].timeStamp.inSeconds, 5.5)
+        XCTAssertEqual(sut.noteTracks[0][2].timeStamp.inTicks.value, 2640)
+        XCTAssertEqual(sut.noteTracks[0][2].duration.inSeconds, 0.5)
+        XCTAssertEqual(sut.noteTracks[0][2].duration.inTicks.value, 240)
         
-        XCTAssertEqual(sut.noteTracks[1][0].timeStamp, 0.0)
-        XCTAssertEqual(sut.noteTracks[1][0].duration, 1.0)
-        XCTAssertEqual(sut.noteTracks[1][0].ticks.value, 0)
+        XCTAssertEqual(sut.noteTracks[1][0].timeStamp.inSeconds, 0.0)
+        XCTAssertEqual(sut.noteTracks[1][0].timeStamp.inTicks.value, 0)
+        XCTAssertEqual(sut.noteTracks[1][0].duration.inSeconds, 1.0)
+        XCTAssertEqual(sut.noteTracks[1][0].duration.inTicks.value, 480)
         
-        XCTAssertEqual(sut.noteTracks[1][1].timeStamp, 1.0)
-        XCTAssertEqual(sut.noteTracks[1][1].duration, 0.5)
-        XCTAssertEqual(sut.noteTracks[1][1].ticks.value, 480)
+        XCTAssertEqual(sut.noteTracks[1][1].timeStamp.inSeconds, 1.0)
+        XCTAssertEqual(sut.noteTracks[1][1].timeStamp.inTicks.value, 480)
+        XCTAssertEqual(sut.noteTracks[1][1].duration.inSeconds, 0.5)
+        XCTAssertEqual(sut.noteTracks[1][1].duration.inTicks.value, 240)
         
-        XCTAssertEqual(sut.noteTracks[1][2].timeStamp, 1.5)
-        XCTAssertEqual(sut.noteTracks[1][2].duration, 0.5)
-        XCTAssertEqual(sut.noteTracks[1][2].ticks.value, 720)
+        XCTAssertEqual(sut.noteTracks[1][2].timeStamp.inSeconds, 1.5)
+        XCTAssertEqual(sut.noteTracks[1][2].timeStamp.inTicks.value, 720)
+        XCTAssertEqual(sut.noteTracks[1][2].duration.inSeconds, 0.5)
+        XCTAssertEqual(sut.noteTracks[1][2].duration.inTicks.value, 240)
     }
     
 }
@@ -118,30 +124,37 @@ extension MidiDataTests {
         
         XCTAssertEqual(sut.noteTracks.count, 2)
         
-        XCTAssertEqual(sut.noteTracks[0][0].timeStamp, 5.333)
-        XCTAssertEqual(sut.noteTracks[0][0].duration, 1.0)
-        XCTAssertEqual(sut.noteTracks[0][0].ticks.value, 1_920)
+        XCTAssertEqual(sut.noteTracks[0][0].timeStamp.inSeconds, 5.333)
+        XCTAssertEqual(sut.noteTracks[0][0].timeStamp.inTicks.value, 1_920)
+        XCTAssertEqual(sut.noteTracks[0][0].duration.inSeconds, 1.333)
+        XCTAssertEqual(sut.noteTracks[0][0].duration.inTicks.value, 480)
         
-        XCTAssertEqual(sut.noteTracks[0][1].timeStamp, 6.666)
-        XCTAssertEqual(sut.noteTracks[0][1].duration, 1.0)
-        XCTAssertEqual(sut.noteTracks[0][1].ticks.value, 2_400)
         
-        XCTAssertEqual(sut.noteTracks[0][2].timeStamp, 8.0)
-        XCTAssertEqual(sut.noteTracks[0][2].duration, 1.0)
-        XCTAssertEqual(sut.noteTracks[0][2].ticks.value, 2_880)
+        XCTAssertEqual(sut.noteTracks[0][1].timeStamp.inSeconds, 6.666)
+        XCTAssertEqual(sut.noteTracks[0][1].timeStamp.inTicks.value, 2_400)
+        XCTAssertEqual(sut.noteTracks[0][1].duration.inSeconds, 1.333)
+        XCTAssertEqual(sut.noteTracks[0][1].duration.inTicks.value, 480)
+        
+        XCTAssertEqual(sut.noteTracks[0][2].timeStamp.inSeconds, 8.0)
+        XCTAssertEqual(sut.noteTracks[0][2].timeStamp.inTicks.value, 2_880)
+        XCTAssertEqual(sut.noteTracks[0][2].duration.inSeconds, 1.333)
+        XCTAssertEqual(sut.noteTracks[0][2].duration.inTicks.value, 480)
        
 
-        XCTAssertEqual(sut.noteTracks[1][0].timeStamp, 0.0)
-        XCTAssertEqual(sut.noteTracks[1][0].duration, 1.0)
-        XCTAssertEqual(sut.noteTracks[1][0].ticks.value, 0)
+        XCTAssertEqual(sut.noteTracks[1][0].timeStamp.inSeconds, 0.0)
+        XCTAssertEqual(sut.noteTracks[1][0].timeStamp.inTicks.value, 0)
+        XCTAssertEqual(sut.noteTracks[1][0].duration.inSeconds, 1.333)
+        XCTAssertEqual(sut.noteTracks[1][0].duration.inTicks.value, 480)
         
-        XCTAssertEqual(sut.noteTracks[1][1].timeStamp, 1.333)
-        XCTAssertEqual(sut.noteTracks[1][1].duration, 1.0)
-        XCTAssertEqual(sut.noteTracks[1][1].ticks.value, 480)
+        XCTAssertEqual(sut.noteTracks[1][1].timeStamp.inSeconds, 1.333)
+        XCTAssertEqual(sut.noteTracks[1][1].timeStamp.inTicks.value, 480)
+        XCTAssertEqual(sut.noteTracks[1][1].duration.inSeconds, 1.333)
+        XCTAssertEqual(sut.noteTracks[1][1].duration.inTicks.value, 480)
         
-        XCTAssertEqual(sut.noteTracks[1][2].timeStamp, 2.666)
-        XCTAssertEqual(sut.noteTracks[1][2].duration, 0.5)
-        XCTAssertEqual(sut.noteTracks[1][2].ticks.value, 960)
+        XCTAssertEqual(sut.noteTracks[1][2].timeStamp.inSeconds, 2.666)
+        XCTAssertEqual(sut.noteTracks[1][2].timeStamp.inTicks.value, 960)
+        XCTAssertEqual(sut.noteTracks[1][2].duration.inSeconds, 0.666)
+        XCTAssertEqual(sut.noteTracks[1][2].duration.inTicks.value, 240)
     }
     
 }
@@ -187,29 +200,35 @@ extension MidiDataTests {
         
         XCTAssertEqual(sut.noteTracks.count, 10)
         
-        XCTAssertEqual(sut.noteTracks[0][0].timeStamp, 2.823)
-        XCTAssertEqual(sut.noteTracks[0][0].duration, 0.5)
-        XCTAssertEqual(sut.noteTracks[0][0].ticks.value, 1_920)
+        XCTAssertEqual(sut.noteTracks[0][0].timeStamp.inSeconds, 2.823)
+        XCTAssertEqual(sut.noteTracks[0][0].timeStamp.inTicks.value, 1_920)
+        XCTAssertEqual(sut.noteTracks[0][0].duration.inSeconds, 0.352)
+        XCTAssertEqual(sut.noteTracks[0][0].duration.inTicks.value, 240)
         
-        XCTAssertEqual(sut.noteTracks[0][1].timeStamp, 4.235)
-        XCTAssertEqual(sut.noteTracks[0][1].duration, 0.25)
-        XCTAssertEqual(sut.noteTracks[0][1].ticks.value, 2_880)
+        XCTAssertEqual(sut.noteTracks[0][1].timeStamp.inSeconds, 4.235)
+        XCTAssertEqual(sut.noteTracks[0][1].timeStamp.inTicks.value, 2_880)
+        XCTAssertEqual(sut.noteTracks[0][1].duration.inSeconds, 0.176)
+        XCTAssertEqual(sut.noteTracks[0][1].duration.inTicks.value, 120)
         
-        XCTAssertEqual(sut.noteTracks[0][2].timeStamp, 4.411)
-        XCTAssertEqual(sut.noteTracks[0][2].duration, 0.25)
-        XCTAssertEqual(sut.noteTracks[0][2].ticks.value, 3_000)
+        XCTAssertEqual(sut.noteTracks[0][2].timeStamp.inSeconds, 4.411)
+        XCTAssertEqual(sut.noteTracks[0][2].timeStamp.inTicks.value, 3_000)
+        XCTAssertEqual(sut.noteTracks[0][2].duration.inSeconds, 0.176)
+        XCTAssertEqual(sut.noteTracks[0][2].duration.inTicks.value, 120)
         
-        XCTAssertEqual(sut.noteTracks[1][0].timeStamp, 2.47)
-        XCTAssertEqual(sut.noteTracks[1][0].duration, 0.5)
-        XCTAssertEqual(sut.noteTracks[1][0].ticks.value, 1_680)
+        XCTAssertEqual(sut.noteTracks[1][0].timeStamp.inSeconds, 2.47)
+        XCTAssertEqual(sut.noteTracks[1][0].timeStamp.inTicks.value, 1_680)
+        XCTAssertEqual(sut.noteTracks[1][0].duration.inSeconds, 0.352)
+        XCTAssertEqual(sut.noteTracks[1][0].duration.inTicks.value, 240)
         
-        XCTAssertEqual(sut.noteTracks[1][1].timeStamp, 5.294)
-        XCTAssertEqual(sut.noteTracks[1][1].duration, 0.5)
-        XCTAssertEqual(sut.noteTracks[1][1].ticks.value, 3_600)
+        XCTAssertEqual(sut.noteTracks[1][1].timeStamp.inSeconds, 5.294)
+        XCTAssertEqual(sut.noteTracks[1][1].timeStamp.inTicks.value, 3_600)
+        XCTAssertEqual(sut.noteTracks[1][1].duration.inSeconds, 0.352)
+        XCTAssertEqual(sut.noteTracks[1][1].duration.inTicks.value, 240)
         
-        XCTAssertEqual(sut.noteTracks[1][2].timeStamp, 8.117)
-        XCTAssertEqual(sut.noteTracks[1][2].duration, 0.5)
-        XCTAssertEqual(sut.noteTracks[1][2].ticks.value, 5_520)
+        XCTAssertEqual(sut.noteTracks[1][2].timeStamp.inSeconds, 8.117)
+        XCTAssertEqual(sut.noteTracks[1][2].timeStamp.inTicks.value, 5_520)
+        XCTAssertEqual(sut.noteTracks[1][2].duration.inSeconds, 0.352)
+        XCTAssertEqual(sut.noteTracks[1][2].duration.inTicks.value, 240)
     }
     
 }
@@ -276,4 +295,30 @@ extension MidiDataTests {
         midiData.disposeTracks()
         XCTAssertEqual(midiData.noteTracks.count, 0)
     }
+}
+
+//MARK: - Midi Duration
+extension MidiDataTests {
+    
+    func testFakeMidiTempo60_GetDuration_Returns62() {
+        sut.load(data: FakeMidiData.midiDataTempo60)
+        
+        XCTAssertEqual(sut.duration.inSeconds, 52.0)
+        XCTAssertEqual(sut.duration.inTicks.value, 24_960)
+    }
+    
+    func testFakeMidiTempo45_GetDuration_Returns64() {
+        sut.load(data: FakeMidiData.midiDataTempo45)
+        
+        XCTAssertEqual(sut.duration.inSeconds, 64.0)
+        XCTAssertEqual(sut.duration.inTicks.value, 23_040)
+    }
+    
+    func testFakeMidiTempo85_GetDuration_Returns50_82() {
+        sut.load(data: FakeMidiData.midiDataTempo85)
+        
+        XCTAssertEqual(sut.duration.inSeconds, 50.82)
+        XCTAssertEqual(sut.duration.inTicks.value, 34_560)
+    }
+    
 }

@@ -8,24 +8,28 @@
 
 import AudioToolbox
 import Foundation
-
-public struct MidiNote: EventProtocol {
+    
+public struct MidiNote {
     
     private let regularTempoTimeStamp: MusicTimeStamp
+    private let regularDuration: Float32
     
-    public let ticks: Ticks
-    public let timeStamp: MusicTimeStamp
-    public let duration: Float32
+    public let timeStamp: MidiTime
+    public let duration: MidiTime
     public let note: UInt8
     public let velocity: UInt8
     public let channel: UInt8
     public let releaseVelocity: UInt8
 
-    public init(regularTimeStamp: MusicTimeStamp, duration: Float32, note: UInt8, velocity: UInt8, channel: UInt8, releaseVelocity: UInt8 = 0, beatsPerMinute: BeatsPerMinute = BeatsPerMinute.regular, ticksPerBeat: TicksPerBeat = TicksPerBeat.regular) {
+    public init(regularTimeStamp: MusicTimeStamp, regularDuration: Float32, note: UInt8, velocity: UInt8, channel: UInt8, releaseVelocity: UInt8 = 0, beatsPerMinute: BeatsPerMinute = BeatsPerMinute.regular, ticksPerBeat: TicksPerBeat = TicksPerBeat.regular) {
+        let timeStampInTicks = Milliseconds(regularTimeStamp).toTicks(andTicksPerBeat: ticksPerBeat)
+        let durationInTicks = Milliseconds(Double(regularDuration)).toTicks(andTicksPerBeat: ticksPerBeat)
+        
         self.regularTempoTimeStamp = regularTimeStamp
-        self.ticks = Milliseconds(regularTimeStamp).toTicks(andTicksPerBeat: ticksPerBeat)
-        self.timeStamp = ticks.toMs(forBeatsPerMinute: beatsPerMinute, andTicksPerBeat: ticksPerBeat).seconds
-        self.duration = duration
+        self.regularDuration = regularDuration
+        
+        self.timeStamp = MidiTime(inSeconds: timeStampInTicks.toMs(forBeatsPerMinute: beatsPerMinute, andTicksPerBeat: ticksPerBeat).seconds, inTicks: timeStampInTicks)
+        self.duration = MidiTime(inSeconds: durationInTicks.toMs(forBeatsPerMinute: beatsPerMinute, andTicksPerBeat: ticksPerBeat).seconds, inTicks: durationInTicks)
         self.note = note
         self.velocity = velocity
         self.channel = channel
@@ -37,7 +41,7 @@ public struct MidiNote: EventProtocol {
 extension MidiNote {
 
     func convert() -> MIDINoteMessage {
-        return MIDINoteMessage(channel: channel, note: note, velocity: velocity, releaseVelocity: releaseVelocity, duration: duration)
+        return MIDINoteMessage(channel: channel, note: note, velocity: velocity, releaseVelocity: releaseVelocity, duration: Float32(duration.inSeconds))
     }
 
 }

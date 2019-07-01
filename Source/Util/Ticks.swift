@@ -76,3 +76,9 @@ public struct Ticks {
         return Milliseconds(Int(Double(Milliseconds.inMinute) / Double(bpm.value * tpb.value) * Double(value)))
     }
 }
+
+public extension Ticks {
+    static func +(lhs: Ticks, rhs: Ticks) -> Ticks {
+        return Ticks(lhs.value + rhs.value)
+    }
+}

@@ -89,6 +89,8 @@
 		13C66BDD20F4E7DE00DD8D1D /* MetaEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C66BD920F4E7B100DD8D1D /* MetaEvent.swift */; };
 		E745FE0522BA244800077D24 /* ByteDWordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E745FE0222BA242F00077D24 /* ByteDWordTests.swift */; };
 		E745FE0622BA244A00077D24 /* ByteDWordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E745FE0222BA242F00077D24 /* ByteDWordTests.swift */; };
+		E77B61C222C95AD2009B3807 /* MidiTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77B61C122C95AD2009B3807 /* MidiTime.swift */; };
+		E77B61C422CA2582009B3807 /* MidiTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77B61C322CA2582009B3807 /* MidiTimeTests.swift */; };
 		E794915522BAECB2003CF71E /* Ticks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E794915422BAECB2003CF71E /* Ticks.swift */; };
 		E794915922BAF08A003CF71E /* MidiNoteTrackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E794915822BAF08A003CF71E /* MidiNoteTrackTests.swift */; };
 		E794915C22BAF3F9003CF71E /* MidiFileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E794915A22BAF1AA003CF71E /* MidiFileController.swift */; };
@@ -169,6 +171,8 @@
 		13E83063226B0528009DD486 /* MidiParser-iOS.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "MidiParser-iOS.xcconfig"; sourceTree = "<group>"; };
 		13E83064226B0587009DD486 /* MidiParser-macOS.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "MidiParser-macOS.xcconfig"; sourceTree = "<group>"; };
 		E745FE0222BA242F00077D24 /* ByteDWordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ByteDWordTests.swift; sourceTree = "<group>"; };
+		E77B61C122C95AD2009B3807 /* MidiTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiTime.swift; sourceTree = "<group>"; };
+		E77B61C322CA2582009B3807 /* MidiTimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiTimeTests.swift; sourceTree = "<group>"; };
 		E794915422BAECB2003CF71E /* Ticks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticks.swift; sourceTree = "<group>"; };
 		E794915822BAF08A003CF71E /* MidiNoteTrackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiNoteTrackTests.swift; sourceTree = "<group>"; };
 		E794915A22BAF1AA003CF71E /* MidiFileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiFileController.swift; sourceTree = "<group>"; };
@@ -296,6 +300,7 @@
 				13C66B2620F0B9F200DD8D1D /* MetaEventType.swift */,
 				1379EA7620F64C7C00348301 /* MidiLyric.swift */,
 				13C66B2520F0B9F200DD8D1D /* MidiTimeSignature.swift */,
+				E77B61C122C95AD2009B3807 /* MidiTime.swift */,
 				1379EA8420F65FBD00348301 /* KeySignature */,
 			);
 			path = Meta;
@@ -379,6 +384,7 @@
 			children = (
 				E745FE0222BA242F00077D24 /* ByteDWordTests.swift */,
 				E794917222BE76CD003CF71E /* TicksTests.swift */,
+				E77B61C322CA2582009B3807 /* MidiTimeTests.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -386,9 +392,9 @@
 		E745FE4B22BA625D00077D24 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E745FE4C22BA626700077D24 /* MidiFiles */,
-				E794915A22BAF1AA003CF71E /* MidiFileController.swift */,
 				E794916022BBB840003CF71E /* FakeMidData.swift */,
+				E794915A22BAF1AA003CF71E /* MidiFileController.swift */,
+				E745FE4C22BA626700077D24 /* MidiFiles */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -616,6 +622,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13C66B4B20F0B9F200DD8D1D /* MidiEventUserData.swift in Sources */,
+				E77B61C222C95AD2009B3807 /* MidiTime.swift in Sources */,
 				13C66B6C20F1EEAF00DD8D1D /* EventProtocol.swift in Sources */,
 				13C66B4D20F0B9F200DD8D1D /* Util.swift in Sources */,
 				E794916122BBB840003CF71E /* FakeMidData.swift in Sources */,
@@ -658,6 +665,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E794916F22BD9073003CF71E /* MidiDataTests.swift in Sources */,
+				E77B61C422CA2582009B3807 /* MidiTimeTests.swift in Sources */,
 				E794916A22BD66BA003CF71E /* MidiInfoKeyTests.swift in Sources */,
 				E794916722BD5047003CF71E /* MidiEventTypeTests.swift in Sources */,
 				E794915C22BAF3F9003CF71E /* MidiFileController.swift in Sources */,

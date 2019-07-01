@@ -24,7 +24,7 @@ public final class MidiNoteTrack: MidiTrack {
                 return
             }
             
-            notes.sort(by: { $0.timeStamp < $1.timeStamp })
+            notes.sort(by: { $0.timeStamp.inSeconds < $1.timeStamp.inSeconds })
         }
     }
         
@@ -214,7 +214,7 @@ extension MidiNoteTrack {
             case .noteMessage:
                 let noteMessage = eventData.load(as: MIDINoteMessage.self)
                 let note = MidiNote(regularTimeStamp: eventInfo.timeStamp,
-                                    duration: noteMessage.duration,
+                                    regularDuration: noteMessage.duration,
                                     note: noteMessage.note,
                                     velocity: noteMessage.velocity,
                                     channel: noteMessage.channel,
@@ -275,7 +275,7 @@ extension MidiNoteTrack {
 public extension MidiNoteTrack {
     
     func notes(from: MusicTimeStamp, to: MusicTimeStamp) -> [MidiNote] {
-        return notes.filter { from ..< to ~= $0.timeStamp }
+        return notes.filter { from ..< to ~= $0.timeStamp.inSeconds }
     }
     
 }
@@ -286,7 +286,7 @@ public extension MidiNoteTrack {
 
     func addNote(timeStamp: MusicTimeStamp, duration: Float32, note: UInt8, velocity: UInt8, channel: UInt8, releaseVelocity: UInt8 = 0, beatsPerMinute: BeatsPerMinute = BeatsPerMinute.regular, ticksPerBeat: TicksPerBeat = TicksPerBeat.regular) {
         var message = MIDINoteMessage(channel: channel, note: note, velocity: velocity, releaseVelocity: releaseVelocity, duration: duration)
-        let note = MidiNote(regularTimeStamp: timeStamp, duration: duration, note: note, velocity: velocity, channel: channel, releaseVelocity: releaseVelocity, beatsPerMinute: beatsPerMinute, ticksPerBeat: ticksPerBeat)
+        let note = MidiNote(regularTimeStamp: timeStamp, regularDuration: duration, note: note, velocity: velocity, channel: channel, releaseVelocity: releaseVelocity, beatsPerMinute: beatsPerMinute, ticksPerBeat: ticksPerBeat)
         
         check(MusicTrackNewMIDINoteEvent(musicTrack, timeStamp, &message), label: "MusicTrackNewMIDINoteEvent")
         notes.append(note)
@@ -299,14 +299,14 @@ public extension MidiNoteTrack {
     func add(notes: [MidiNote]) {
         notes.forEach {
             var message = $0.convert()
-            check(MusicTrackNewMIDINoteEvent(musicTrack, $0.timeStamp, &message), label: "MusicTrackNewMIDINoteEvent")
+            check(MusicTrackNewMIDINoteEvent(musicTrack, $0.timeStamp.inSeconds, &message), label: "MusicTrackNewMIDINoteEvent")
         }
         self.notes.append(contentsOf: notes)
     }
     
     func removeNote(at index: Int) {
         let note = notes.remove(at: index)
-        iterator.enumerate(seekTime: note.timeStamp) { info, finished, _ in
+        iterator.enumerate(seekTime: note.timeStamp.inSeconds) { info, finished, _ in
             if info.type == kMusicEventType_MIDINoteMessage,
                 let noteMessage = info.data?.load(as: MIDINoteMessage.self),
                 note.convert() == noteMessage {
@@ -330,7 +330,7 @@ public extension MidiNoteTrack {
             }
             finished = info.timeStamp >= to
         }
-        notes = notes.filter { !(from ..< to ~= $0.timeStamp) }
+        notes = notes.filter { !(from ..< to ~= $0.timeStamp.inSeconds) }
     }
     
     func clearNotes() {

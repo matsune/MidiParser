@@ -56,9 +56,9 @@ extension MidiNoteTrackTests {
         let sut = MidiNoteTrack(musicTrack: firstTrack)
         
         XCTAssertEqual(sut.notes.count, 48)
-        XCTAssertEqual(sut.notes[0], MidiNote(regularTimeStamp: 4.0, duration: 1.0, note: 57, velocity: 72, channel: 0, releaseVelocity: 64))
-        XCTAssertEqual(sut.notes[1], MidiNote(regularTimeStamp: 5.0, duration: 0.5, note: 57, velocity: 72, channel: 0, releaseVelocity: 64))
-        XCTAssertEqual(sut.notes[2], MidiNote(regularTimeStamp: 5.5, duration: 0.5, note: 57, velocity: 72, channel: 0, releaseVelocity: 64))
+        XCTAssertEqual(sut.notes[0], MidiNote(regularTimeStamp: 4.0, regularDuration: 1.0, note: 57, velocity: 72, channel: 0, releaseVelocity: 64))
+        XCTAssertEqual(sut.notes[1], MidiNote(regularTimeStamp: 5.0, regularDuration: 0.5, note: 57, velocity: 72, channel: 0, releaseVelocity: 64))
+        XCTAssertEqual(sut.notes[2], MidiNote(regularTimeStamp: 5.5, regularDuration: 0.5, note: 57, velocity: 72, channel: 0, releaseVelocity: 64))
     }
     
     func testInitFakeTrack_LoopIterator_ReturnsEvents() {
@@ -98,11 +98,11 @@ extension MidiNoteTrackTests {
         
         let note = sut[0]        
         XCTAssertEqual(note.channel, 0)
-        XCTAssertEqual(note.duration, 1.0)
+        XCTAssertEqual(note.duration.inSeconds, 1.0)
         XCTAssertEqual(note.note, 57)
         XCTAssertEqual(note.releaseVelocity, 64)
-        XCTAssertEqual(note.timeStamp, 4.0)
-        XCTAssertEqual(note.ticks.value, 1920)
+        XCTAssertEqual(note.timeStamp.inSeconds, 4.0)
+        XCTAssertEqual(note.timeStamp.inTicks.value, 1920)
     }
     
 }
@@ -213,14 +213,14 @@ extension MidiNoteTrackTests {
         
         XCTAssertEqual(sut.notes.count, 0)
         
-        sut.add(note: MidiNote(regularTimeStamp: 0.1, duration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0))
-        sut.add(note: MidiNote(regularTimeStamp: 1.1, duration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2))
+        sut.add(note: MidiNote(regularTimeStamp: 0.1, regularDuration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0))
+        sut.add(note: MidiNote(regularTimeStamp: 1.1, regularDuration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2))
         XCTAssertEqual(sut.notes.count, 2)
         
         sut.addNote(timeStamp: 2.0, duration: 0.5, note: 34, velocity: 12, channel: 2, releaseVelocity: 134)
         XCTAssertEqual(sut.notes.count, 3)
         
-        sut.add(notes: [MidiNote(regularTimeStamp: 0.1, duration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0), MidiNote(regularTimeStamp: 1.1, duration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2)])
+        sut.add(notes: [MidiNote(regularTimeStamp: 0.1, regularDuration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0), MidiNote(regularTimeStamp: 1.1, regularDuration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2)])
         XCTAssertEqual(sut.notes.count, 5)
     }
     
@@ -230,13 +230,14 @@ extension MidiNoteTrackTests {
         
         XCTAssertEqual(sut.notes.count, 0)
         
-        sut.add(note: MidiNote(regularTimeStamp: 0.1, duration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0))
-        sut.add(note: MidiNote(regularTimeStamp: 1.1, duration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2))
+        sut.add(note: MidiNote(regularTimeStamp: 0.1, regularDuration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0))
+        sut.add(note: MidiNote(regularTimeStamp: 1.1, regularDuration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2))
         XCTAssertEqual(sut.notes.count, 2)
         
         sut.removeNote(at: 1)
         XCTAssertEqual(sut.notes.count, 1)
-        XCTAssertEqual(sut.notes[0].timeStamp, 0.1)
+        XCTAssertEqual(sut.notes[0].timeStamp.inSeconds, 0.1)
+        //XCTAssertEqual(sut.notes[0].timeStamp.inSeconds, 0.1)
     }
     
     func testInitEmptyTrack_RemoveNote1_ReturnsSuccess() {
@@ -245,13 +246,13 @@ extension MidiNoteTrackTests {
         
         XCTAssertEqual(sut.notes.count, 0)
         
-        sut.add(note: MidiNote(regularTimeStamp: 0.1, duration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0))
-        sut.add(note: MidiNote(regularTimeStamp: 1.1, duration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2))
+        sut.add(note: MidiNote(regularTimeStamp: 0.1, regularDuration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0))
+        sut.add(note: MidiNote(regularTimeStamp: 1.1, regularDuration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2))
         XCTAssertEqual(sut.notes.count, 2)
         
         sut.removeNote(at: 1)
         XCTAssertEqual(sut.notes.count, 1)
-        XCTAssertEqual(sut.notes[0].timeStamp, 0.1)
+        XCTAssertEqual(sut.notes[0].timeStamp.inSeconds, 0.1)
     }
     
 }
@@ -263,8 +264,8 @@ extension MidiNoteTrackTests {
         let newTrack = sequence.newTrack()
         let sut = MidiNoteTrack(musicTrack: newTrack.musicTrack)
         
-        sut.add(note: MidiNote(regularTimeStamp: 0.1, duration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0))
-        sut.add(note: MidiNote(regularTimeStamp: 1.1, duration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2))
+        sut.add(note: MidiNote(regularTimeStamp: 0.1, regularDuration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0))
+        sut.add(note: MidiNote(regularTimeStamp: 1.1, regularDuration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2))
         XCTAssertEqual(sut.notes.count, 2)
         
         sut.clearNotes()
@@ -278,11 +279,11 @@ extension MidiNoteTrackTests {
         XCTAssertEqual(sut.notes.count, 0)
         
         sut.add(notes: [
-            MidiNote(regularTimeStamp: 0.1, duration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0),
-            MidiNote(regularTimeStamp: 0.2, duration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2),
-            MidiNote(regularTimeStamp: 0.4, duration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2),
-            MidiNote(regularTimeStamp: 0.6, duration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2),
-            MidiNote(regularTimeStamp: 0.8, duration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2)
+            MidiNote(regularTimeStamp: 0.1, regularDuration: 0.2, note: 20, velocity: 34, channel: 0, releaseVelocity: 0),
+            MidiNote(regularTimeStamp: 0.2, regularDuration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2),
+            MidiNote(regularTimeStamp: 0.4, regularDuration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2),
+            MidiNote(regularTimeStamp: 0.6, regularDuration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2),
+            MidiNote(regularTimeStamp: 0.8, regularDuration: 1.2, note: 21, velocity: 134, channel: 1, releaseVelocity: 2)
         ])
         
         XCTAssertEqual(sut.notes.count, 5)
@@ -295,7 +296,11 @@ extension MidiNoteTrackTests {
 
 extension MidiNote: Equatable {
     
+//    public static func == (lhs: MidiNote, rhs: MidiNote) -> Bool {
+//        return lhs.channel == rhs.channel && lhs.duration == rhs.duration && lhs.note == rhs.note && lhs.releaseVelocity == rhs.releaseVelocity && lhs.timeStamp.inSeconds == rhs.timeStamp.inSeconds
+//    }
+    
     public static func == (lhs: MidiNote, rhs: MidiNote) -> Bool {
-        return lhs.channel == rhs.channel && lhs.duration == rhs.duration && lhs.note == rhs.note && lhs.releaseVelocity == rhs.releaseVelocity && lhs.timeStamp == rhs.timeStamp
+        return lhs.channel == rhs.channel && lhs.duration.inSeconds == rhs.duration.inSeconds && lhs.note == rhs.note && lhs.releaseVelocity == rhs.releaseVelocity && lhs.timeStamp.inSeconds == rhs.timeStamp.inSeconds
     }
 }

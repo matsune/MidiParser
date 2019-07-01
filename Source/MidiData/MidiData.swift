@@ -32,6 +32,19 @@ public final class MidiData {
         return sequence.infoDictionary
     }
     
+    public var duration: MidiTime {
+        func getMaxNote(inTracks tracks: [MidiNoteTrack]) -> MidiNote? {
+            return noteTracks.compactMap { $0.last }.max { $0.timeStamp.inSeconds < $1.timeStamp.inSeconds }
+        }
+
+        guard let maxMidiNote = getMaxNote(inTracks: noteTracks) else {
+            return MidiTime.empty
+        }
+        
+        let timeStampInSeconds = maxMidiNote.timeStamp.inSeconds + maxMidiNote.duration.inSeconds
+        return MidiTime(inSeconds: timeStampInSeconds.roundTo(places: 2), inTicks: maxMidiNote.timeStamp.inTicks + maxMidiNote.duration.inTicks)
+    }
+    
     public lazy var beatsPerMinute: BeatsPerMinute = {
         if tempoTrack.extendedTempos.isEmpty {
             return BeatsPerMinute.regular
@@ -41,7 +54,6 @@ public final class MidiData {
     }()
     
     public lazy var ticksPerBeat: TicksPerBeat = TicksPerBeat(UInt(tempoTrack.timeResolution))
-    
     
     public init() {
         sequence = MidiSequence()
