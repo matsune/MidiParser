@@ -10,21 +10,20 @@ import AudioToolbox
 import Foundation
 
 protocol MidiTrack {
-    // swiftlint:disable identifier_name
-    var _musicTrack: MusicTrack { get }
+    var musicTrack: MusicTrack { get }
     var iterator: EventIterator { get }
-    init(musicTrack: MusicTrack)
     func reload()
 }
 
 extension MidiTrack {
+    
     public func clearEvents(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp) {
-        check(MusicTrackClear(_musicTrack, inStartTime, inEndTime), label: "MusicTrackClear")
+        check(MusicTrackClear(musicTrack, inStartTime, inEndTime), label: "MusicTrackClear")
         reload()
     }
     
     public func moveEvents(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp, inMoveTime: MusicTimeStamp) {
-        check(MusicTrackMoveEvents(_musicTrack, inStartTime, inEndTime, inMoveTime),
+        check(MusicTrackMoveEvents(musicTrack, inStartTime, inEndTime, inMoveTime),
               label: "MusicTrackMoveEvents")
         reload()
     }
@@ -32,15 +31,19 @@ extension MidiTrack {
     public var destAUNode: AUNode {
         get {
             var data = AUNode()
-            check(MusicTrackGetDestNode(_musicTrack, &data), label: "MusicTrackGetDestNode",
+            check(MusicTrackGetDestNode(musicTrack, &data), label: "MusicTrackGetDestNode",
                   level: .log)
             return data
         }
         set {
-            check(MusicTrackSetDestNode(_musicTrack, newValue), label: "MusicTrackSetDestNode")
+            check(MusicTrackSetDestNode(musicTrack, newValue), label: "MusicTrackSetDestNode")
         }
     }
     
+}
+
+extension MidiTrack {
+ 
     func bindEventData<T>(info: EventInfo) -> T? {
         guard let type = MidiEventType(info.type) else {
             return nil
@@ -50,9 +53,9 @@ extension MidiTrack {
              .extendedTempo where T.self == ExtendedTempoEvent.self,
              .user where T.self == MusicEventUserData.self,
              .meta where T.self == MIDIMetaEvent.self,
-             .midiNoteMessage where T.self == MIDINoteMessage.self,
-             .midiChannelMessage where T.self == MIDIChannelMessage.self,
-             .midiRawData where T.self == MIDIRawData.self,
+             .noteMessage where T.self == MIDINoteMessage.self,
+             .channelMessage where T.self == MIDIChannelMessage.self,
+             .rawData where T.self == MIDIRawData.self,
              .parameter where T.self == ParameterEvent.self,
              .auPreset where T.self == AUPresetEvent.self:
             return info.data?.assumingMemoryBound(to: T.self).pointee
@@ -63,13 +66,13 @@ extension MidiTrack {
     
     func getProperty<T>(_ property: SequenceTrackProperty, data: inout T) {
         var length = sizeof(T.self)
-        check(MusicTrackGetProperty(_musicTrack, property.inPropertyID, &data, &length),
+        check(MusicTrackGetProperty(musicTrack, property.inPropertyID, &data, &length),
               label: "[MusicTrackGetProperty] \(property)", level: .fatal)
     }
     
     func setProperty<T>(_ property: SequenceTrackProperty, data: inout T) {
         let length = sizeof(T.self)
-        check(MusicTrackSetProperty(_musicTrack, property.inPropertyID, &data, length),
+        check(MusicTrackSetProperty(musicTrack, property.inPropertyID, &data, length),
               label: "[MusicTrackSetProperty] \(property)", level: .fatal)
     }
     
@@ -78,12 +81,12 @@ extension MidiTrack {
         e.metaEventType = UInt8(metaEvent.metaType.rawValue)
         e.dataLength = UInt32(metaEvent.bytes.count)
         write(bytes: metaEvent.bytes, to: &e.data)
-        check(MusicTrackNewMetaEvent(_musicTrack, metaEvent.timeStamp, &e),
+        check(MusicTrackNewMetaEvent(musicTrack, metaEvent.timeStamp, &e),
               label: "MusicTrackNewMetaEvent")
     }
     
     func add(extendedTempo: MidiExtendedTempo) {
-        check(MusicTrackNewExtendedTempoEvent(_musicTrack, extendedTempo.timeStamp, extendedTempo.bpm),
+        check(MusicTrackNewExtendedTempoEvent(musicTrack, extendedTempo.timeStamp, extendedTempo.bpm),
               label: "MusicTrackNewExtendedTempoEvent")
     }
     
@@ -94,7 +97,8 @@ extension MidiTrack {
                                                 data1: UInt8(patch.patch.rawValue),
                                                 data2: 0,
                                                 reserved: 0)
-        check(MusicTrackNewMIDIChannelEvent(_musicTrack, 0, &channelMessage),
+        check(MusicTrackNewMIDIChannelEvent(musicTrack, 0, &channelMessage),
               label: "MusicTrackNewMIDIChannelEvent")
     }
+    
 }

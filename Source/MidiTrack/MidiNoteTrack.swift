@@ -10,20 +10,25 @@ import AudioToolbox
 import Foundation
 
 public final class MidiNoteTrack: MidiTrack {
-    let _musicTrack: MusicTrack
+    
+    private var isReload = false
+    private let beatsPerMinute: BeatsPerMinute
+    private let ticksPerBeat: TicksPerBeat
+    
+    let musicTrack: MusicTrack
     let iterator: EventIterator
     
-    public private(set) var notes: [MidiNote] = [] {
+    private(set) var notes: [MidiNote] = [] {
         didSet {
             if isReload {
                 return
             }
             
-            notes.sort(by: { $0.timeStamp < $1.timeStamp })
+            notes.sort(by: { $0.timeStamp.inSeconds < $1.timeStamp.inSeconds })
         }
     }
-    
-    public var keySignatures: [MidiKeySignature] = [] {
+        
+    var keySignatures: [MidiKeySignature] = [] {
         didSet {
             if isReload {
                 return
@@ -87,7 +92,7 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    public var trackName = "" {
+    public var name = "" {
         didSet {
             if isReload {
                 return
@@ -101,7 +106,7 @@ public final class MidiNoteTrack: MidiTrack {
                 iterator.deleteEvent()
                 finished = true
             }
-            add(metaEvent: MetaEvent(timeStamp: 0, metaType: .sequenceTrackName, bytes: Bytes(trackName.utf8)))
+            add(metaEvent: MetaEvent(timeStamp: 0, metaType: .sequenceTrackName, bytes: Bytes(name.utf8)))
         }
     }
     
@@ -177,13 +182,16 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    init(musicTrack: MusicTrack) {
-        _musicTrack = musicTrack
+    init(musicTrack: MusicTrack, beatsPerMinute: BeatsPerMinute = BeatsPerMinute.regular, ticksPerBeat: TicksPerBeat = TicksPerBeat.regular) {
+        self.beatsPerMinute = beatsPerMinute
+        self.ticksPerBeat = ticksPerBeat
+        self.musicTrack = musicTrack
         iterator = EventIterator(track: musicTrack)
         reload()
     }
-    
-    private var isReload = false
+}
+
+extension MidiNoteTrack {
     
     func reload() {
         isReload = true
@@ -194,23 +202,23 @@ public final class MidiNoteTrack: MidiTrack {
         notes.removeAll()
         keySignatures.removeAll()
         lyrics.removeAll()
-        trackName = ""
+        name = ""
         
         iterator.enumerate { eventInfo, _, _ in
             guard let eventData = eventInfo.data,
                 let eventType = MidiEventType(eventInfo.type) else {
-                return
+                    return
             }
             
             switch eventType {
-            case .midiNoteMessage:
+            case .noteMessage:
                 let noteMessage = eventData.load(as: MIDINoteMessage.self)
-                let note = MidiNote(timeStamp: eventInfo.timeStamp,
-                                    duration: noteMessage.duration,
+                let note = MidiNote(regularTimeStamp: eventInfo.timeStamp,
+                                    regularDuration: noteMessage.duration,
                                     note: noteMessage.note,
                                     velocity: noteMessage.velocity,
                                     channel: noteMessage.channel,
-                                    releaseVelocity: noteMessage.releaseVelocity)
+                                    releaseVelocity: noteMessage.releaseVelocity, beatsPerMinute: beatsPerMinute, ticksPerBeat: ticksPerBeat)
                 notes.append(note)
             case .meta:
                 let header = eventData.assumingMemoryBound(to: MetaEventHeader.self).pointee
@@ -238,13 +246,13 @@ public final class MidiNoteTrack: MidiTrack {
                                                         isMajor: data[1] == 0)
                     keySignatures.append(keySignature)
                 case .sequenceTrackName:
-                    trackName = data.string
+                    name = data.string
                 case .lyric:
                     lyrics.append(MidiLyric(timeStamp: eventInfo.timeStamp, str: data.string))
                 default:
                     break
                 }
-            case .midiChannelMessage:
+            case .channelMessage:
                 if let channelMessage: MIDIChannelMessage = bindEventData(info: eventInfo),
                     let status = channelMessage.status.hexString.first,
                     let channel = channelMessage.status.hexString.suffix(1).number,
@@ -261,43 +269,44 @@ public final class MidiNoteTrack: MidiTrack {
             }
         }
     }
+}
+
+//MARK: - Get
+public extension MidiNoteTrack {
     
-    public func addNote(timeStamp: MusicTimeStamp,
-                        duration: Float32,
-                        note: UInt8,
-                        velocity: UInt8,
-                        channel: UInt8,
-                        releaseVelocity: UInt8 = 0) {
-        var message = MIDINoteMessage(channel: channel,
-                                      note: note,
-                                      velocity: velocity,
-                                      releaseVelocity: releaseVelocity,
-                                      duration: duration)
-        let note = MidiNote(timeStamp: timeStamp,
-                            duration: duration,
-                            note: note,
-                            velocity: velocity,
-                            channel: channel,
-                            releaseVelocity: releaseVelocity)
-        check(MusicTrackNewMIDINoteEvent(_musicTrack, timeStamp, &message), label: "MusicTrackNewMIDINoteEvent")
+    func notes(from: MusicTimeStamp, to: MusicTimeStamp) -> [MidiNote] {
+        return notes.filter { from ..< to ~= $0.timeStamp.inSeconds }
+    }
+    
+}
+
+//MARK: - Mutating
+//MARK: - Add and Remove
+public extension MidiNoteTrack {
+
+    func addNote(timeStamp: MusicTimeStamp, duration: Float32, note: UInt8, velocity: UInt8, channel: UInt8, releaseVelocity: UInt8 = 0, beatsPerMinute: BeatsPerMinute = BeatsPerMinute.regular, ticksPerBeat: TicksPerBeat = TicksPerBeat.regular) {
+        var message = MIDINoteMessage(channel: channel, note: note, velocity: velocity, releaseVelocity: releaseVelocity, duration: duration)
+        let note = MidiNote(regularTimeStamp: timeStamp, regularDuration: duration, note: note, velocity: velocity, channel: channel, releaseVelocity: releaseVelocity, beatsPerMinute: beatsPerMinute, ticksPerBeat: ticksPerBeat)
+        
+        check(MusicTrackNewMIDINoteEvent(musicTrack, timeStamp, &message), label: "MusicTrackNewMIDINoteEvent")
         notes.append(note)
     }
     
-    public func add(note: MidiNote) {
+    func add(note: MidiNote) {
         add(notes: [note])
     }
-    
-    public func add(notes: [MidiNote]) {
+
+    func add(notes: [MidiNote]) {
         notes.forEach {
             var message = $0.convert()
-            check(MusicTrackNewMIDINoteEvent(_musicTrack, $0.timeStamp, &message), label: "MusicTrackNewMIDINoteEvent")
+            check(MusicTrackNewMIDINoteEvent(musicTrack, $0.timeStamp.inSeconds, &message), label: "MusicTrackNewMIDINoteEvent")
         }
         self.notes.append(contentsOf: notes)
     }
     
-    public func removeNote(at index: Int) {
+    func removeNote(at index: Int) {
         let note = notes.remove(at: index)
-        iterator.enumerate(seekTime: note.timeStamp) { info, finished, _ in
+        iterator.enumerate(seekTime: note.timeStamp.inSeconds) { info, finished, _ in
             if info.type == kMusicEventType_MIDINoteMessage,
                 let noteMessage = info.data?.load(as: MIDINoteMessage.self),
                 note.convert() == noteMessage {
@@ -307,7 +316,12 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
     
-    public func clearNotes(from: MusicTimeStamp, to: MusicTimeStamp) {
+}
+
+//MARK: - Clear
+public extension MidiNoteTrack {
+    
+    func clearNotes(from: MusicTimeStamp, to: MusicTimeStamp) {
         iterator.enumerate(seekTime: from) { info, finished, next in
             if info.type == kMusicEventType_MIDINoteMessage,
                 from ..< to ~= info.timeStamp {
@@ -316,10 +330,10 @@ public final class MidiNoteTrack: MidiTrack {
             }
             finished = info.timeStamp >= to
         }
-        notes = notes.filter { !(from ..< to ~= $0.timeStamp) }
+        notes = notes.filter { !(from ..< to ~= $0.timeStamp.inSeconds) }
     }
     
-    public func clearNotes() {
+    func clearNotes() {
         var count = 0
         iterator.enumerate { info, finished, next in
             if let _: MIDINoteMessage = bindEventData(info: info) {
@@ -331,33 +345,28 @@ public final class MidiNoteTrack: MidiTrack {
         }
         notes.removeAll()
     }
+}
+
+//MARK: - Cut, Merge, Copy
+public extension MidiNoteTrack {
     
-    public func cut(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp) {
-        check(MusicTrackCut(_musicTrack, inStartTime, inEndTime), label: "MusicTrackCut", level: .log)
+    func cut(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp) {
+        check(MusicTrackCut(musicTrack, inStartTime, inEndTime), label: "MusicTrackCut", level: .log)
         reload()
     }
     
-    public func merge(from inStartTime: MusicTimeStamp,
-                      to inEndTime: MusicTimeStamp,
-                      destTrack: MidiNoteTrack,
-                      insertTime: MusicTimeStamp) {
-        check(MusicTrackMerge(_musicTrack, inStartTime, inEndTime, destTrack._musicTrack, insertTime),
+    func merge(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp, destTrack: MidiNoteTrack, insertTime: MusicTimeStamp) {
+        check(MusicTrackMerge(musicTrack, inStartTime, inEndTime, destTrack.musicTrack, insertTime),
               label: "MusicTrackMerge")
         destTrack.reload()
     }
     
-    public func copyInsert(from inStartTime: MusicTimeStamp,
-                           to inEndTime: MusicTimeStamp,
-                           destTrack: MidiNoteTrack,
-                           insertTime: MusicTimeStamp) {
-        check(MusicTrackCopyInsert(_musicTrack, inStartTime, inEndTime, destTrack._musicTrack, insertTime),
+    func copyInsert(from inStartTime: MusicTimeStamp, to inEndTime: MusicTimeStamp, destTrack: MidiNoteTrack, insertTime: MusicTimeStamp) {
+        check(MusicTrackCopyInsert(musicTrack, inStartTime, inEndTime, destTrack.musicTrack, insertTime),
               label: "MusicTrackCopyInsert")
         destTrack.reload()
     }
     
-    public func notes(from: MusicTimeStamp, to: MusicTimeStamp) -> [MidiNote] {
-        return notes.filter { from ..< to ~= $0.timeStamp }
-    }
 }
 
 extension MidiNoteTrack: RandomAccessCollection {
@@ -379,6 +388,6 @@ extension MidiNoteTrack: RandomAccessCollection {
 
 extension MidiNoteTrack: Equatable {
     public static func == (lhs: MidiNoteTrack, rhs: MidiNoteTrack) -> Bool {
-        return lhs._musicTrack == rhs._musicTrack
+        return lhs.musicTrack == rhs.musicTrack
     }
 }

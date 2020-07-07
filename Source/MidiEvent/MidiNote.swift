@@ -8,34 +8,40 @@
 
 import AudioToolbox
 import Foundation
-
-public struct MidiNote: EventProtocol {
-    public let timeStamp: MusicTimeStamp
-    public let duration: Float32
+    
+public struct MidiNote {
+    
+    private let regularTempoTimeStamp: MusicTimeStamp
+    private let regularDuration: Float32
+    
+    public let timeStamp: MidiTime
+    public let duration: MidiTime
     public let note: UInt8
     public let velocity: UInt8
     public let channel: UInt8
     public let releaseVelocity: UInt8
-    
-    public init(timeStamp: MusicTimeStamp,
-                duration: Float32,
-                note: UInt8,
-                velocity: UInt8,
-                channel: UInt8,
-                releaseVelocity: UInt8 = 0) {
-        self.timeStamp = timeStamp
-        self.duration = duration
+
+    public init(regularTimeStamp: MusicTimeStamp, regularDuration: Float32, note: UInt8, velocity: UInt8, channel: UInt8, releaseVelocity: UInt8 = 0, beatsPerMinute: BeatsPerMinute = BeatsPerMinute.regular, ticksPerBeat: TicksPerBeat = TicksPerBeat.regular) {
+        let timeStampInTicks = Milliseconds(regularTimeStamp).toTicks(andTicksPerBeat: ticksPerBeat)
+        let durationInTicks = Milliseconds(Double(regularDuration)).toTicks(andTicksPerBeat: ticksPerBeat)
+        
+        self.regularTempoTimeStamp = regularTimeStamp
+        self.regularDuration = regularDuration
+        
+        self.timeStamp = MidiTime(inSeconds: timeStampInTicks.toMs(forBeatsPerMinute: beatsPerMinute, andTicksPerBeat: ticksPerBeat).seconds, inTicks: timeStampInTicks)
+        self.duration = MidiTime(inSeconds: durationInTicks.toMs(forBeatsPerMinute: beatsPerMinute, andTicksPerBeat: ticksPerBeat).seconds, inTicks: durationInTicks)
         self.note = note
         self.velocity = velocity
         self.channel = channel
         self.releaseVelocity = releaseVelocity
     }
     
+}
+
+extension MidiNote {
+
     func convert() -> MIDINoteMessage {
-        return MIDINoteMessage(channel: channel,
-                               note: note,
-                               velocity: velocity,
-                               releaseVelocity: releaseVelocity,
-                               duration: duration)
+        return MIDINoteMessage(channel: channel, note: note, velocity: velocity, releaseVelocity: releaseVelocity, duration: Float32(duration.inSeconds))
     }
+
 }

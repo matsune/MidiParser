@@ -9,20 +9,20 @@
 import AudioToolbox
 import Foundation
 
-public enum MidiEventType: CustomDebugStringConvertible {
+public enum MidiEventType: CustomDebugStringConvertible, CaseIterable {
     case null
     case extendedNote
     case extendedTempo
     case user
     case meta
-    case midiNoteMessage
-    case midiChannelMessage
-    case midiRawData
+    case noteMessage
+    case channelMessage
+    case rawData
     case parameter
     case auPreset
     
     // swiftlint:disable cyclomatic_complexity
-    init?(_ kMusicEventType: UInt32) {
+    init?(_ kMusicEventType: MusicEventType) {
         switch kMusicEventType {
         case kMusicEventType_NULL:
             self = .null
@@ -35,11 +35,11 @@ public enum MidiEventType: CustomDebugStringConvertible {
         case kMusicEventType_Meta:
             self = .meta
         case kMusicEventType_MIDINoteMessage:
-            self = .midiNoteMessage
+            self = .noteMessage
         case kMusicEventType_MIDIChannelMessage:
-            self = .midiChannelMessage
+            self = .channelMessage
         case kMusicEventType_MIDIRawData:
-            self = .midiRawData
+            self = .rawData
         case kMusicEventType_Parameter:
             self = .parameter
         case kMusicEventType_AUPreset:
@@ -48,8 +48,10 @@ public enum MidiEventType: CustomDebugStringConvertible {
             return nil
         }
     }
+}
+
+public extension MidiEventType {
     
-    // - MARK: CustomDebugStringConvertible
     public var debugDescription: String {
         switch self {
         case .null:
@@ -62,11 +64,11 @@ public enum MidiEventType: CustomDebugStringConvertible {
             return "MidiEventType.user"
         case .meta:
             return "MidiEventType.meta"
-        case .midiNoteMessage:
+        case .noteMessage:
             return "MidiEventType.midiNoteMessage"
-        case .midiChannelMessage:
+        case .channelMessage:
             return "MidiEventType.midiChannelMessage"
-        case .midiRawData:
+        case .rawData:
             return "MidiEventType.midiRawData"
         case .parameter:
             return "MidiEventType.parameter"

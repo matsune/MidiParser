@@ -21,19 +21,19 @@ final class MidiParserTests: XCTestCase {
     func testWrite() {
         let midi = MidiData()
         let track1 = midi.addTrack()
-        track1.add(note: MidiNote(timeStamp: 0, duration: 10, note: 50, velocity: 100, channel: 0))
+        track1.add(note: MidiNote(regularTimeStamp: 0, regularDuration: 10, note: 50, velocity: 100, channel: 0))
         XCTAssertEqual(track1.count, 1)
         
         track1.add(notes: [
-            MidiNote(timeStamp: 5, duration: 10, note: 40, velocity: 100, channel: 0),
-            MidiNote(timeStamp: 10, duration: 10, note: 40, velocity: 100, channel: 0),
-            MidiNote(timeStamp: 20, duration: 10, note: 40, velocity: 100, channel: 0)
+            MidiNote(regularTimeStamp: 5, regularDuration: 10, note: 40, velocity: 100, channel: 0),
+            MidiNote(regularTimeStamp: 10, regularDuration: 10, note: 40, velocity: 100, channel: 0),
+            MidiNote(regularTimeStamp: 20, regularDuration: 10, note: 40, velocity: 100, channel: 0)
         ])
         XCTAssertEqual(track1.count, 4)
         
         track1.keySignatures = [MidiKeySignature(timeStamp: 0, key: .minor(.A))]
         track1.patch = MidiPatch(channel: 0, patch: .cello)
-        track1.trackName = "track1"
+        track1.name = "track1"
         
         track1.cut(from: 0, to: 5)
         XCTAssertEqual(track1.trackLength, 25)
@@ -45,29 +45,29 @@ final class MidiParserTests: XCTestCase {
         XCTAssertEqual(track1.count, 0)
         
         track1.add(notes: [
-            MidiNote(timeStamp: 0, duration: 1, note: 40, velocity: 100, channel: 0),
-            MidiNote(timeStamp: 5, duration: 1, note: 40, velocity: 100, channel: 0)
+            MidiNote(regularTimeStamp: 0, regularDuration: 1, note: 40, velocity: 100, channel: 0),
+            MidiNote(regularTimeStamp: 5, regularDuration: 1, note: 40, velocity: 100, channel: 0)
         ])
         
         let track2 = midi.addTrack()
         track2.add(notes: [
-            MidiNote(timeStamp: 10, duration: 1, note: 40, velocity: 100, channel: 1),
-            MidiNote(timeStamp: 15, duration: 1, note: 40, velocity: 100, channel: 1)
+            MidiNote(regularTimeStamp: 10, regularDuration: 1, note: 40, velocity: 100, channel: 1),
+            MidiNote(regularTimeStamp: 15, regularDuration: 1, note: 40, velocity: 100, channel: 1)
         ])
         
         track1.merge(from: 0, to: 10, destTrack: track2, insertTime: 0)
-        XCTAssertEqual(track2.notes[0].timeStamp, 0)
-        XCTAssertEqual(track2.notes[1].timeStamp, 5)
-        XCTAssertEqual(track2.notes[2].timeStamp, 10)
-        XCTAssertEqual(track2.notes[3].timeStamp, 15)
+        XCTAssertEqual(track2.notes[0].timeStamp.inSeconds, 0)
+        XCTAssertEqual(track2.notes[1].timeStamp.inSeconds, 5)
+        XCTAssertEqual(track2.notes[2].timeStamp.inSeconds, 10)
+        XCTAssertEqual(track2.notes[3].timeStamp.inSeconds, 15)
         
         track1.copyInsert(from: 0, to: 10, destTrack: track2, insertTime: 0)
-        XCTAssertEqual(track2.notes[0].timeStamp, 0)
-        XCTAssertEqual(track2.notes[1].timeStamp, 5)
-        XCTAssertEqual(track2.notes[2].timeStamp, 10)
-        XCTAssertEqual(track2.notes[3].timeStamp, 15)
-        XCTAssertEqual(track2.notes[4].timeStamp, 20)
-        XCTAssertEqual(track2.notes[5].timeStamp, 25)
+        XCTAssertEqual(track2.notes[0].timeStamp.inSeconds, 0)
+        XCTAssertEqual(track2.notes[1].timeStamp.inSeconds, 5)
+        XCTAssertEqual(track2.notes[2].timeStamp.inSeconds, 10)
+        XCTAssertEqual(track2.notes[3].timeStamp.inSeconds, 15)
+        XCTAssertEqual(track2.notes[4].timeStamp.inSeconds, 20)
+        XCTAssertEqual(track2.notes[5].timeStamp.inSeconds, 25)
         
         let tmp = URL(fileURLWithPath: NSTemporaryDirectory() + "tmp.mid")
         print(tmp)
