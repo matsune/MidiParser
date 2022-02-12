@@ -60,3 +60,36 @@ public enum MinorKey: UInt8 {
     case Eflat = 250
     case Aflat = 249
 }
+
+public extension MajorKey {
+    var isFlat: Bool {
+        switch self {
+        case .Aflat, .Bflat, .Cflat, .Dflat, .Eflat, .Gflat:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+public extension MinorKey {
+    var isFlat: Bool {
+        switch self {
+        case .Aflat, .Bflat, .Eflat:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+public extension KeySignature {
+    var isFlat: Bool {
+        switch self {
+        case .major(let major):
+            return major.isFlat
+        case .minor(let minor):
+            return minor.isFlat
+        }
+    }
+}
