@@ -52,7 +52,7 @@ public enum MidiEventType: CustomDebugStringConvertible, CaseIterable {
 
 public extension MidiEventType {
     
-    public var debugDescription: String {
+    var debugDescription: String {
         switch self {
         case .null:
             return "MidiEventType.null"

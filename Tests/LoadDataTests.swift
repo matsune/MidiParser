@@ -12,13 +12,13 @@ import XCTest
 final class LoadDataTests: XCTestCase {
     
     private let sut = MidiData()
-    private let midiFileController = MidiFileController(bundleSource: LoadDataTests.self)
+    private let midiFileController = MidiFileController()
     
     func testLoadedMidi() {
         /*
          [MIDI_sample.mid](https://en.wikipedia.org/wiki/File:MIDI_sample.mid?qsrc=3044)
          */
-        guard let url = Bundle(for: type(of: self)).url(forResource: "MIDI_sample", withExtension: "mid"),
+        guard let url = Bundle.module.url(forResource: "MIDI_sample", withExtension: "mid"),
             let data = try? Data(contentsOf: url) else {
             XCTFail()
             return
