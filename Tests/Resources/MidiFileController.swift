@@ -12,12 +12,6 @@ struct MidiFileController {
     typealias FileName = String
     typealias FileComponents = (name: String, ext: String)
     
-    private let bundleSource: AnyClass
-    
-    init(bundleSource: AnyClass) {
-      self.bundleSource = bundleSource
-    }
-    
     func data(fromFileName fileName: FileName) throws -> Data {
         func getComponent(fromFileName fileName: FileName) throws -> FileComponents {
             let components = fileName.split(separator: ".").compactMap({ String($0) })
@@ -32,7 +26,7 @@ struct MidiFileController {
         
         let fileComponents = try getComponent(fromFileName: fileName)
         
-        guard let url = Bundle(for: bundleSource).url(forResource: fileComponents.name, withExtension: fileComponents.ext) else {
+        guard let url = Bundle.module.url(forResource: fileComponents.name, withExtension: fileComponents.ext) else {
             throw MidiFileControllerError.urlInvalid
         }
         

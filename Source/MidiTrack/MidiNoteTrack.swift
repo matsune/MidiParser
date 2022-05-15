@@ -28,7 +28,7 @@ public final class MidiNoteTrack: MidiTrack {
         }
     }
         
-    var keySignatures: [MidiKeySignature] = [] {
+    public var keySignatures: [MidiKeySignature] = [] {
         didSet {
             if isReload {
                 return
